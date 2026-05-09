@@ -32,7 +32,7 @@ GUYS = [
         "top_works": "'Tội Ác', 'Em Của Ngày Hôm Qua', 'Muôn Kiếp Nhân Sinh', album 'SOOBIN'",
         "awards": "VTV Awards, Cống hiến Awards, MTV Vietnam",
         "intro": "SOOBIN sinh ngày 07/01/1995, cao 1m80 — gương mặt góc cạnh, phong thái điềm tĩnh đầy nội tâm. Album solo 'SOOBIN' được đánh giá là một trong những album Việt xuất sắc nhất thập kỷ. Người ta mê anh không chỉ vì visual mà còn vì chiều sâu nghệ thuật.",
-        "image_url": "", "tags": ["V-pop", "nhạc sĩ", "indie"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Choi_Soo-bin_%28%EC%B5%9C%EC%88%98%EB%B9%88%29_220121.jpg/400px-Choi_Soo-bin_%28%EC%B5%9C%EC%88%98%EB%B9%88%29_220121.jpg", "tags": ["V-pop", "nhạc sĩ", "indie"],
     },
     {
         "name": "Isaac (Jun Phạm)",
@@ -58,7 +58,7 @@ GUYS = [
         "top_works": "'Mang Tiền Về Cho Mẹ', 'Bài Này Chill Phết', 'Đi Về Nhà', 'Anh Đếch Cần Gì Cả'",
         "awards": "Cống hiến Awards, VTV Awards, Ca sĩ của năm nhiều trang báo",
         "intro": "Đen Vâu sinh ngày 16/12/1993 — rapper Hà Nội với phong cách trữ tình độc nhất V-rap. Nhạc anh kể chuyện đời thường bằng ngôn từ tinh tế, chạm trái tim hàng triệu người. 'Mang Tiền Về Cho Mẹ' là bài anthem thế hệ không thể tranh cãi.",
-        "image_url": "", "tags": ["rapper", "V-rap", "indie"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/d/d5/Den_Vau_in_Song_Gallery_2021.jpg", "tags": ["rapper", "V-rap", "indie"],
     },
     {
         "name": "Tăng Duy Tân",
@@ -97,7 +97,7 @@ GUYS = [
         "top_works": "'Ghen' (WHO sử dụng toàn cầu), 'Nơi Này Có Anh', 'Về Nghe Mẹ Ru'",
         "awards": "Top nhạc số VN, 'Ghen' được WHO dùng trong chiến dịch COVID-19",
         "intro": "Erik sinh ngày 17/06/1997 — khuôn mặt bầu bĩnh dễ thương, năng lượng dồi dào. 'Ghen' là ca khúc Việt Nam đầu tiên được WHO lấy làm nhạc nền chiến dịch phòng chống COVID-19 toàn cầu — cột mốc lịch sử! 'Nơi Này Có Anh' = bài tỏ tình được dùng nhiều nhất Việt Nam.",
-        "image_url": "", "tags": ["V-pop", "ca sĩ"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/8/83/Erik_t%E1%BA%A1i_s%E1%BB%B1_ki%E1%BB%87n%2C_2020-03-21.png", "tags": ["V-pop", "ca sĩ"],
     },
     {
         "name": "Rhyder (Trần Minh Tú)",
@@ -218,7 +218,7 @@ GUYS = [
         "top_works": "Album solo 'Indigo' (2022), 'Wild Flower', phát biểu tại LHQ (UN Speech 2018/2021)",
         "awards": "Grammy nomination, Billboard Music Awards, Grammy Foundation Award",
         "intro": "RM sinh ngày 12/09/1994 — leader BTS, IQ 148, tự học tiếng Anh qua xem 'Friends'. Collector nghệ thuật đương đại nghiêm túc, hiến tặng cho các bảo tàng quốc gia Hàn Quốc. Phát biểu tại Đại Hội Đồng LHQ năm 2018 và 2021. Cao 1m81, lúm đồng tiền hai bên má siêu cute.",
-        "image_url": "", "tags": ["K-pop", "BTS", "rapper", "intellectual"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/RM_at_W_Korea_Love_Your_W%2C_November_2023.jpg/400px-RM_at_W_Korea_Love_Your_W%2C_November_2023.jpg", "tags": ["K-pop", "BTS", "rapper", "intellectual"],
     },
     {
         "name": "J-Hope (Jung Hoseok)",
@@ -367,7 +367,7 @@ GUYS = [
         "top_works": "NCT 127 'Kick It', 'Superhuman'; NCT Dream 'Hot Sauce'; SuperM 'Jopping'",
         "awards": "Grammy nomination (SuperM), Daesang MAMA (với NCT), nhiều giải SM",
         "intro": "Mark Lee sinh ngày 02/08/1999 — rapper Canada gốc Hàn, thành viên NCT 127, NCT Dream và SuperM cùng lúc. Năng lượng dồi dào, tích cực vô hạn, rap nhanh mà rõ. Nấu ăn ngon bất ngờ và thẳng thắn hài hước không cần filter. Crush của cả SM Town!",
-        "image_url": "", "tags": ["K-pop", "NCT", "rapper"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/20231006_Mark_%28NCT%29.jpg/400px-20231006_Mark_%28NCT%29.jpg", "tags": ["K-pop", "NCT", "rapper"],
     },
     {
         "name": "Jay (Park Jongseong)",
@@ -473,7 +473,7 @@ GUYS = [
         "top_works": "Drama 'The Red Sleeve' (2021 — rating kỷ lục MBC 17.4%), 2PM 'Heartbeat'",
         "awards": "MBC Drama Awards (Daesang diễn xuất), Baeksang đề cử",
         "intro": "Junho sinh ngày 25/01/1990 — nghệ sĩ toàn diện: hát, nhảy, rap, diễn, vẽ tranh. 'The Red Sleeve' phá kỷ lục rating MBC với 17.4%, Junho nhận Daesang diễn xuất — chứng minh idol có thể trở thành diễn viên thật sự. Xuất ngũ về là fan xếp hàng chờ comeback!",
-        "image_url": "", "tags": ["K-pop", "2PM", "diễn viên"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9f/Lee_Jun-ho_%EC%9D%B4%EC%A4%80%ED%98%B8_211228.png/400px-Lee_Jun-ho_%EC%9D%B4%EC%A4%80%ED%98%B8_211228.png", "tags": ["K-pop", "2PM", "diễn viên"],
     },
     {
         "name": "Son Heung-min (손흥민)",
@@ -527,7 +527,7 @@ GUYS = [
         "top_works": "'Một Nụ Cười Vạn Năm' (2018), 'You Are My Hero', 'Where the Wind Blows'",
         "awards": "Tencent Video Awards, Weibo TV Stars Awards, Mango TV Stars Awards",
         "intro": "Vương Hạc Đệ sinh ngày 07/04/1998, cao 1m85 — nụ cười năng lượng cao, mái tóc bồng bềnh. Body bơi lội tỷ lệ vai-eo hoàn hảo. Vibe của anh = muôn ánh mặt trời buổi sáng không thể cưỡng lại!",
-        "image_url": "", "tags": ["C-pop", "diễn viên"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/76/Dylan_Wang.jpg/400px-Dylan_Wang.jpg", "tags": ["C-pop", "diễn viên"],
     },
     {
         "name": "Cung Tuấn (Gong Jun)",
@@ -540,7 +540,7 @@ GUYS = [
         "top_works": "'Sơn Hà Lệnh' (2021), 'Where Dreams Begin', 'Fearless' (MV solo)",
         "awards": "Weibo Drama Awards, iQiyi Drama Awards, Golden Eagle TV Arts Festival",
         "intro": "Cung Tuấn sinh ngày 11/02/1992, cao 1m86 — bùng nổ với vai Chu Bảo Thần trong 'Sơn Hà Lệnh'. Body leo núi và gym cho tỷ lệ rất đẹp. Khuôn mặt phúc hậu, nụ cười ấm lòng. Fan VN gọi yêu là 'Tuấn Tuấn'!",
-        "image_url": "", "tags": ["C-pop", "diễn viên", "tall 🏔️"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/GJ_Cannes.jpg/400px-GJ_Cannes.jpg", "tags": ["C-pop", "diễn viên", "tall 🏔️"],
     },
     {
         "name": "Lý Hiện (Li Xian)",
@@ -553,7 +553,7 @@ GUYS = [
         "top_works": "'Go Ahead' (2020 — cả ĐNA khóc hết nước mắt), 'My Marvellous Fable', 'Be Together'",
         "awards": "Weibo TV Drama Awards, iQiyi Starlight Awards, Golden Eagle TV Arts Festival",
         "intro": "Lý Hiện sinh ngày 27/08/1991, cao 1m85 — vai Giang Thần Thành trong 'Go Ahead' khiến cả Đông Nam Á khóc. Body gym đẹp với visible abs, nhưng vẫn giữ được phong thái điềm tĩnh chín chắn. Sự trưởng thành và thực lực có sức hút riêng không kém visual!",
-        "image_url": "", "tags": ["C-pop", "diễn viên"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f4/Li_Xian_%28cropped%29.jpg/400px-Li_Xian_%28cropped%29.jpg", "tags": ["C-pop", "diễn viên"],
     },
     {
         "name": "Dương Dương (Yang Yang)",
@@ -605,7 +605,7 @@ GUYS = [
         "top_works": "'Sư Thúc' (2021 — top trending Netflix toàn cầu), 'Oath of Love', 'Go Into Your Heart'",
         "awards": "Golden Eagle TV Arts Festival, WeTV Popular Actor Awards",
         "intro": "Ngô Lỗi sinh ngày 26/12/1999, cao 1m82 — thần đồng diễn xuất từ nhỏ. 'Sư Thúc' top trending Netflix toàn cầu 2021. Kiểu đẹp 'hoa thần' tinh tế thanh tú, diễn xuất chín chắn vượt tuổi. Gen Z chính gốc nhưng diễn như lão nghệ sĩ!",
-        "image_url": "", "tags": ["C-pop", "diễn viên", "Gen Z"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Wu_Lei_being_interviewed_in_December_2015_for_C_China.png/400px-Wu_Lei_being_interviewed_in_December_2015_for_C_China.png", "tags": ["C-pop", "diễn viên", "Gen Z"],
     },
     {
         "name": "Trần Phi Vũ (Chen Feiyu)",
@@ -657,7 +657,7 @@ GUYS = [
         "top_works": "'The Wolf' (2020), 'Till the End of the Moon' (2023), 'Eternal Love Rain'",
         "awards": "Weibo TV Series Awards, iQiyi Starlight Awards, Golden Eagle Drama Awards",
         "intro": "Nhiệm Gia Luân sinh ngày 16/11/1986, cao 1m85 — khí chất vương giả tự nhiên không cần cố gắng. Cưỡi ngựa và kiếm thuật thật sự (không phải stunt). 'Till the End of the Moon' một phim hai vai đều xuất sắc — mẫu đại nhân quân tử ngôn tình bước ra đời thật!",
-        "image_url": "", "tags": ["C-pop", "diễn viên", "cổ trang"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/%E4%BB%BB%E5%98%89%E5%80%AB_%E6%94%9D%E6%96%BC210711_%E6%AD%90%E7%B1%B3%E8%8C%84%E6%B4%BB%E5%8B%95_in_Nanjing.jpg/400px-%E4%BB%BB%E5%98%89%E5%80%AB_%E6%94%9D%E6%96%BC210711_%E6%AD%90%E7%B1%B3%E8%8C%84%E6%B4%BB%E5%8B%95_in_Nanjing.jpg", "tags": ["C-pop", "diễn viên", "cổ trang"],
     },
     {
         "name": "Sái Từ Khôn (Cai Xukun)",
@@ -683,7 +683,7 @@ GUYS = [
         "top_works": "'Sword Snow Stride' (2021), 'A Journey to Love' (2023 — hot nhất năm)",
         "awards": "Weibo New Stars Awards, Tencent Video Awards, iQiyi New Generation",
         "intro": "Trần Triết Viễn sinh ngày 20/03/1998, cao 1m82 — thần đồng nhảy múa chuyên nghiệp trước khi diễn xuất. Body vũ công đẹp hoàn hảo, di chuyển uyển chuyển. Khuôn mặt trẻ trung, ánh mắt trong sáng sâu thẳm — không thể rời mắt!",
-        "image_url": "", "tags": ["C-pop", "diễn viên", "vũ công"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Chen_Zheyuan.jpg/400px-Chen_Zheyuan.jpg", "tags": ["C-pop", "diễn viên", "vũ công"],
     },
     {
         "name": "Đặng Vĩ (Deng Wei)",
@@ -696,7 +696,7 @@ GUYS = [
         "top_works": "'Go Ahead' (2020), 'The Long Night', 'Twisted Fate of Love'",
         "awards": "Weibo TV Drama Awards, iQiyi Starlight Awards",
         "intro": "Đặng Vĩ sinh ngày 28/12/1992, cao 1m85 — body gym và boxing cực kỳ rắn chắc. Khuôn mặt góc cạnh mạnh mẽ, ánh mắt sắc bén. Trong 'Go Ahead' dù vai phụ vẫn gây chú ý lớn. Mẫu nam thần vừa đẹp vừa có aura mạnh mẽ không thể bỏ qua!",
-        "image_url": "", "tags": ["C-pop", "diễn viên", "6-pack 🔥"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Deng_Wei.jpg/400px-Deng_Wei.jpg", "tags": ["C-pop", "diễn viên", "6-pack 🔥"],
     },
     {
         "name": "Chu Nhất Long (Zhu Yilong)",
@@ -722,7 +722,7 @@ GUYS = [
         "top_works": "OST 'Till the End of the Moon', 'Love Between Fairy and Devil', nhiều OST hit",
         "awards": "Weibo Popular Singer Awards, Golden Eagle Music Awards",
         "intro": "Lưu Vũ Ninh sinh ngày 17/04/1996 — giọng hát trầm ấm đặc trưng chuyên hát OST cho các drama lớn. Nghe mà không biết tên là thiệt thòi lớn! Khuôn mặt thư sinh điềm tĩnh, kiểu đẹp nghệ sĩ nội tâm. OST 'Till the End of the Moon' viral khắp châu Á.",
-        "image_url": "", "tags": ["C-pop", "OST", "giọng hát"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Liu_Yuning_%E5%88%98%E5%AE%87%E5%AE%81_COSMO_%E5%BA%86%E5%85%B8%E6%B4%BB%E5%8A%A8_1.jpg/400px-Liu_Yuning_%E5%88%98%E5%AE%87%E5%AE%81_COSMO_%E5%BA%86%E5%85%B8%E6%B4%BB%E5%8A%A8_1.jpg", "tags": ["C-pop", "OST", "giọng hát"],
     },
     {
         "name": "Hoắc Kiến Hoa (Wallace Huo)",

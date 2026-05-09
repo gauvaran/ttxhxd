@@ -86,8 +86,9 @@ def build_html(data):
     viral            = data.get("viral", "")
     music_fashion    = data.get("music_fashion", "")
     food_of_day      = data.get("food_of_day", "")
-    tip              = data.get("tip", "")
-    tip_type         = data.get("tip_type", "food")
+    tip_beauty   = data.get("tip_beauty", "")
+    tip_exercise = data.get("tip_exercise", "")
+    tip_health   = data.get("tip_health", "")
     quote            = data.get("quote", "")
     guy              = data.get("guy")
 
@@ -209,30 +210,45 @@ def build_html(data):
     </td>
   </tr>"""
 
-    # ── Tip ──────────────────────────────────────────────────────────────────
-    tip_html = ""
-    if tip:
-        if tip_type == "food":
-            tip_bg, tip_color = C_AMBER_BG, "#E65100"
-            tip_icon  = "&#127836;"
-            tip_label = "Tip &#7848;m th&#7921;c h&#244;m nay"
-        elif tip_type == "health":
-            tip_bg, tip_color = C_GREEN_BG, "#2E7D32"
-            tip_icon  = "&#127808;"
-            tip_label = "Tip s&#7913;c kh&#7887;e h&#244;m nay"
-        else:  # beauty
-            tip_bg, tip_color = C_PINK_BG, "#AD1457"
-            tip_icon  = "&#10024;"
-            tip_label = "Tip l&#224;m &#273;&#7865;p &amp; phong c&#225;ch s&#7889;ng"
-        tip_html = f"""
+    # ── Tips: 3 mandatory sub-sections ───────────────────────────────────────
+    tips_html = ""
+    if tip_beauty or tip_exercise or tip_health:
+        tips_header = """
   <tr>
-    <td bgcolor="{tip_bg}" style="background-color:{tip_bg};padding:20px 30px;border-top:3px solid {tip_color};">
-      <p style="margin:0 0 12px;font-size:11px;color:{tip_color};letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;font-weight:bold;">
-        {tip_icon}&nbsp;{tip_label}
+    <td bgcolor="#F5F7FA" style="background-color:#F5F7FA;padding:12px 30px;">
+      <p style="margin:0;font-size:11px;color:#999999;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;font-weight:bold;">
+        &#127774;&nbsp;Tips d&#224;nh cho ch&#7883; em h&#244;m nay
       </p>
-      {md_to_html(tip)}
     </td>
   </tr>"""
+        tip_beauty_html = f"""
+  <tr>
+    <td bgcolor="#FCE4EC" style="background-color:#FCE4EC;padding:20px 30px;border-top:3px solid #AD1457;">
+      <p style="margin:0 0 12px;font-size:11px;color:#AD1457;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;font-weight:bold;">
+        &#10024;&nbsp;Tip l&#224;m &#273;&#7865;p &amp; ch&#259;m da
+      </p>
+      {md_to_html(tip_beauty) if tip_beauty else '<p style="margin:0;font-size:13px;color:#999;">Đang cập nhật...</p>'}
+    </td>
+  </tr>""" if tip_beauty else ""
+        tip_exercise_html = f"""
+  <tr>
+    <td bgcolor="#E8F5E9" style="background-color:#E8F5E9;padding:20px 30px;border-top:3px solid #2E7D32;">
+      <p style="margin:0 0 12px;font-size:11px;color:#2E7D32;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;font-weight:bold;">
+        &#127939;&#65039;&nbsp;Tip t&#7853;p th&#7875; d&#7909;c &amp; gi&#7919; d&#225;ng
+      </p>
+      {md_to_html(tip_exercise) if tip_exercise else '<p style="margin:0;font-size:13px;color:#999;">Đang cập nhật...</p>'}
+    </td>
+  </tr>""" if tip_exercise else ""
+        tip_health_html = f"""
+  <tr>
+    <td bgcolor="#E3F2FD" style="background-color:#E3F2FD;padding:20px 30px;border-top:3px solid #1565C0;">
+      <p style="margin:0 0 12px;font-size:11px;color:#1565C0;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;font-weight:bold;">
+        &#129338;&nbsp;Tip s&#7913;c kh&#7887;e: huy&#7871;t &#225;p, c&#7897;t s&#7889;ng, vai g&#225;y
+      </p>
+      {md_to_html(tip_health) if tip_health else '<p style="margin:0;font-size:13px;color:#999;">Đang cập nhật...</p>'}
+    </td>
+  </tr>""" if tip_health else ""
+        tips_html = tips_header + tip_beauty_html + tip_exercise_html + tip_health_html
 
     # ── Music + Fashion Trending ─────────────────────────────────────────────
     music_fashion_html = ""
@@ -278,7 +294,7 @@ def build_html(data):
     if guy:
         img_block = ""
         if guy.get("image_url"):
-            img_block = f'<img src="{h(guy["image_url"], quote=True)}" alt="{h(guy["name"])}" width="140" style="width:140px;border-radius:10px;display:block;margin:0 auto 10px;box-shadow:0 2px 8px rgba(0,0,0,.15);" />'
+            img_block = f'<img src="{h(guy["image_url"], quote=True)}" alt="{h(guy["name"])}" width="140" height="190" style="width:140px;max-width:140px;height:auto;border-radius:10px;display:block;margin:0 auto 10px;box-shadow:0 2px 8px rgba(0,0,0,.15);border:0;outline:none;" />'
         tags_html = " ".join(
             f'<span style="background:{C_PRIMARY};color:#fff;font-size:10px;padding:2px 8px;border-radius:10px;margin-right:4px;margin-bottom:4px;display:inline-block;font-family:Arial,sans-serif;">{h(t)}</span>'
             for t in guy.get("tags", [])
@@ -389,8 +405,8 @@ def build_html(data):
   <!-- FOOD OF THE DAY -->
   {food_of_day_html}
 
-  <!-- TIP -->
-  {tip_html}
+  <!-- TIPS -->
+  {tips_html}
 
   <!-- QUOTE -->
   {quote_html}
@@ -456,12 +472,18 @@ def build_plain_text(data):
         lines.append("\n" + "─" * 50)
         lines.append("🍽️ MÓN NGON HÔM NAY")
         lines.append(data["food_of_day"])
-    if data.get("tip"):
+    if data.get("tip_beauty") or data.get("tip_exercise") or data.get("tip_health"):
         lines.append("\n" + "─" * 50)
-        tip_type = data.get("tip_type", "food")
-        label = {"food": "🍜 TIP ẨM THỰC", "health": "🍀 TIP SỨC KHỎE", "beauty": "✨ TIP LÀM ĐẸP & PHONG CÁCH"}.get(tip_type, "💡 TIP HÔM NAY")
-        lines.append(label)
-        lines.append(data["tip"])
+        lines.append("🌸 TIPS HÔM NAY\n")
+        if data.get("tip_beauty"):
+            lines.append("✨ TIP LÀM ĐẸP & CHĂM DA")
+            lines.append(data["tip_beauty"])
+        if data.get("tip_exercise"):
+            lines.append("\n🏃‍♀️ TIP TẬP THỂ DỤC & GIỮ DÁNG")
+            lines.append(data["tip_exercise"])
+        if data.get("tip_health"):
+            lines.append("\n🩺 TIP SỨC KHỎE: HUYẾT ÁP, CỘT SỐNG, VAI GÁY")
+            lines.append(data["tip_health"])
     if data.get("quote"):
         lines.append("\n" + "─" * 50)
         lines.append("💬 CÂU CHÂM NGÔN HÔM NAY")
@@ -573,6 +595,11 @@ function sharePage(){{
   table[width="600"] { width:100% !important; }
   td { word-break:break-word; overflow-wrap:break-word; }
   td[style*="padding:28px 30px"], td[style*="padding:20px 30px"], td[style*="padding:16px 30px"], td[style*="padding:12px 30px"] { padding-left:14px !important; padding-right:14px !important; }
+  /* stack guy image above text on mobile */
+  td[width="150"] { display:block !important; width:100% !important; padding-right:0 !important; text-align:center !important; margin-bottom:10px; }
+  td[width="150"] img { margin:0 auto !important; }
+  td[width="32"] { display:none; }
+  img { max-width:100% !important; height:auto !important; }
 }
 @media print { #web-nav { display:none !important; } body { background:#fff !important; } }
 </style>

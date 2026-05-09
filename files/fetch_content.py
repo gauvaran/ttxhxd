@@ -201,51 +201,65 @@ def _groq_food_of_day(date_str):
     return _groq_call(prompt, max_tokens=350, temperature=0.85)
 
 
+def _groq_tip_beauty(date_str):
+    prompt = (
+        f"Hôm nay là {date_str}. Bạn là beauty blogger và chuyên gia skincare Việt Nam.\n\n"
+        "Viết 1 tip làm đẹp & chăm sóc da dành cho phụ nữ văn phòng. "
+        "Chọn ngẫu nhiên 1 trong các chủ đề: skincare routine, chăm sóc da mặt/body, "
+        "makeup tiết kiệm thời gian, chăm sóc tóc, móng tay, hoặc bí kíp tự tin tỏa sáng.\n\n"
+        "Yêu cầu:\n"
+        "- ~130-150 từ, tiếng Việt sinh động có emoji 💄\n"
+        "- Sản phẩm/nguyên liệu dễ tìm, giá hợp lý\n"
+        "- Tone vui tươi như người bạn thân share bí kíp\n"
+        "- Bắt đầu bằng emoji + tên tip ngắn gọn in đậm"
+    )
+    return _groq_call(prompt, max_tokens=350, temperature=0.8)
+
+
+def _groq_tip_exercise(date_str):
+    prompt = (
+        f"Hôm nay là {date_str}. Bạn là huấn luyện viên thể dục và chuyên gia dinh dưỡng.\n\n"
+        "Viết 1 tip về tập thể dục, giảm cân hoặc giữ dáng cho phụ nữ văn phòng. "
+        "Chọn ngẫu nhiên: bài tập tại nhà/văn phòng không cần dụng cụ, "
+        "cardio đơn giản, mẹo ăn uống để giảm cân, kiểm soát calo, "
+        "hoặc thói quen vận động nhỏ tích lũy cả ngày.\n\n"
+        "Yêu cầu:\n"
+        "- ~130-150 từ, tiếng Việt sinh động có emoji 🏃‍♀️\n"
+        "- Thực tế, làm được ngay không cần gym hay dụng cụ đắt tiền\n"
+        "- Có con số cụ thể (số lần, phút, calo) để dễ thực hiện\n"
+        "- Bắt đầu bằng emoji + tên tip ngắn gọn in đậm"
+    )
+    return _groq_call(prompt, max_tokens=350, temperature=0.8)
+
+
+def _groq_tip_health(date_str):
+    prompt = (
+        f"Hôm nay là {date_str}. Bạn là bác sĩ nội khoa và chuyên gia sức khỏe phụ nữ.\n\n"
+        "Viết 1 tip sức khỏe thực tế cho phụ nữ văn phòng. "
+        "Xoay vòng trong các chủ đề: huyết áp (đo, kiểm soát, thực phẩm tốt/xấu), "
+        "cột sống (tư thế ngồi, bài tập phòng thoái hóa), đau vai gáy (nguyên nhân, bài tập giảm đau nhanh), "
+        "đau đầu, mỏi mắt do màn hình, hoặc sức đề kháng.\n\n"
+        "Yêu cầu:\n"
+        "- ~130-150 từ, tiếng Việt sinh động có emoji 🩺\n"
+        "- Có dẫn chứng khoa học ngắn hoặc con số cụ thể\n"
+        "- Thực tế, áp dụng ngay tại chỗ ngồi văn phòng\n"
+        "- Bắt đầu bằng emoji + tên tip ngắn gọn in đậm"
+    )
+    return _groq_call(prompt, max_tokens=350, temperature=0.75)
+
+
 def _groq_food_tip(date_str):
     prompt = (
         f"Hôm nay là {date_str}. Bạn là đầu bếp và food blogger Việt Nam.\n\n"
-        "Viết 1 tip ẩm thực hữu ích: có thể là công thức nhanh, mẹo nấu ăn, "
-        "giới thiệu món ngon Đà Nẵng/Việt Nam hoặc mẹo chọn nguyên liệu.\n\n"
+        "Viết 1 tip ẩm thực hữu ích: công thức nhanh, mẹo nấu ăn, "
+        "hoặc mẹo chọn nguyên liệu tươi ngon.\n\n"
         "Yêu cầu:\n"
         "- ~120-150 từ, tiếng Việt sinh động có emoji\n"
         "- Thực tế, áp dụng được ngay, không cầu kỳ\n"
         "- Tone vui vẻ như người bạn chia sẻ bí kíp nấu ăn\n"
         "- Bắt đầu bằng emoji và tên tip ngắn gọn"
     )
-    return _groq_call(prompt, max_tokens=400, temperature=0.8)
-
-
-def _groq_health_tip(date_str):
-    prompt = (
-        f"Hôm nay là {date_str}. Bạn là chuyên gia dinh dưỡng và sức khỏe phụ nữ.\n\n"
-        "Viết 1 tip sức khỏe hữu ích dành riêng cho phụ nữ văn phòng: thói quen tốt, "
-        "dinh dưỡng theo chu kỳ, vitamin cần thiết, giảm stress, hoặc chăm sóc sức khỏe sinh sản.\n\n"
-        "Yêu cầu:\n"
-        "- ~130-160 từ, tiếng Việt sinh động có emoji\n"
-        "- Thực tế, dễ áp dụng ngay, có dẫn chứng hoặc lý giải khoa học ngắn\n"
-        "- Tone ân cần như người bạn thân chăm sóc nhau\n"
-        "- Bắt đầu bằng emoji và tên tip ngắn gọn"
-    )
-    return _groq_call(prompt, max_tokens=400, temperature=0.8)
-
-
-def _groq_beauty_tip(date_str):
-    prompt = (
-        f"Hôm nay là {date_str}. Bạn là beauty blogger kiêm lifestyle coach Việt Nam.\n\n"
-        "Viết 1 tip về làm đẹp hoặc phong cách sống dành riêng cho phụ nữ. "
-        "Chọn ngẫu nhiên một trong các chủ đề:\n"
-        "- Skincare / chăm sóc da mặt & body\n"
-        "- Makeup mẹo vặt tiết kiệm thời gian\n"
-        "- Chăm sóc tóc, móng tay\n"
-        "- Phong cách sống: tổ chức không gian sống, digital detox, thói quen buổi sáng, self-care\n"
-        "- Mặc đẹp đến công ty với ngân sách hợp lý\n\n"
-        "Yêu cầu:\n"
-        "- ~130-160 từ, tiếng Việt sinh động có emoji\n"
-        "- Thực tế, dễ áp dụng ngay, không cầu kỳ hoặc tốn kém\n"
-        "- Tone vui tươi như người bạn thân share bí kíp\n"
-        "- Bắt đầu bằng emoji và tên tip ngắn gọn"
-    )
-    return _groq_call(prompt, max_tokens=400, temperature=0.8)
+    return _groq_call(prompt, max_tokens=350, temperature=0.8)
 
 
 def _fetch_rss_articles(target=6, feeds=None):
@@ -341,20 +355,16 @@ def fetch_content():
     food_of_day = _groq_food_of_day(date_iso) if groq_key else ""
     time.sleep(4)
 
-    # ── Phase 5: Tip (rotate: food / health / beauty by day mod 3) ───────────
-    tip_mod = day_num % 3
-    tip_type = "food" if tip_mod == 1 else ("health" if tip_mod == 2 else "beauty")
-    print(f"Generating {tip_type} tip...", file=sys.stderr)
-    if groq_key:
-        if tip_type == "food":
-            tip = _groq_food_tip(date_iso)
-        elif tip_type == "health":
-            tip = _groq_health_tip(date_iso)
-        else:
-            tip = _groq_beauty_tip(date_iso)
-        time.sleep(4)
-    else:
-        tip = ""
+    # ── Phase 5: 3 mandatory tip sub-sections ────────────────────────────────
+    print("Generating beauty tip...", file=sys.stderr)
+    tip_beauty = _groq_tip_beauty(date_iso) if groq_key else ""
+    time.sleep(4)
+    print("Generating exercise tip...", file=sys.stderr)
+    tip_exercise = _groq_tip_exercise(date_iso) if groq_key else ""
+    time.sleep(4)
+    print("Generating health tip...", file=sys.stderr)
+    tip_health = _groq_tip_health(date_iso) if groq_key else ""
+    time.sleep(4)
 
     # ── Phase 6: Motivational quote ───────────────────────────────────────────
     print("Generating motivational quote...", file=sys.stderr)
@@ -371,8 +381,9 @@ def fetch_content():
         "viral": viral,
         "music_fashion": music_fashion,
         "food_of_day": food_of_day,
-        "tip": tip,
-        "tip_type": tip_type,
+        "tip_beauty": tip_beauty,
+        "tip_exercise": tip_exercise,
+        "tip_health": tip_health,
         "quote": quote,
         "guy": guy,
         "groq": bool(groq_key),
