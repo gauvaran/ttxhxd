@@ -1,0 +1,62 @@
+name: TTXHXD Daily Newsletter
+
+on:
+  schedule:
+    - cron: '30 0 * * *'   # 07:30 GMT+7 (00:30 UTC)
+    - cron: '30 2 * * *'   # 09:30 GMT+7 fallback
+  workflow_dispatch:
+
+jobs:
+  send-news:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        env:
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+      - name: Check if today's newsletter already exists
+        id: check
+        run: |
+          TODAY=$(date -u '+%Y-%m-%d')
+          if [ -f "docs/${TODAY}.html" ]; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+            echo "Newsletter for ${TODAY} already exists — skipping."
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up Python
+        if: steps.check.outputs.skip == 'false'
+        uses: actions/setup-python@v5
+        env:
+          FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        if: steps.check.outputs.skip == 'false'
+        run: |
+          pip install feedparser weasyprint --quiet
+          sudo apt-get install -y libpango-1.0-0 libpangoft2-1.0-0 libcairo2 --quiet 2>/dev/null || true
+
+      - name: Run TTXHXD Bot
+        if: steps.check.outputs.skip == 'false'
+        env:
+          EMAIL_FROM:     ${{ secrets.EMAIL_FROM }}
+          EMAIL_TO:       ${{ secrets.EMAIL_TO }}
+          EMAIL_BCC:      ${{ secrets.EMAIL_BCC }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          GROQ_API_KEY:   ${{ secrets.GROQ_API_KEY }}
+        run: python files/ai_news_bot.py
+
+      - name: Publish web pages
+        if: steps.check.outputs.skip == 'false'
+        run: |
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add docs/
+          git diff --staged --quiet || git commit -m "newsletter $(date +%Y-%m-%d)"
+          git push
