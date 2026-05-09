@@ -16,7 +16,7 @@ import time
 from html.parser import HTMLParser
 
 GROQ_URL   = "https://api.groq.com/openai/v1/chat/completions"
-GROQ_MODEL = "llama-3.3-70b-versatile"
+GROQ_MODEL = "llama-3.1-8b-instant"
 
 # 9 feeds × 1 bài/feed = 9 tin trải đều 9 chủ đề
 RSS_FEEDS = [
@@ -53,10 +53,11 @@ except Exception:
     _GUYS = []
 
 
-def get_daily_guy():
+def get_daily_guy(override_date=None):
     if not _GUYS:
         return None
-    idx = (datetime.datetime.now().timetuple().tm_yday - 1) % len(_GUYS)
+    d = override_date or datetime.datetime.now()
+    idx = (d.timetuple().tm_yday - 1) % len(_GUYS)
     return _GUYS[idx]
 
 
@@ -111,16 +112,23 @@ def _groq_call(prompt, max_tokens=600, temperature=0.7):
 
 
 def _groq_summarize_vi(title, raw_text):
-    if not raw_text:
-        return ""
-    prompt = (
-        "Bạn là biên tập viên tin tức cho một tờ báo điện tử Việt Nam. "
-        "Dựa HOÀN TOÀN vào nội dung được cung cấp bên dưới, "
-        "hãy viết tóm tắt 3-5 câu bằng tiếng Việt, rõ ràng, dễ hiểu, súc tích. "
-        "Tone dí dỏm, thân thiện — không khô khan như báo cáo. "
-        "TUYỆT ĐỐI không thêm thông tin ngoài bài.\n\n"
-        f"Tiêu đề: {title}\n\nNội dung: {raw_text[:3000]}"
-    )
+    clean = (raw_text or "").strip()
+    if len(clean) < 80:
+        # RSS desc quá ngắn — generate từ tiêu đề, dùng kiến thức mô hình
+        prompt = (
+            "Bạn là biên tập viên tin tức Việt Nam. "
+            f"Viết tóm tắt 3-4 câu tiếng Việt, dí dỏm, thân thiện về bài báo sau:\n\n"
+            f"Tiêu đề: {title}\n\n"
+            "Tóm tắt phải nói đúng nội dung của tiêu đề trên."
+        )
+    else:
+        prompt = (
+            "Bạn là biên tập viên tin tức Việt Nam. "
+            "Dựa VÀO NỘI DUNG bên dưới, viết tóm tắt 3-5 câu tiếng Việt, dí dỏm, thân thiện.\n"
+            "QUAN TRỌNG: tóm tắt phải phản ánh đúng tiêu đề bài báo. "
+            "Nếu nội dung không liên quan đến tiêu đề, hãy tóm tắt theo tiêu đề.\n\n"
+            f"Tiêu đề: {title}\n\nNội dung: {clean[:3000]}"
+        )
     return _groq_call(prompt, max_tokens=300, temperature=0.3)
 
 
@@ -262,16 +270,16 @@ def _groq_food_tip(date_str):
     return _groq_call(prompt, max_tokens=350, temperature=0.8)
 
 
-def _fetch_rss_articles(target=6, feeds=None):
+def _fetch_rss_articles(target=6, feeds=None, seed=None):
+    import random as _random
     socket.setdefaulttimeout(12)
     headers = {"User-Agent": "Mozilla/5.0 (compatible; TTXHXDBot/1.0)"}
     raw = []
     feed_list = feeds if feeds is not None else RSS_FEEDS
 
-    per_feed = 1 if feeds is None else 4  # main feeds: 1/feed → 1 bài/chủ đề; danang: up to 4
+    # With a seed we fetch more entries per feed so shuffle gives real variety.
+    per_feed = (5 if seed is not None else 1) if feeds is None else 8
     for feed_url, publisher in feed_list:
-        if len(raw) >= target + 3:
-            break
         try:
             feed = feedparser.parse(feed_url, request_headers=headers)
             for entry in feed.entries[:per_feed]:
@@ -290,6 +298,10 @@ def _fetch_rss_articles(target=6, feeds=None):
         except Exception as e:
             print(f"Feed error ({publisher}): {e}", file=sys.stderr)
 
+    if seed is not None:
+        _random.seed(seed)
+        _random.shuffle(raw)
+
     # Deduplicate by title similarity
     seen, deduped = set(), []
     for item in raw:
@@ -303,14 +315,18 @@ def _fetch_rss_articles(target=6, feeds=None):
 
 def fetch_content():
     groq_key = os.environ.get("GROQ_API_KEY", "")
-    today = datetime.datetime.now()
+    _override = os.environ.get("DATE_OVERRIDE")
+    today = datetime.datetime.strptime(_override, "%Y-%m-%d") if _override else datetime.datetime.now()
     date_str = today.strftime("%d/%m/%Y")
     date_iso = today.strftime("%Y-%m-%d")
     day_num = today.timetuple().tm_yday
 
+    # seed: unique integer per date so each day picks a different article subset
+    date_seed = int(today.strftime("%Y%m%d")) if _override else None
+
     # ── Phase 1: Fetch main VN RSS articles ───────────────────────────────────
     print("Fetching VN RSS feeds...", file=sys.stderr)
-    raw_articles = _fetch_rss_articles(target=9)
+    raw_articles = _fetch_rss_articles(target=9, seed=date_seed)
 
     # ── Phase 2: Groq summarize main articles ─────────────────────────────────
     articles = []
@@ -327,7 +343,7 @@ def fetch_content():
 
     # ── Phase 3: Đà Nẵng dedicated news ──────────────────────────────────────
     print("Fetching Đà Nẵng RSS feeds...", file=sys.stderr)
-    raw_danang = _fetch_rss_articles(target=3, feeds=DANANG_FEEDS)
+    raw_danang = _fetch_rss_articles(target=3, feeds=DANANG_FEEDS, seed=date_seed)
     danang_articles = []
     for i, art in enumerate(raw_danang):
         print(f"  DaNang {i+1}/{len(raw_danang)}: {art['title'][:50]}...", file=sys.stderr)
@@ -372,7 +388,7 @@ def fetch_content():
     time.sleep(4)
 
     # ── Phase 7: Handsome guy of the day ─────────────────────────────────────
-    guy = get_daily_guy()
+    guy = get_daily_guy(today)
 
     return {
         "date": date_str,

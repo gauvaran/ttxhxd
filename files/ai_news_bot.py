@@ -39,23 +39,23 @@ MAX_RETRIES    = 3
 RETRY_DELAY    = 15
 LOG_FILE       = os.path.join(os.path.dirname(__file__), "bot.log")
 
-# Color palette — Gen Z feminine, modern, trendy
-C_PRIMARY   = "#C2006F"   # vibrant hot pink (header, badges)
-C_ACCENT    = "#F50057"   # bright magenta-pink (links, accents)
-C_LIGHT     = "#FFF5FB"   # soft pink background
-C_PINK_BG   = "#FCE4EC"   # light pink sections
+# Color palette — professional warm gold, feminine
+C_PRIMARY   = "#8B6508"   # deep warm gold (header, badges)
+C_ACCENT    = "#C9950C"   # amber gold (links, accents)
+C_LIGHT     = "#FFFDE7"   # soft ivory-yellow background
+C_PINK_BG   = "#FFF9C4"   # light yellow sections
 C_AMBER_BG  = "#FFF8E1"   # amber
 C_GREEN_BG  = "#E8F5E9"   # green
-C_GOLD      = "#FFB300"   # warm amber gold
+C_GOLD      = "#F9A825"   # warm gold
 C_TEAL_BG   = "#E0F2F1"   # teal bg (Đà Nẵng)
 C_TEAL      = "#00897B"   # teal accent
 C_PURPLE_BG = "#EDE7F6"   # purple bg (music, quote)
 C_PURPLE    = "#7B1FA2"   # purple accent
-C_BEAUTY_BG = "#FCE4EC"   # beauty tip bg
+C_BEAUTY_BG = "#FCE4EC"   # beauty tip bg (giữ hồng theo chủ đề)
 C_CORAL     = "#E64A19"   # coral/orange (food)
 C_CORAL_BG  = "#FBE9E7"   # light coral bg
-C_STICKER   = "#FFF0F8"   # sticker rows bg
-C_STRIPE    = "#FF80AB"   # header top/bottom stripe
+C_STICKER   = "#FFFFF0"   # sticker rows bg (ivory)
+C_STRIPE    = "#FFD54F"   # header stripe (golden amber)
 # ──────────────────────────────────────────────────────────────────────────────
 
 logging.basicConfig(
@@ -110,7 +110,7 @@ def build_html(data):  # noqa: C901
                 f'{emoji}&nbsp;{text}</span></td></tr></table></td></tr>')
 
     # ── Articles ─────────────────────────────────────────────────────────────
-    ART_BG = ["#FFFFFF", "#FFF8FC"]   # alternating card backgrounds
+    ART_BG = ["#FFFFFF", "#FFFEF5"]   # alternating card backgrounds
     articles_html = ""
     for i, art in enumerate(articles, 1):
         art_bg = ART_BG[(i - 1) % 2]
@@ -120,7 +120,7 @@ def build_html(data):  # noqa: C901
             <tr>
               <td colspan="2" style="padding:10px 0 0 42px;">
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-                  <td bgcolor="#FFF5FB" style="background-color:#FFF5FB;padding:10px 14px;border-left:3px solid {C_ACCENT};border-radius:0 4px 4px 0;">
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid {C_ACCENT};border-radius:0 4px 4px 0;">
                     <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">{h(art["summary"])}</p>
                   </td>
                 </tr></table>
@@ -154,7 +154,7 @@ def build_html(data):  # noqa: C901
             </td>
           </tr>
           <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-            <td height="1" bgcolor="#FFCCE0" style="background-color:#FFCCE0;font-size:0;line-height:0;">&nbsp;</td>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
           </tr></table></td></tr>"""
 
     # ── Đà Nẵng section ──────────────────────────────────────────────────────
@@ -256,7 +256,7 @@ def build_html(data):  # noqa: C901
         tips_html = (
             _sticker("💄 💪 🩺 💪 💄")
             + _badge("💡", "Tips dành cho chị em hôm nay", C_PRIMARY)
-            + _tip_card("💄", "#AD1457", "#AD1457", "#FCE4EC", "#F8BBD9",
+            + _tip_card("💄", "#AD1457", "#AD1457", "#FCE4EC", "#FFE082",
                         "Tip làm đẹp &amp; chăm da", tip_beauty)
             + _tip_card("🏃", "#2E7D32", "#2E7D32", "#E8F5E9", "#C8E6C9",
                         "Tip tập thể dục &amp; giữ dáng", tip_exercise)
@@ -282,7 +282,7 @@ def build_html(data):  # noqa: C901
             img_block = (f'<img src="{h(guy["image_url"], quote=True)}" alt="{h(guy["name"])}" '
                          f'width="140" height="190" style="width:140px;max-width:140px;height:auto;'
                          f'border-radius:12px;display:block;margin:0 auto 10px;'
-                         f'box-shadow:0 4px 14px rgba(194,0,111,.25);border:3px solid #FFD6ED;outline:none;" />')
+                         f'box-shadow:0 4px 14px rgba(139,101,8,.20);border:3px solid #FFE082;outline:none;" />')
         tags_html = " ".join(
             f'<span style="background:{C_ACCENT};color:#fff;font-size:10px;padding:3px 10px;'
             f'border-radius:12px;margin-right:4px;margin-bottom:4px;display:inline-block;'
@@ -322,7 +322,7 @@ def build_html(data):  # noqa: C901
                            f'<p style="margin:0 0 8px;font-size:12px;color:#555;font-family:Arial,sans-serif;">{h(guy["awards"])}</p>')
 
         guy_html = f"""
-  {_sticker("💗 😍 💗 😍 💗", "#FFF0F8")}
+  {_sticker("💛 😍 💛 😍 💛", "#FFFFF0")}
   {_badge("🌟", "Crush Hôm Nay", C_GOLD, "#FFF9E6")}
   <tr><td bgcolor="{C_LIGHT}" style="background-color:{C_LIGHT};padding:16px 24px 22px;border-top:3px solid {C_GOLD};">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
@@ -355,7 +355,7 @@ def build_html(data):  # noqa: C901
 
 <table role="presentation" width="600" cellpadding="0" cellspacing="0"
        style="max-width:600px;width:100%;background-color:#FFFFFF;border-radius:14px;
-              box-shadow:0 4px 24px rgba(194,0,111,.12);" bgcolor="#FFFFFF">
+              box-shadow:0 4px 24px rgba(139,101,8,.12);" bgcolor="#FFFFFF">
 
   <!-- HEADER TOP STICKER STRIPE -->
   <tr>
@@ -370,12 +370,12 @@ def build_html(data):  # noqa: C901
       <p style="margin:0 0 10px;font-size:26px;font-weight:bold;color:#FFFFFF;font-family:Arial,sans-serif;line-height:1.2;">
         💌 Thông Tấn Xã Heo Xinh Đẹp
       </p>
-      <p style="margin:0 0 14px;font-size:13px;color:#F8BBD9;font-family:Arial,sans-serif;">
+      <p style="margin:0 0 14px;font-size:13px;color:#FFE082;font-family:Arial,sans-serif;">
         Bản tin hàng ngày dành cho chị em văn phòng 💕
       </p>
       <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
         <tr>
-          <td bgcolor="#AD1457" style="background-color:#AD1457;border-radius:20px;padding:6px 20px;">
+          <td bgcolor="#7B5000" style="background-color:#7B5000;border-radius:20px;padding:6px 20px;">
             <span style="color:#FFFFFF;font-size:13px;font-weight:bold;font-family:Arial,sans-serif;">📅 {date_str}</span>
           </td>
         </tr>
@@ -385,8 +385,8 @@ def build_html(data):  # noqa: C901
 
   <!-- HEADER BOTTOM FLOWER STRIPE -->
   <tr>
-    <td bgcolor="#FFB7D5" style="background-color:#FFB7D5;padding:7px 20px;text-align:center;">
-      <p style="margin:0;font-size:18px;letter-spacing:5px;font-family:Arial,sans-serif;">🌸 🌷 💐 🌷 🌸</p>
+    <td bgcolor="#FFD54F" style="background-color:#FFD54F;padding:7px 20px;text-align:center;">
+      <p style="margin:0;font-size:18px;letter-spacing:5px;font-family:Arial,sans-serif;">✨ 🌼 💛 🌼 ✨</p>
     </td>
   </tr>
 
@@ -420,14 +420,14 @@ def build_html(data):  # noqa: C901
   <!-- FOOTER -->
   <tr>
     <td bgcolor="{C_PRIMARY}" style="background-color:{C_PRIMARY};padding:16px 30px 12px;text-align:center;">
-      <p style="margin:0 0 6px;font-size:20px;letter-spacing:5px;font-family:Arial,sans-serif;">🌸 💕 🌸 💕 🌸</p>
-      <p style="margin:0 0 4px;font-size:13px;color:#F8BBD9;font-family:Arial,sans-serif;">
+      <p style="margin:0 0 6px;font-size:20px;letter-spacing:5px;font-family:Arial,sans-serif;">✨ 💛 ✨ 💛 ✨</p>
+      <p style="margin:0 0 4px;font-size:13px;color:#FFE082;font-family:Arial,sans-serif;">
         Chúc chị em một ngày vui vẻ và năng suất! ✨
       </p>
-      <p style="margin:0 0 10px;font-size:11px;color:#F48FB1;font-family:Arial,sans-serif;">
+      <p style="margin:0 0 10px;font-size:11px;color:#FFD54F;font-family:Arial,sans-serif;">
         TTXHXD — Tổng hợp bởi Groq AI &amp; nguồn tin VN 💌
       </p>
-      <p style="margin:0;font-size:18px;letter-spacing:5px;font-family:Arial,sans-serif;border-radius:0 0 14px 14px;">🌷 ✨ 🌷 ✨ 🌷</p>
+      <p style="margin:0;font-size:18px;letter-spacing:5px;font-family:Arial,sans-serif;border-radius:0 0 14px 14px;">🌼 ✨ 🌼 ✨ 🌼</p>
     </td>
   </tr>
 
@@ -567,10 +567,10 @@ def build_web_html(data, date_slug=None):
     btn_style = f"background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:5px 12px;border-radius:4px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;text-decoration:none;display:inline-block;"
     pdf_slug  = date_slug or _date_slug()
     nav = f"""<div id="web-nav" style="background:{C_PRIMARY};padding:8px 16px;font-family:Arial,sans-serif;font-size:13px;position:sticky;top:0;z-index:999;border-bottom:2px solid {C_ACCENT};display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;">
-  <span id="nav-prev" style="color:#F48FB1;">&#8592;</span>
+  <span id="nav-prev" style="color:#C9950C;">&#8592;</span>
   <a href="all.html" style="color:#FFD700;text-decoration:none;font-weight:bold;">&#128240; T&#7845;t c&#7843; b&#7843;n tin</a>
   <span style="color:#FFFFFF;">{h(data['date'])}</span>
-  <span id="nav-next" style="color:#F48FB1;">&#8594;</span>
+  <span id="nav-next" style="color:#C9950C;">&#8594;</span>
   <a href="{pdf_slug}.pdf" download="{pdf_slug}.pdf" style="{btn_style}">&#128196; T&#7843;i PDF</a>
   <button onclick="sharePage()" style="{btn_style}">&#128279; Chia s&#7867;</button>
 </div>
@@ -585,7 +585,7 @@ function sharePage(){{
   if(!m)return;
   var slug=m[1];
   function fmt(s){{var p=s.split('-');return p[2]+'/'+p[1];}}
-  var lnkStyle='color:#F8BBD9;text-decoration:none;';
+  var lnkStyle='color:#FFE082;text-decoration:none;';
   fetch('dates.json?_='+Date.now())
     .then(function(r){{return r.json();}})
     .then(function(dates){{
@@ -637,7 +637,7 @@ def update_web_index(all_dates):
         dt = datetime.datetime.strptime(d, "%Y-%m-%d")
         label = dt.strftime("%d/%m/%Y")
         weekday = ["Thứ Hai","Thứ Ba","Thứ Tư","Thứ Năm","Thứ Sáu","Thứ Bảy","Chủ Nhật"][dt.weekday()]
-        rows += f'<tr><td style="padding:12px 20px;border-bottom:1px solid #FCE4EC;"><a href="{d}.html" style="color:{C_PRIMARY};text-decoration:none;font-size:15px;font-weight:bold;">{label}</a><span style="color:#999;font-size:13px;margin-left:10px;">{weekday}</span></td></tr>\n'
+        rows += f'<tr><td style="padding:12px 20px;border-bottom:1px solid #FFE082;"><a href="{d}.html" style="color:{C_PRIMARY};text-decoration:none;font-size:15px;font-weight:bold;">{label}</a><span style="color:#999;font-size:13px;margin-left:10px;">{weekday}</span></td></tr>\n'
 
     latest_dt = datetime.datetime.strptime(latest, "%Y-%m-%d") if latest else None
     latest_label = latest_dt.strftime("%d/%m/%Y") if latest_dt else ""
@@ -650,7 +650,7 @@ def update_web_index(all_dates):
 <div style="max-width:600px;margin:40px auto;background:#fff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.1);">
   <div style="background:{C_PRIMARY};padding:24px 30px;text-align:center;">
     <h1 style="margin:0;color:#fff;font-size:22px;">&#128150; TTXHXD — Bản tin hàng ngày</h1>
-    <p style="margin:8px 0 0;color:#F8BBD9;font-size:13px;">Thông Tấn Xã Heo Xinh Đẹp</p>
+    <p style="margin:8px 0 0;color:#FFE082;font-size:13px;">Thông Tấn Xã Heo Xinh Đẹp</p>
   </div>
   {f'<div style="padding:14px 20px;text-align:center;background:{C_PINK_BG};border-bottom:2px solid {C_ACCENT};"><a href="{latest}.html" style="display:inline-block;background:{C_PRIMARY};color:#fff;padding:9px 22px;border-radius:6px;text-decoration:none;font-size:14px;font-weight:bold;">&#128240; Bản tin mới nhất &mdash; {latest_label}</a></div>' if latest else ''}
   <div style="padding:10px 20px 4px;background:#F5F7FA;">
