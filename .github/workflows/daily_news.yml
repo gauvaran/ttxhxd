@@ -60,3 +60,10 @@ jobs:
           git add docs/
           git diff --staged --quiet || git commit -m "newsletter $(date +%Y-%m-%d)"
           git push
+
+      - name: Deploy to Cloudflare Pages
+        if: steps.check.outputs.skip == 'false'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: 8d14dd57d0b4ead34dd4af6a027dc439
+        run: npx wrangler pages deploy docs --project-name ttxhxd --branch master --commit-dirty=true
