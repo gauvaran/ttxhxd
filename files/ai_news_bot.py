@@ -524,7 +524,8 @@ def send_email(subject, html, plain_text):
     msg["Subject"] = Header(subject, "utf-8")
     msg["From"]    = from_header
     msg["To"]      = "undisclosed-recipients:;"
-    msg["Bcc"]     = ", ".join(bcc_list)
+    # Do NOT add Bcc header — recipients would see the full list.
+    # BCC is handled by the SMTP envelope (RCPT TO) in sendmail() below.
 
     msg.attach(MIMEText(plain_text, "plain", "utf-8"))
     msg.attach(MIMEText(html, "html", "utf-8"))
