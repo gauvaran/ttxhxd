@@ -45,7 +45,7 @@ GUYS = [
         "top_works": "'Thằng Điên', 'Nồng Nàn Hơi Thở Em', phim 'Song Lang' (LHP Busan)",
         "awards": "Diễn viên xuất sắc LHP Busan, đề cử nhiều giải thưởng điện ảnh",
         "intro": "Isaac sinh ngày 22/11/1994, cao 1m79 — từ 365 đến solo career thành công vang dội. Vai diễn trong 'Song Lang' đoạt giải tại LHP Busan, đưa tên tuổi ra quốc tế. Ballad ngọt, diễn xuất chất, body gym đẹp — combo hoàn hảo.",
-        "image_url": "", "tags": ["V-pop", "diễn viên", "ballad"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Jun_Pham_GDHH.png/400px-Jun_Pham_GDHH.png", "tags": ["V-pop", "diễn viên", "ballad"],
     },
     {
         "name": "Đen Vâu",
@@ -71,7 +71,7 @@ GUYS = [
         "top_works": "'Không Thể Say', 'Tôi Thấy Hoa Vàng Trên Cỏ Xanh' OST, 'Lời Hứa Của Anh'",
         "awards": "Top trending nhạc Việt, hàng triệu stream Spotify",
         "intro": "Tăng Duy Tân sinh ngày 17/03/1998 — chàng trai Gia Lai với nụ cười rạng rỡ đặc trưng. 'Không Thể Say' viral khắp mạng xã hội, chứng minh âm nhạc dân gian đương đại có thể chinh phục thế hệ trẻ. Da ngăm khỏe khoắn, vibe miền cao tự nhiên.",
-        "image_url": "", "tags": ["V-pop", "dân gian đương đại"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/6/6d/Tangduytan.png", "tags": ["V-pop", "dân gian đương đại"],
     },
     {
         "name": "Noo Phước Thịnh",
@@ -84,7 +84,7 @@ GUYS = [
         "top_works": "'Cause I Love You', 'Chạm Khẽ Tim Anh Một Chút Thôi', 'Tâm Sự Tuổi 30'",
         "awards": "Làn Sóng Xanh nhiều lần, VTV Awards, ông hoàng nhạc dance V-pop",
         "intro": "Noo Phước Thịnh sinh ngày 02/11/1987 — ông hoàng nhạc dance V-pop với vũ đạo điêu luyện đỉnh cao. Body từ tập nhảy chuyên nghiệp cân đối đẹp mắt. Hát live + nhảy cùng lúc cực chuẩn — tài năng hiếm gặp trong showbiz Việt.",
-        "image_url": "", "tags": ["V-pop", "dance", "icon"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/c/cf/Noo_Ph%C6%B0%E1%BB%9Bc_Th%E1%BB%8Bnh.png", "tags": ["V-pop", "dance", "icon"],
     },
     {
         "name": "Erik (Nguyễn Minh Anh)",
@@ -192,7 +192,7 @@ GUYS = [
         "top_works": "'The Astronaut', 'Epiphany', 'Awake', 'Super Tuna' (viral meme toàn cầu)",
         "awards": "Grammy nomination, Daesang MAMA/Melon/MMA, Billboard Music Awards",
         "intro": "Jin sinh ngày 04/12/1992 — tự phong 'Worldwide Handsome' và cả thế giới đồng ý. Xuất ngũ với body đỉnh hơn trước khi đi — quân đội Hàn Quốc là gym tốt nhất! Giọng tenor trong vắt, khiếu hài hước vô đối, nụ cười windshield-wiper iconic.",
-        "image_url": "", "tags": ["K-pop", "BTS", "Worldwide Handsome"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/BTS_Jin_at_Maison_Fred%2C_13_March_2025_04.png/400px-BTS_Jin_at_Maison_Fred%2C_13_March_2025_04.png", "tags": ["K-pop", "BTS", "Worldwide Handsome"],
     },
     {
         "name": "Jimin (Park Jimin)",
@@ -205,7 +205,7 @@ GUYS = [
         "top_works": "Album 'FACE', 'Like Crazy' (#1 Billboard Hot 100), 'Set Me Free Pt. 2', 'Vibe'",
         "awards": "#1 Billboard Hot 100, Grammy nomination, Melon Daesang, Global Icon Award",
         "intro": "Jimin sinh ngày 13/10/1995 — nghệ sĩ solo người Hàn đầu tiên đạt #1 Billboard Hot 100 với 'Like Crazy'. Kỹ thuật nhảy contemporary đỉnh cao, biểu cảm sân khấu cuốn hút không ai cưỡng lại. Visible abs từ những lần fancam viral gây sốt toàn cầu.",
-        "image_url": "", "tags": ["K-pop", "BTS", "dancer"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/33/Jimin_on_the_way_to_SBS_Radio%2C_31_March_2023_%282%29.jpg", "tags": ["K-pop", "BTS", "dancer"],
     },
     {
         "name": "RM (Kim Namjoon)",
@@ -231,7 +231,7 @@ GUYS = [
         "top_works": "Album 'Jack in the Box' (2022), 'MORE', headline Lollapalooza 2022, 'ON THE STREET'",
         "awards": "Grammy nomination, Billboard Music Awards, headline festival quốc tế",
         "intro": "J-Hope sinh ngày 18/02/1994 — 'sunshine' của BTS với năng lượng dồi dào không giới hạn. Nghệ sĩ Hàn Quốc đầu tiên headline solo tại Lollapalooza 2022 (festival âm nhạc lớn Mỹ). Nhảy đường phố đỉnh, phong cách thời trang táo bạo. Xuất ngũ về là anh bùng cháy ngay!",
-        "image_url": "", "tags": ["K-pop", "BTS", "dancer"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/J-Hope_at_W_Korea_Breast_Cancer_Campaign%2C_15_October_2025.png/400px-J-Hope_at_W_Korea_Breast_Cancer_Campaign%2C_15_October_2025.png", "tags": ["K-pop", "BTS", "dancer"],
     },
 
     # ── 🇰🇷 EXO ───────────────────────────────────────────────────────────────
@@ -246,7 +246,7 @@ GUYS = [
         "top_works": "Album solo 'City Lights', 'Delight' (1M copies), 'Bambi', EXO 'Ko Ko Bop'",
         "awards": "Daesang MAMA/Melon, Gaon Chart Awards, Bonsang Golden Disc/Seoul Music Awards",
         "intro": "Baekhyun sinh ngày 06/05/1992 — vocal main EXO, nghệ sĩ solo bán hơn 1 triệu album mỗi comeback. Nụ cười mắt híp ngây thơ, aegyo hàng đầu K-pop nhưng lên sân khấu thì charisma hoàn toàn khác. Xuất ngũ xong bùng cháy trở lại không kịp thở!",
-        "image_url": "", "tags": ["K-pop", "EXO", "solo artist"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/%ED%95%98%EC%96%80%EB%A8%B8%EB%A6%AC_%EB%B0%B1%ED%98%84_3.jpg/400px-%ED%95%98%EC%96%80%EB%A8%B8%EB%A6%AC_%EB%B0%B1%ED%98%84_3.jpg", "tags": ["K-pop", "EXO", "solo artist"],
     },
     {
         "name": "Kai (Kim Jongin)",
@@ -272,7 +272,7 @@ GUYS = [
         "top_works": "EXO 'Monster', 'Wolf', 'Obsession'; Dolce & Gabbana Global Ambassador",
         "awards": "Daesang MAMA/Melon (với EXO), nhiều giải thưởng thời trang quốc tế",
         "intro": "Sehun sinh ngày 12/04/1994 — maknae EXO, cao nhất nhóm 1m83, global ambassador của Dolce & Gabbana. Visual được xếp vào hàng đẹp trai nhất K-pop qua các thời đại. Mê skateboard và chụp ảnh film — depth thật sự không chỉ là idol image.",
-        "image_url": "", "tags": ["K-pop", "EXO", "fashion icon"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/Oh_Se-hun_at_Rimowa_Essential_Poly_Color_Collection_Launch_on_July_5%2C_2019.png/400px-Oh_Se-hun_at_Rimowa_Essential_Poly_Color_Collection_Launch_on_July_5%2C_2019.png", "tags": ["K-pop", "EXO", "fashion icon"],
     },
     {
         "name": "Chanyeol (Park Chanyeol)",
@@ -285,7 +285,7 @@ GUYS = [
         "top_works": "EXO 'Power', 'Tempo', 'Ko Ko Bop'; solo 'Tomorrow', 'SSFW'",
         "awards": "Daesang MAMA/Melon (với EXO), nhiều giải thưởng âm nhạc Hàn Quốc",
         "intro": "Chanyeol sinh ngày 27/11/1992 — rapper EXO, tự sản xuất âm nhạc nghiêm túc. Giọng rap trầm đặc trưng, chơi được guitar/piano/drum thật sự. Body cao to 1m85 rắn chắc. Nụ cười chiều rộng iconic — có thể làm bất cứ ai rung động chỉ bằng một nụ cười!",
-        "image_url": "", "tags": ["K-pop", "EXO", "nhạc sĩ"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Chanyeol_during_the_Exo_Planet_5_%E2%80%93_Exploration_concert_on_December_2019.jpg/400px-Chanyeol_during_the_Exo_Planet_5_%E2%80%93_Exploration_concert_on_December_2019.jpg", "tags": ["K-pop", "EXO", "nhạc sĩ"],
     },
 
     # ── 🇰🇷 Stray Kids ────────────────────────────────────────────────────────
@@ -328,7 +328,7 @@ GUYS = [
         "top_works": "TXT 'Good Boy Gone Bad', 'Sugar Rush Ride'; solo 'LOCA', 'Chasing That Feeling'",
         "awards": "MAMA Rookie/Daesang (với TXT), Melon Music Awards, MTV VMAs",
         "intro": "Yeonjun sinh ngày 13/09/1999 — center và main dancer TXT, một trong những vũ công xuất sắc nhất 4th gen K-pop. Cao 1m81, phong thái lạnh lùng trên sân khấu nhưng rất vui tính ngoài đời. Bias wrecker #1 TXT fandom!",
-        "image_url": "", "tags": ["K-pop", "TXT", "dancer"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/Yeonjun_250625.jpg/400px-Yeonjun_250625.jpg", "tags": ["K-pop", "TXT", "dancer"],
     },
     {
         "name": "Wonwoo (Jeon Wonwoo)",
@@ -354,7 +354,7 @@ GUYS = [
         "top_works": "NCT 127 'Kick It', 'Cherry Bomb', 'Simon Says'; solo 'SHALALA'",
         "awards": "Daesang MAMA/Gaon (với NCT 127), MTV VMAs, Billboard Chart",
         "intro": "Taeyong sinh ngày 01/07/1995 — leader NCT 127, visual số 1 SM Entertainment. Khuôn mặt như điêu khắc, vũ đạo sharp tuyệt đối, rap rõ từng chữ. Thiết kế đồ trang sức và vẽ graffiti ngoài âm nhạc. Bộ tổng Taeyong hiếm có!",
-        "image_url": "", "tags": ["K-pop", "NCT", "visual"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/13/20231006_Taeyong_%28NCT%29.jpg/400px-20231006_Taeyong_%28NCT%29.jpg", "tags": ["K-pop", "NCT", "visual"],
     },
     {
         "name": "Mark Lee (이마크)",
@@ -393,7 +393,7 @@ GUYS = [
         "top_works": "Drama 'True Beauty' (2020), 'My ID is Gangnam Beauty', 'A Good Day to be a Dog' (2023)",
         "awards": "Baeksang Arts Awards đề cử, Asia Artist Awards, APAN Star Awards",
         "intro": "Cha Eunwoo sinh ngày 30/03/1997 — mệnh danh 'Real Life Manhwa Character' vì khuôn mặt cực kỳ đối xứng và hoàn hảo đến mức không tin là có thật. Cử nhân ĐH Sungkyunkwan ngành Kỹ thuật điện — đẹp mà còn học giỏi. 'True Beauty' gây bão MXH toàn châu Á.",
-        "image_url": "", "tags": ["K-pop", "ASTRO", "visual legend"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Cha_Eun-woo%2C_March_31%2C_2025.png/400px-Cha_Eun-woo%2C_March_31%2C_2025.png", "tags": ["K-pop", "ASTRO", "visual legend"],
     },
 
     # ── 🇰🇷 K-drama actors ────────────────────────────────────────────────────
@@ -408,7 +408,7 @@ GUYS = [
         "top_works": "Drama 'Reply 1988' (2015), 'Moonlight Drawn by Clouds' (2016), 'Record of Youth' (2020)",
         "awards": "Baeksang Arts Awards (Nam diễn viên nổi tiếng), KBS Drama Awards (Nam chính)",
         "intro": "Park Bogum sinh ngày 16/06/1993 — mẫu nam thần Hàn hoàn hảo nhất: đẹp, tài, tử tế và chân thành. Chơi piano cực giỏi, màn biểu diễn tại fansign viral khắp mạng. 'Reply 1988' và 'Moonlight' đưa anh vào lòng hàng triệu khán giả châu Á.",
-        "image_url": "", "tags": ["K-drama", "diễn viên", "piano"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/86/Park_Bo-gum_%EB%B0%95%EB%B3%B4%EA%B2%80_%E6%9C%B4%E5%AF%B6%E5%8A%8D_for_Marie_Claire_Korea%2C_April_2025_4.png/400px-Park_Bo-gum_%EB%B0%95%EB%B3%B4%EA%B2%80_%E6%9C%B4%E5%AF%B6%E5%8A%8D_for_Marie_Claire_Korea%2C_April_2025_4.png", "tags": ["K-drama", "diễn viên", "piano"],
     },
     {
         "name": "Park Seo-jun",
@@ -421,7 +421,7 @@ GUYS = [
         "top_works": "Drama 'What's Wrong with Secretary Kim' (2018), 'Itaewon Class' (2020), Marvel 'The Marvels' (2023)",
         "awards": "SBS Drama Awards (Nam chính), tvN Drama Awards, Baeksang đề cử",
         "intro": "Park Seo-jun sinh ngày 16/12/1988 — body gym 6-pack visible trong nhiều cảnh quay. 'Itaewon Class' viral toàn cầu trên Netflix, sau đó gia nhập Marvel. Drama nào có Park Seo-jun là chị em coi không bỏ tập nào!",
-        "image_url": "", "tags": ["K-drama", "Marvel 🎬", "6-pack 🔥"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/39/Park_Seo-joon_in_March_2026.png/400px-Park_Seo-joon_in_March_2026.png", "tags": ["K-drama", "Marvel 🎬", "6-pack 🔥"],
     },
     {
         "name": "Kim Soo-hyun",
@@ -434,7 +434,7 @@ GUYS = [
         "top_works": "'My Love from the Star' (2013), 'Moon That Embraces the Sun' (2012), 'Queen of Tears' (2024)",
         "awards": "Baeksang Arts Awards (Nam diễn viên xuất sắc), Daesang nhiều lễ trao giải, cát-xê cao nhất HQ",
         "intro": "Kim Soo-hyun sinh ngày 16/02/1988 — được trả cát-xê cao nhất Hàn Quốc, và xứng đáng hoàn toàn. 'My Love from the Star' gây bão 30+ quốc gia. Comeback 2024 với 'Queen of Tears' phá kỷ lục rating tvN. Quốc bảo diễn xuất Hàn Quốc!",
-        "image_url": "", "tags": ["K-drama", "top actor", "icon"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Kim_Soo-hyun_in_August_2024_-_2.png/400px-Kim_Soo-hyun_in_August_2024_-_2.png", "tags": ["K-drama", "top actor", "icon"],
     },
     {
         "name": "Lee Min-ho",
@@ -447,7 +447,7 @@ GUYS = [
         "top_works": "'Boys Over Flowers' (2009), 'The Heirs' (2013), 'The King: Eternal Monarch' (2020)",
         "awards": "Baeksang Arts Awards đề cử, Top Hallyu Star nhiều năm, QQ Asian Style Award",
         "intro": "Lee Min-ho sinh ngày 22/06/1987, cao 1m87 — người đàn ông đưa Hallyu wave đến Việt Nam qua 'Boys Over Flowers'. Cao nhất danh sách K-drama hôm nay, khuôn mặt điêu khắc hoàn hảo. Sau 15+ năm sự nghiệp, vẫn là biểu tượng Hallyu không thể thay thế.",
-        "image_url": "", "tags": ["K-drama", "Hallyu icon", "diễn viên"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Lee_Min-ho_in_December_2025.png/400px-Lee_Min-ho_in_December_2025.png", "tags": ["K-drama", "Hallyu icon", "diễn viên"],
     },
     {
         "name": "Gong Yoo",
@@ -460,7 +460,7 @@ GUYS = [
         "top_works": "'Coffee Prince' (2007), 'Goblin' (2016 — 20.5% rating), 'Train to Busan' (2016)",
         "awards": "Baeksang Arts Awards (Nam diễn xuất xuất sắc), Korean Drama Awards, Asia Artist Awards",
         "intro": "Gong Yoo sinh ngày 10/07/1979 — body gym 6-pack iconic của showbiz Hàn. 'Goblin' phá kỷ lục tvN với 20.5% rating, Gong Yoo trong áo vest cầm hoa cải = biểu tượng K-drama lãng mạn. Tuổi 40+ vẫn đỉnh cao không nghi ngờ!",
-        "image_url": "", "tags": ["K-drama", "diễn viên", "6-pack 🔥"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Gong_Yoo_in_2021_-_3.png/400px-Gong_Yoo_in_2021_-_3.png", "tags": ["K-drama", "diễn viên", "6-pack 🔥"],
     },
     {
         "name": "Lee Junho (이준호)",
@@ -486,7 +486,7 @@ GUYS = [
         "top_works": "Premier League Golden Boot 2022, 100 bàn thắng Tottenham, captain ĐTQG Hàn Quốc",
         "awards": "FWA Footballer of the Year 2022, Asian Footballer of the Year, PL Player of the Month nhiều lần",
         "intro": "Son Heung-min sinh ngày 08/07/1992 — cầu thủ xuất sắc nhất châu Á, chia sẻ Vua phá lưới Premier League 2022 với Salah. Ngoài sân cỏ: tử tế, khiêm tốn, và cực kỳ đẹp trai kiểu trai lành mạnh. Captain tuyển Hàn Quốc và là niềm tự hào quốc gia!",
-        "image_url": "", "tags": ["bóng đá ⚽", "Premier League", "icon"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/BFA_2023_-2_Heung-Min_Son_%28cropped%29.jpg/400px-BFA_2023_-2_Heung-Min_Son_%28cropped%29.jpg", "tags": ["bóng đá ⚽", "Premier League", "icon"],
     },
 
     # ── 🇨🇳 C-pop & C-drama ───────────────────────────────────────────────────
@@ -501,7 +501,7 @@ GUYS = [
         "top_works": "'Trần Tình Lệnh' (2019), 'Phong Khởi Lạc Dương', 'Trường Tân' (phim điện ảnh)",
         "awards": "Weibo Movie Awards, Golden Eagle Awards, đua xe CMSC giải nhất nhiều lần",
         "intro": "Vương Nhất Bác sinh ngày 05/08/1997 — vibe lạnh lùng ngầu, body rắn chắc từ tập nhảy và đua xe mô tô chuyên nghiệp. Nhìn thẳng vào camera khiến người xem quên mất đang thở. 'Trần Tình Lệnh' bùng nổ toàn châu Á 2019.",
-        "image_url": "", "tags": ["C-pop", "diễn viên", "đua xe 🏍️"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/20200111%E7%8E%8B%E4%B8%80%E5%8D%9A.jpg/400px-20200111%E7%8E%8B%E4%B8%80%E5%8D%9A.jpg", "tags": ["C-pop", "diễn viên", "đua xe 🏍️"],
     },
     {
         "name": "Tiêu Chiến (Xiao Zhan)",
@@ -514,7 +514,7 @@ GUYS = [
         "top_works": "'Trần Tình Lệnh' (2019 — phim gây bão nhất thập kỷ), 'Chiến Lang', 'Thương Lan Quyết'",
         "awards": "Weibo Star Awards, Golden Eagle Awards, MTV Chinese Music Awards",
         "intro": "Tiêu Chiến sinh ngày 05/10/1991, cao 1m84 — xuất thân thiết kế đồ họa trước khi trở thành ngôi sao. 'Trần Tình Lệnh' gây bão khắp châu Á. Vẽ tranh đẹp, nấu ăn ngon, nụ cười tỏa nắng — cộng đồng fan VN đông không kém quốc nội!",
-        "image_url": "", "tags": ["C-pop", "diễn viên", "icon"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Xiao_Zhan_at_the_Weibo_Night_Ceremony_January_11_2020.jpg/400px-Xiao_Zhan_at_the_Weibo_Night_Ceremony_January_11_2020.jpg", "tags": ["C-pop", "diễn viên", "icon"],
     },
     {
         "name": "Vương Hạc Đệ (Wang Hedi)",
@@ -566,7 +566,7 @@ GUYS = [
         "top_works": "'Love O2O' (2016 — viral toàn cầu), 'You Are My City and Fortress' (2022)",
         "awards": "Mao Dun Literature Prize (adaptation), Golden Eagle TV Arts Festival",
         "intro": "Dương Dương sinh ngày 09/09/1991, cao 1m84 — tốt nghiệp Học viện Nghệ thuật Nhân dân TQ, thành thạo wushu từ nhỏ. 'Love O2O' viral toàn cầu. Khuôn mặt sắc nét góc cạnh, ánh mắt sâu — kiêu kỳ nhưng thực lực không thể phủ nhận.",
-        "image_url": "", "tags": ["C-pop", "diễn viên", "wushu"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Yang_profile_pic.jpg/400px-Yang_profile_pic.jpg", "tags": ["C-pop", "diễn viên", "wushu"],
     },
     {
         "name": "La Vân Hi (Luo Yunxi)",
@@ -579,7 +579,7 @@ GUYS = [
         "top_works": "'Hương Mật Tựa Khói Sương' (2018), 'Till the End of the Moon' (2023), 'Stand by Me'",
         "awards": "Weibo Drama Awards, iQiyi Starlight Awards, Golden Eagle TV Arts Festival",
         "intro": "La Vân Hi sinh ngày 28/06/1988 — xuất thân vũ công chuyên nghiệp trước khi diễn xuất. Di chuyển uyển chuyển như nghệ sĩ múa thật sự. 'Hương Mật' và 'Till the End of the Moon' đều là tác phẩm để đời. La Vân Hi càng nhìn càng đẹp — fine wine không lỗi thời!",
-        "image_url": "", "tags": ["C-pop", "diễn viên", "vũ công"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Luo_Yunxi2025.jpg/400px-Luo_Yunxi2025.jpg", "tags": ["C-pop", "diễn viên", "vũ công"],
     },
     {
         "name": "Hứa Khải (Xu Kai)",
@@ -644,7 +644,7 @@ GUYS = [
         "top_works": "'Forever and Ever' (2021 — viral toàn châu Á), 'Time Flies and You Are Here', 'Skate Into Love'",
         "awards": "Weibo Drama Awards, iQiyi Starlight Awards, Mango TV Awards",
         "intro": "Bạch Kính Đình sinh ngày 28/11/1993, cao 1m80 — kiểu đẹp acquired taste: càng nhìn càng thấy đẹp. Phong thái điềm đạm đáng tin cậy. 'Forever and Ever' viral toàn châu Á — treasure của C-drama!",
-        "image_url": "", "tags": ["C-pop", "diễn viên"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/5/57/Bai_Jingting.jpg", "tags": ["C-pop", "diễn viên"],
     },
     {
         "name": "Nhiệm Gia Luân (Ren Jialun)",
@@ -670,7 +670,7 @@ GUYS = [
         "top_works": "Solo 'YOUNG', 'Wait Wait Wait', 'Pull Up'; album 'YOUNG x ABLE'",
         "awards": "Weibo Music Awards, Golden Eagle Popular Actor, nhiều giải âm nhạc TQ",
         "intro": "Cai Xukun sinh ngày 02/08/1998, cao 1m83 — 'Triple Threat' C-pop: hát, nhảy, rap đều đỉnh. Video dribble bóng rổ viral khắp TikTok/Weibo. Charisma sân khấu vô cùng cuốn hút — ra sân khấu là chiếm spotlight!",
-        "image_url": "", "tags": ["C-pop", "idol", "bóng rổ 🏀"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/KUN_Charlotte_Tilbury_in_Shanghai_January_2026.jpg/400px-KUN_Charlotte_Tilbury_in_Shanghai_January_2026.jpg", "tags": ["C-pop", "idol", "bóng rổ 🏀"],
     },
     {
         "name": "Trần Triết Viễn (Chen Zheyuan)",
@@ -709,7 +709,7 @@ GUYS = [
         "top_works": "'Guardian' (2018 — gây sốt cộng đồng), 'Nirvana in Fire 2', 'New Life'",
         "awards": "Weibo Drama Awards, iQiyi Popular Awards, Golden Eagle TV Arts Festival",
         "intro": "Chu Nhất Long sinh ngày 16/04/1988, cao 1m80 — trầm lắng ít nói, thích đọc sách triết học. Khi bước vào vai diễn thì charisma bùng phát không cưỡng lại. Từ thiện sang phản diện, từ cổ trang sang hiện đại đều xuất sắc. Càng khám phá càng mê!",
-        "image_url": "", "tags": ["C-pop", "diễn viên", "nội tâm"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Zhu_Yilong_%28%E6%9C%B1%E4%B8%80%E9%BE%99%29_at_the_25th_Shanghai_Television_Festival_-_Magnolia_Awards_in_June_2019.jpg/400px-Zhu_Yilong_%28%E6%9C%B1%E4%B8%80%E9%BE%99%29_at_the_25th_Shanghai_Television_Festival_-_Magnolia_Awards_in_June_2019.jpg", "tags": ["C-pop", "diễn viên", "nội tâm"],
     },
     {
         "name": "Lưu Vũ Ninh (Liu Yuning)",
@@ -735,7 +735,7 @@ GUYS = [
         "top_works": "'Hoa Thiên Cốt' (2015 — phá kỷ lục rating), 'Perfect Couple', 'Ruyi's Royal Love'",
         "awards": "Golden Bell Awards (TW), Weibo Drama Awards, Golden Eagle TV Festival",
         "intro": "Hoắc Kiến Hoa sinh ngày 25/03/1979, cao 1m82 — 'Hoa Thiên Cốt' năm 2015 là phim Trung Hoa rating cao nhất lịch sử thời điểm đó. Kiểu đẹp chín chắn phong trần sang trọng — đàn ông 40+ vẫn đỉnh như này là hiếm có!",
-        "image_url": "", "tags": ["Đài Loan", "diễn viên", "cổ trang"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ed/Wallace_Huo_image_taken_in_November_2016.png/400px-Wallace_Huo_image_taken_in_November_2016.png", "tags": ["Đài Loan", "diễn viên", "cổ trang"],
     },
     {
         "name": "Eddie Peng (Bành Vu Yến)",
@@ -748,7 +748,7 @@ GUYS = [
         "top_works": "'Unbeatable' (2013 — body 6-pack iconic), 'Rise of the Legend' (2014), 'Wu Kong' (2017)",
         "awards": "Hong Kong Film Awards đề cử, Golden Horse Awards đề cử",
         "intro": "Eddie Peng sinh ngày 24/03/1982, cao 1m83 — tập boxing và gym 6 tháng để đạt body 6-pack chuẩn võ sĩ cho phim 'Unbeatable', kết quả khiến cả internet ngừng thở. Không phải body diễn — là body thật sự. Định nghĩa của 'nỗ lực tạo nên hoàn hảo'!",
-        "image_url": "", "tags": ["Đài Loan", "diễn viên", "6-pack 🔥"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Eddie_Peng_%28%E5%BD%AD%E4%BA%8E%E6%99%8F%29_in_October_2018.png/400px-Eddie_Peng_%28%E5%BD%AD%E4%BA%8E%E6%99%8F%29_in_October_2018.png", "tags": ["Đài Loan", "diễn viên", "6-pack 🔥"],
     },
     {
         "name": "Nicholas Tse (Tạ Đình Phong)",
@@ -761,7 +761,7 @@ GUYS = [
         "top_works": "Phim HK 'Young and Dangerous'; TV show 'Chef Nic' (nổi tiếng khắp châu Á); nhiều album",
         "awards": "HK Film Awards đề cử, Golden Horse đề cử, CCTV Food Show Awards",
         "intro": "Tạ Đình Phong sinh ngày 26/08/1980, cao 1m80 — từ ca sĩ idol đến diễn viên action đến đầu bếp TV chuyên nghiệp có show riêng! Ông nội là diễn viên huyền thoại Tạ Hiền. Tuổi 44 mà vẫn body đỉnh, phong thái hoàn hảo — lão mà không già!",
-        "image_url": "", "tags": ["HK cinema", "đầu bếp TV", "đa tài"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/2017.2.13_%E5%86%B3%E6%88%98%E9%A3%9F%E7%A5%9E%E5%90%88%E8%82%A5%E8%B7%AF%E6%BC%94_%E8%B0%A2%E9%9C%86%E9%94%8B_%288%29.jpg/400px-2017.2.13_%E5%86%B3%E6%88%98%E9%A3%9F%E7%A5%9E%E5%90%88%E8%82%A5%E8%B7%AF%E6%BC%94_%E8%B0%A2%E9%9C%86%E9%94%8B_%288%29.jpg", "tags": ["HK cinema", "đầu bếp TV", "đa tài"],
     },
     {
         "name": "Lâm Phong (Raymond Lam)",
@@ -774,7 +774,7 @@ GUYS = [
         "top_works": "TVB 'Beyond the Realm of Conscience' (2009), 'A Change of Heart', nhiều album Cantopop",
         "awards": "TVB Anniversary Awards (Nam diễn viên xuất sắc), ifpi HK Cantopop Awards",
         "intro": "Raymond Lam sinh ngày 08/12/1983, cao 1m79 — ngôi sao TVB và Cantopop quen thuộc với khán giả Việt thế hệ 8X-9X. Khuôn mặt điền trai kiểu trai lành HK, giọng hát ấm áp đặc trưng. Vẫn giữ được fan base trung thành đông đảo sau nhiều năm.",
-        "image_url": "", "tags": ["HK cinema", "Cantopop", "TVB"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/Raymond_Lam_Fung.jpg/400px-Raymond_Lam_Fung.jpg", "tags": ["HK cinema", "Cantopop", "TVB"],
     },
     {
         "name": "Aaron Yan (Viêm Á Luân)",
@@ -787,7 +787,7 @@ GUYS = [
         "top_works": "Fahrenheit, drama 'Just You' (2013), 'Fall in Love with Me' (2014)",
         "awards": "Golden Bell Awards đề cử, Asian Television Awards, Idol Drama Awards",
         "intro": "Aaron Yan sinh ngày 23/11/1985, cao 1m82 — thành viên Fahrenheit (idol group Đài Loan đình đám thập kỷ 2000-2010). Drama 'Just You' gây sốt khắp Đông Á. Dũng cảm công khai là thành viên cộng đồng LGBTQ+ — được đông đảo fan ủng hộ và tôn trọng!",
-        "image_url": "", "tags": ["Đài Loan", "FAHRENHEIT", "idol"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/20210124_%E7%82%8E%E4%BA%9E%E7%B6%B8_%E6%91%A9%E7%99%BB%E5%8E%9F%E5%A7%8B%E4%BA%BA%E9%AB%98%E9%9B%84%E7%B0%BD%E5%94%B1%E6%9C%83.jpg/400px-20210124_%E7%82%8E%E4%BA%9E%E7%B6%B8_%E6%91%A9%E7%99%BB%E5%8E%9F%E5%A7%8B%E4%BA%BA%E9%AB%98%E9%9B%84%E7%B0%BD%E5%94%B1%E6%9C%83.jpg", "tags": ["Đài Loan", "FAHRENHEIT", "idol"],
     },
     {
         "name": "Lưu Dĩ Hào (Jasper Liu)",
@@ -800,7 +800,7 @@ GUYS = [
         "top_works": "'Before We Get Married' (2019 — fan VN mê điên đảo), 'Dear Lemon Chicken'",
         "awards": "Golden Bell Awards đề cử, Asian Television Awards đề cử",
         "intro": "Lưu Dĩ Hào sinh ngày 01/04/1988, cao 1m86 — diễn viên và người mẫu Đài Loan với chiều cao lý tưởng. Khuôn mặt điền trai đàn ông trưởng thành, phong thái tự tin phóng khoáng. 'Before We Get Married' có lượng fan VN rất lớn. An toàn để thích!",
-        "image_url": "", "tags": ["Đài Loan", "diễn viên", "người mẫu"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/1/1f/Jasper_Liu_20200901.jpg", "tags": ["Đài Loan", "diễn viên", "người mẫu"],
     },
     {
         "name": "Đậu Kiêu (Shawn Dou)",
@@ -813,7 +813,7 @@ GUYS = [
         "top_works": "'Nothing Gold Can Stay', 'The Flame's Daughter', 'Nirvana in Fire' (vai phụ)",
         "awards": "Weibo Drama Awards, Golden Eagle TV Arts Festival, iQiyi Starlight Awards",
         "intro": "Đậu Kiêu sinh ngày 21/02/1989, cao 1m85 — diễn viên với phong thái 'bad boy nghệ sĩ' cực kỳ hấp dẫn. Mê mô tô và guitar điện — không phải mẫu idol an toàn thông thường. Body cao to rắn chắc. Bí ẩn đáng khám phá trong C-drama!",
-        "image_url": "", "tags": ["C-pop", "diễn viên", "bad boy"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Shawn_Dou_at_Dior_event.png/400px-Shawn_Dou_at_Dior_event.png", "tags": ["C-pop", "diễn viên", "bad boy"],
     },
     {
         "name": "Hà Tuấn Lâm (He Junlin)",
@@ -867,7 +867,7 @@ GUYS = [
         "top_works": "Netflix 'Alice in Borderland' (2020/2022 — top Netflix toàn cầu), 'Death Note' (2016)",
         "awards": "Japan Academy Film Award đề cử, Hochi Film Award, Nikkan Sports Film Award",
         "intro": "Kento Yamazaki sinh ngày 07/09/1994, cao 1m80 — được yêu mến rộng rãi tại VN sau 'Alice in Borderland' trên Netflix. Biểu cảm cực kỳ sâu sắc, khiến khán giả toàn cầu phải tìm hiểu về anh. Body từ bơi lội cân đối đẹp. Xem Alice mà không fangirl Kento = bất khả thi!",
-        "image_url": "", "tags": ["J-drama", "Netflix 🎬", "diễn viên"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Kingdom%2BSingapore%2BPremiere%2BPress%2BConference%2Bcaagvhp5Gwax.jpg/400px-Kingdom%2BSingapore%2BPremiere%2BPress%2BConference%2Bcaagvhp5Gwax.jpg", "tags": ["J-drama", "Netflix 🎬", "diễn viên"],
     },
     {
         "name": "Mackenyu (Maeda Mackenyu)",
@@ -880,7 +880,7 @@ GUYS = [
         "top_works": "Netflix 'One Piece' live action (vai Zoro — 2023 viral toàn cầu), 'Rurouni Kenshin'",
         "awards": "Japan Film Critics đề cử, Netflix Global Top 10 (#1 nhiều tuần — One Piece)",
         "intro": "Mackenyu sinh ngày 16/06/1996 — con trai diễn viên huyền thoại Sonny Chiba. Vai Zoro trong 'One Piece' Netflix 2023 chinh phục cả cộng đồng fan toàn cầu — body từ tập võ thuật thật sự rắn chắc và đẹp. Ngôi sao Nhật đang chinh phục Hollywood!",
-        "image_url": "", "tags": ["J-drama", "One Piece 🗡️", "6-pack 🔥"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Mackenyu.png/400px-Mackenyu.png", "tags": ["J-drama", "One Piece 🗡️", "6-pack 🔥"],
     },
     {
         "name": "Takeru Satoh",
@@ -893,7 +893,7 @@ GUYS = [
         "top_works": "'Rurouni Kenshin' (series phim 2012-2021 — loạt phim action Nhật đỉnh nhất)",
         "awards": "Japan Academy Film Prize (đề cử nhiều lần), Blue Ribbon Awards, Hochi Film Award",
         "intro": "Takeru Satoh sinh ngày 21/03/1989 — huyền thoại điện ảnh Nhật với vai Himura Kenshin kéo dài gần 10 năm. Tập kiếm thuật thật sự — không phải stunt double. Khuôn mặt thanh tú tinh tế, diễn xuất sâu sắc. Ví dụ hoàn hảo về idol trưởng thành thành diễn viên thật sự!",
-        "image_url": "", "tags": ["J-cinema", "diễn viên", "kiếm thuật"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Sato_Takeru_from_%22One_Night%22_at_Opening_Ceremony_of_the_Tokyo_International_Film_Festival_2019_%2849013876096%29.jpg/400px-Sato_Takeru_from_%22One_Night%22_at_Opening_Ceremony_of_the_Tokyo_International_Film_Festival_2019_%2849013876096%29.jpg", "tags": ["J-cinema", "diễn viên", "kiếm thuật"],
     },
     {
         "name": "Ryusei Yokohama",
@@ -906,7 +906,7 @@ GUYS = [
         "top_works": "'Anata no Bangō wa' (2019), 'Summer Time Rendering' (2022), Netflix projects",
         "awards": "Television Drama Academy Award đề cử, Nikkan Sports Film Awards",
         "intro": "Ryusei Yokohama sinh ngày 20/12/1996, cao 1m79 — gương mặt điển trai J-drama thế hệ mới. Từ drama lãng mạn đến thriller tâm lý đều xử lý tốt. Netflix đang chú ý anh cho dự án quốc tế. Mẫu bạn trai lý tưởng Nhật Bản — healthy, chăm chỉ, tử tế!",
-        "image_url": "", "tags": ["J-drama", "diễn viên"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Ryusei_Yokohama_20190704.jpg/400px-Ryusei_Yokohama_20190704.jpg", "tags": ["J-drama", "diễn viên"],
     },
     {
         "name": "Taishi Nakagawa",
@@ -919,6 +919,6 @@ GUYS = [
         "top_works": "'Chihayafuru' (series phim 2016/2018/2019 — ăn khách), 'First Love'",
         "awards": "Japan Academy Film Prize đề cử, Eiga no Hi Award",
         "intro": "Taishi Nakagawa sinh ngày 31/05/1995, cao 1m77 — được biết đến qua 'Chihayafuru' với vai Arata mà fangirl Nhật/Việt mê không rứt. Khuôn mặt thanh tú, nụ cười ấm áp chân thành, chemistry với bạn diễn cực kỳ tự nhiên. Nam chính lãng mạn ai cũng muốn gặp!",
-        "image_url": "", "tags": ["J-drama", "diễn viên"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/Taishi_Nakagawa_IMG_4276-1a_20181228.jpg/400px-Taishi_Nakagawa_IMG_4276-1a_20181228.jpg", "tags": ["J-drama", "diễn viên"],
     },
 ]
