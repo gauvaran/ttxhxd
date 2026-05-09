@@ -86,11 +86,15 @@ def _gemini_call(prompt, max_tokens=600, temperature=0.7):
     if not gemini_key:
         return ""
     url = f"{GEMINI_URL}/{GEMINI_MODEL}:generateContent?key={gemini_key}"
+    # Gemini 2.5 Flash dùng thinking tokens nằm trong maxOutputTokens budget.
+    # thinkingBudget=512 để model suy nghĩ vừa đủ, phần còn lại dành cho response.
+    total_tokens = max_tokens + 512
     payload = json.dumps({
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
-            "maxOutputTokens": max_tokens,
+            "maxOutputTokens": total_tokens,
             "temperature": temperature,
+            "thinkingConfig": {"thinkingBudget": 512},
         },
     }).encode()
     req = urllib.request.Request(
@@ -171,7 +175,7 @@ def _groq_summarize_vi(title, raw_text):
             "Viết tự nhiên như kể chuyện — nêu bối cảnh, diễn biến, ý nghĩa thực tế.\n\n"
             f"Tiêu đề: {title}\n\nNội dung: {clean[:4000]}"
         )
-    return _llm_call(prompt, max_tokens=450, temperature=0.4)
+    return _llm_call(prompt, max_tokens=800, temperature=0.4)
 
 
 def _groq_viral_content(date_str):
