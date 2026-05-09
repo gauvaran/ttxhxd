@@ -15,8 +15,10 @@ import json
 import time
 from html.parser import HTMLParser
 
-GROQ_URL   = "https://api.groq.com/openai/v1/chat/completions"
-GROQ_MODEL = "llama-3.1-8b-instant"
+GEMINI_URL   = "https://generativelanguage.googleapis.com/v1beta/models"
+GEMINI_MODEL = "gemini-2.5-flash"
+GROQ_URL     = "https://api.groq.com/openai/v1/chat/completions"
+GROQ_MODEL   = "llama-3.3-70b-versatile"
 
 # 9 feeds × 1 bài/feed = 9 tin trải đều 9 chủ đề
 RSS_FEEDS = [
@@ -79,6 +81,38 @@ def _strip_html(text):
     return p.get_text()
 
 
+def _gemini_call(prompt, max_tokens=600, temperature=0.7):
+    gemini_key = os.environ.get("GEMINI_API_KEY", "")
+    if not gemini_key:
+        return ""
+    url = f"{GEMINI_URL}/{GEMINI_MODEL}:generateContent?key={gemini_key}"
+    payload = json.dumps({
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {
+            "maxOutputTokens": max_tokens,
+            "temperature": temperature,
+        },
+    }).encode()
+    req = urllib.request.Request(
+        url,
+        data=payload,
+        headers={
+            "Content-Type": "application/json",
+            "User-Agent": "Mozilla/5.0 (compatible; TTXHXDBot/1.0)",
+        },
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=45) as r:
+            data = json.loads(r.read().decode())
+        return data["candidates"][0]["content"]["parts"][0]["text"].strip()
+    except urllib.error.HTTPError as e:
+        print(f"Gemini HTTP {e.code}: {e.read().decode()[:300]}", file=sys.stderr)
+        return ""
+    except Exception as e:
+        print(f"Gemini error: {e}", file=sys.stderr)
+        return ""
+
+
 def _groq_call(prompt, max_tokens=600, temperature=0.7):
     groq_key = os.environ.get("GROQ_API_KEY", "")
     if not groq_key:
@@ -95,7 +129,6 @@ def _groq_call(prompt, max_tokens=600, temperature=0.7):
         headers={
             "Authorization": f"Bearer {groq_key}",
             "Content-Type": "application/json",
-            "Accept": "application/json",
             "User-Agent": "Mozilla/5.0 (compatible; TTXHXDBot/1.0)",
         },
     )
@@ -111,25 +144,34 @@ def _groq_call(prompt, max_tokens=600, temperature=0.7):
         return ""
 
 
+def _llm_call(prompt, max_tokens=600, temperature=0.7):
+    result = _gemini_call(prompt, max_tokens, temperature)
+    if not result:
+        print("Gemini returned empty — falling back to Groq", file=sys.stderr)
+        result = _groq_call(prompt, max_tokens, temperature)
+    return result
+
+
 def _groq_summarize_vi(title, raw_text):
     clean = (raw_text or "").strip()
     if len(clean) < 80:
-        # RSS desc quá ngắn — generate từ tiêu đề, dùng kiến thức mô hình
         prompt = (
-            "Bạn là biên tập viên tin tức Việt Nam. "
-            f"Viết tóm tắt 3-4 câu tiếng Việt, dí dỏm, thân thiện về bài báo sau:\n\n"
+            "Bạn là biên tập viên tin tức Việt Nam, viết cho nữ nhân viên văn phòng. "
+            f"Viết tóm tắt khoảng 250 từ, tiếng Việt, dí dỏm, thân thiện về bài báo:\n\n"
             f"Tiêu đề: {title}\n\n"
-            "Tóm tắt phải nói đúng nội dung của tiêu đề trên."
+            "Phân tích bối cảnh, ý nghĩa, tác động thực tế của sự kiện này. "
+            "Viết tự nhiên như kể chuyện cho bạn nghe, không khô khan."
         )
     else:
         prompt = (
-            "Bạn là biên tập viên tin tức Việt Nam. "
-            "Dựa VÀO NỘI DUNG bên dưới, viết tóm tắt 3-5 câu tiếng Việt, dí dỏm, thân thiện.\n"
-            "QUAN TRỌNG: tóm tắt phải phản ánh đúng tiêu đề bài báo. "
-            "Nếu nội dung không liên quan đến tiêu đề, hãy tóm tắt theo tiêu đề.\n\n"
-            f"Tiêu đề: {title}\n\nNội dung: {clean[:3000]}"
+            "Bạn là biên tập viên tin tức Việt Nam, viết cho nữ nhân viên văn phòng. "
+            "Dựa vào nội dung bên dưới, viết tóm tắt khoảng 250 từ, tiếng Việt, dí dỏm, thân thiện.\n"
+            "QUAN TRỌNG: tóm tắt phải bám sát tiêu đề. "
+            "Nếu nội dung không khớp tiêu đề, ưu tiên diễn giải theo tiêu đề.\n"
+            "Viết tự nhiên như kể chuyện — nêu bối cảnh, diễn biến, ý nghĩa thực tế.\n\n"
+            f"Tiêu đề: {title}\n\nNội dung: {clean[:4000]}"
         )
-    return _groq_call(prompt, max_tokens=300, temperature=0.3)
+    return _llm_call(prompt, max_tokens=450, temperature=0.4)
 
 
 def _groq_viral_content(date_str):
@@ -147,7 +189,7 @@ def _groq_viral_content(date_str):
         "- Tiếng Việt sinh động, chêm tiếng lóng tự nhiên\n"
         "- 3 item liền nhau, không thêm gì khác"
     )
-    return _groq_call(prompt, max_tokens=600, temperature=0.9)
+    return _llm_call(prompt, max_tokens=600, temperature=0.9)
 
 
 def _groq_music_fashion_trend(date_str):
@@ -167,7 +209,7 @@ def _groq_music_fashion_trend(date_str):
         "- Thời trang: trend thực tế đang bán chạy/được chia sẻ nhiều tại VN\n"
         "- Có nguồn/tên cụ thể"
     )
-    return _groq_call(prompt, max_tokens=500, temperature=0.85)
+    return _llm_call(prompt, max_tokens=500, temperature=0.85)
 
 
 def _groq_motivational_quote(date_str):
@@ -189,7 +231,7 @@ def _groq_motivational_quote(date_str):
         "**Giải nghĩa:** [2-3 câu: ý nghĩa sâu xa của câu này là gì, áp dụng vào cuộc sống hàng ngày như thế nào, tại sao nó truyền cảm hứng]\n\n"
         "Chỉ output đúng format trên, không thêm gì khác."
     )
-    return _groq_call(prompt, max_tokens=300, temperature=0.5)
+    return _llm_call(prompt, max_tokens=300, temperature=0.5)
 
 
 def _groq_food_of_day(date_str):
@@ -206,7 +248,7 @@ def _groq_food_of_day(date_str):
         "💰 **Giá tham khảo:** [khoảng giá thực tế]\n\n"
         "Yêu cầu: món thật, địa điểm thật (không bịa tên quán), giá thực tế. Tone vui vẻ, thèm ăn."
     )
-    return _groq_call(prompt, max_tokens=350, temperature=0.85)
+    return _llm_call(prompt, max_tokens=350, temperature=0.85)
 
 
 def _groq_tip_beauty(date_str):
@@ -221,7 +263,7 @@ def _groq_tip_beauty(date_str):
         "- Tone vui tươi như người bạn thân share bí kíp\n"
         "- Bắt đầu bằng emoji + tên tip ngắn gọn in đậm"
     )
-    return _groq_call(prompt, max_tokens=350, temperature=0.8)
+    return _llm_call(prompt, max_tokens=350, temperature=0.8)
 
 
 def _groq_tip_exercise(date_str):
@@ -237,7 +279,7 @@ def _groq_tip_exercise(date_str):
         "- Có con số cụ thể (số lần, phút, calo) để dễ thực hiện\n"
         "- Bắt đầu bằng emoji + tên tip ngắn gọn in đậm"
     )
-    return _groq_call(prompt, max_tokens=350, temperature=0.8)
+    return _llm_call(prompt, max_tokens=350, temperature=0.8)
 
 
 def _groq_tip_health(date_str):
@@ -253,7 +295,7 @@ def _groq_tip_health(date_str):
         "- Thực tế, áp dụng ngay tại chỗ ngồi văn phòng\n"
         "- Bắt đầu bằng emoji + tên tip ngắn gọn in đậm"
     )
-    return _groq_call(prompt, max_tokens=350, temperature=0.75)
+    return _llm_call(prompt, max_tokens=350, temperature=0.75)
 
 
 def _groq_food_tip(date_str):
@@ -267,7 +309,7 @@ def _groq_food_tip(date_str):
         "- Tone vui vẻ như người bạn chia sẻ bí kíp nấu ăn\n"
         "- Bắt đầu bằng emoji và tên tip ngắn gọn"
     )
-    return _groq_call(prompt, max_tokens=350, temperature=0.8)
+    return _llm_call(prompt, max_tokens=350, temperature=0.8)
 
 
 def _fetch_rss_articles(target=6, feeds=None, seed=None):
@@ -314,7 +356,9 @@ def _fetch_rss_articles(target=6, feeds=None, seed=None):
 
 
 def fetch_content():
-    groq_key = os.environ.get("GROQ_API_KEY", "")
+    gemini_key = os.environ.get("GEMINI_API_KEY", "")
+    groq_key   = os.environ.get("GROQ_API_KEY", "")
+    ai_key     = gemini_key or groq_key
     _override = os.environ.get("DATE_OVERRIDE")
     today = datetime.datetime.strptime(_override, "%Y-%m-%d") if _override else datetime.datetime.now()
     date_str = today.strftime("%d/%m/%Y")
@@ -332,8 +376,8 @@ def fetch_content():
     articles = []
     for i, art in enumerate(raw_articles):
         print(f"  Summarizing {i+1}/{len(raw_articles)}: {art['title'][:50]}", file=sys.stderr)
-        summary = _groq_summarize_vi(art["title"], art["desc"]) if groq_key else art["desc"]
-        time.sleep(5)
+        summary = _groq_summarize_vi(art["title"], art["desc"]) if ai_key else art["desc"]
+        time.sleep(2)
         articles.append({
             "title": art["title"],
             "publisher": art["publisher"],
@@ -347,8 +391,8 @@ def fetch_content():
     danang_articles = []
     for i, art in enumerate(raw_danang):
         print(f"  DaNang {i+1}/{len(raw_danang)}: {art['title'][:50]}...", file=sys.stderr)
-        summary = _groq_summarize_vi(art["title"], art["desc"]) if groq_key else art["desc"]
-        time.sleep(5)
+        summary = _groq_summarize_vi(art["title"], art["desc"]) if ai_key else art["desc"]
+        time.sleep(2)
         danang_articles.append({
             "title": art["title"],
             "publisher": art["publisher"],
@@ -358,34 +402,34 @@ def fetch_content():
 
     # ── Phase 4: Viral MXH content ────────────────────────────────────────────
     print("Generating viral content...", file=sys.stderr)
-    viral = _groq_viral_content(date_iso) if groq_key else ""
-    time.sleep(4)
+    viral = _groq_viral_content(date_iso) if ai_key else ""
+    time.sleep(2)
 
     # ── Phase 4b: Music + Fashion trending ───────────────────────────────────
     print("Generating music/fashion trend...", file=sys.stderr)
-    music_fashion = _groq_music_fashion_trend(date_iso) if groq_key else ""
-    time.sleep(4)
+    music_fashion = _groq_music_fashion_trend(date_iso) if ai_key else ""
+    time.sleep(2)
 
     # ── Phase 4c: Food of the day ─────────────────────────────────────────────
     print("Generating food of day...", file=sys.stderr)
-    food_of_day = _groq_food_of_day(date_iso) if groq_key else ""
-    time.sleep(4)
+    food_of_day = _groq_food_of_day(date_iso) if ai_key else ""
+    time.sleep(2)
 
     # ── Phase 5: 3 mandatory tip sub-sections ────────────────────────────────
     print("Generating beauty tip...", file=sys.stderr)
-    tip_beauty = _groq_tip_beauty(date_iso) if groq_key else ""
-    time.sleep(4)
+    tip_beauty = _groq_tip_beauty(date_iso) if ai_key else ""
+    time.sleep(2)
     print("Generating exercise tip...", file=sys.stderr)
-    tip_exercise = _groq_tip_exercise(date_iso) if groq_key else ""
-    time.sleep(4)
+    tip_exercise = _groq_tip_exercise(date_iso) if ai_key else ""
+    time.sleep(2)
     print("Generating health tip...", file=sys.stderr)
-    tip_health = _groq_tip_health(date_iso) if groq_key else ""
-    time.sleep(4)
+    tip_health = _groq_tip_health(date_iso) if ai_key else ""
+    time.sleep(2)
 
     # ── Phase 6: Motivational quote ───────────────────────────────────────────
     print("Generating motivational quote...", file=sys.stderr)
-    quote = _groq_motivational_quote(date_iso) if groq_key else ""
-    time.sleep(4)
+    quote = _groq_motivational_quote(date_iso) if ai_key else ""
+    time.sleep(2)
 
     # ── Phase 7: Handsome guy of the day ─────────────────────────────────────
     guy = get_daily_guy(today)
@@ -402,7 +446,7 @@ def fetch_content():
         "tip_health": tip_health,
         "quote": quote,
         "guy": guy,
-        "groq": bool(groq_key),
+        "gemini": bool(gemini_key),
     }
 
 
