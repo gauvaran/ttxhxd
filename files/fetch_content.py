@@ -86,9 +86,7 @@ def _gemini_call(prompt, max_tokens=600, temperature=0.7):
     if not gemini_key:
         return ""
     url = f"{GEMINI_URL}/{GEMINI_MODEL}:generateContent?key={gemini_key}"
-    # Gemini 2.5 Flash dùng thinking tokens nằm trong maxOutputTokens budget.
-    # thinkingBudget=512 để model suy nghĩ vừa đủ, phần còn lại dành cho response.
-    total_tokens = max_tokens + 512
+    total_tokens = max_tokens + 512  # thinking budget + response
     payload = json.dumps({
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {
@@ -98,23 +96,28 @@ def _gemini_call(prompt, max_tokens=600, temperature=0.7):
         },
     }).encode()
     req = urllib.request.Request(
-        url,
-        data=payload,
-        headers={
-            "Content-Type": "application/json",
-            "User-Agent": "Mozilla/5.0 (compatible; TTXHXDBot/1.0)",
-        },
+        url, data=payload,
+        headers={"Content-Type": "application/json",
+                 "User-Agent": "Mozilla/5.0 (compatible; TTXHXDBot/1.0)"},
     )
-    try:
-        with urllib.request.urlopen(req, timeout=45) as r:
-            data = json.loads(r.read().decode())
-        return data["candidates"][0]["content"]["parts"][0]["text"].strip()
-    except urllib.error.HTTPError as e:
-        print(f"Gemini HTTP {e.code}: {e.read().decode()[:300]}", file=sys.stderr)
-        return ""
-    except Exception as e:
-        print(f"Gemini error: {e}", file=sys.stderr)
-        return ""
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=45) as r:
+                data = json.loads(r.read().decode())
+            return data["candidates"][0]["content"]["parts"][0]["text"].strip()
+        except urllib.error.HTTPError as e:
+            body = e.read().decode()[:200]
+            if e.code == 429:
+                wait = 15 * (attempt + 1)
+                print(f"Gemini 429 (attempt {attempt+1}) — wait {wait}s", file=sys.stderr)
+                time.sleep(wait)
+            else:
+                print(f"Gemini HTTP {e.code}: {body}", file=sys.stderr)
+                return ""
+        except Exception as e:
+            print(f"Gemini error: {e}", file=sys.stderr)
+            return ""
+    return ""
 
 
 def _groq_call(prompt, max_tokens=600, temperature=0.7):
@@ -128,24 +131,29 @@ def _groq_call(prompt, max_tokens=600, temperature=0.7):
         "temperature": temperature,
     }).encode()
     req = urllib.request.Request(
-        GROQ_URL,
-        data=payload,
-        headers={
-            "Authorization": f"Bearer {groq_key}",
-            "Content-Type": "application/json",
-            "User-Agent": "Mozilla/5.0 (compatible; TTXHXDBot/1.0)",
-        },
+        GROQ_URL, data=payload,
+        headers={"Authorization": f"Bearer {groq_key}",
+                 "Content-Type": "application/json",
+                 "User-Agent": "Mozilla/5.0 (compatible; TTXHXDBot/1.0)"},
     )
-    try:
-        with urllib.request.urlopen(req, timeout=30) as r:
-            data = json.loads(r.read().decode())
-        return data["choices"][0]["message"]["content"].strip()
-    except urllib.error.HTTPError as e:
-        print(f"Groq HTTP {e.code}: {e.read().decode()[:200]}", file=sys.stderr)
-        return ""
-    except Exception as e:
-        print(f"Groq error: {e}", file=sys.stderr)
-        return ""
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                data = json.loads(r.read().decode())
+            return data["choices"][0]["message"]["content"].strip()
+        except urllib.error.HTTPError as e:
+            body = e.read().decode()[:200]
+            if e.code == 429:
+                wait = 15 * (attempt + 1)
+                print(f"Groq 429 (attempt {attempt+1}) — wait {wait}s", file=sys.stderr)
+                time.sleep(wait)
+            else:
+                print(f"Groq HTTP {e.code}: {body}", file=sys.stderr)
+                return ""
+        except Exception as e:
+            print(f"Groq error: {e}", file=sys.stderr)
+            return ""
+    return ""
 
 
 def _llm_call(prompt, max_tokens=600, temperature=0.7):
