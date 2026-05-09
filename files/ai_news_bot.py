@@ -39,19 +39,23 @@ MAX_RETRIES    = 3
 RETRY_DELAY    = 15
 LOG_FILE       = os.path.join(os.path.dirname(__file__), "bot.log")
 
-# Color palette — rose/feminine
-C_PRIMARY   = "#8B1A4A"   # deep rose header
-C_ACCENT    = "#C2185B"   # vibrant rose
-C_LIGHT     = "#FFF0F5"   # blush background
-C_PINK_BG   = "#FCE4EC"   # light pink section
-C_AMBER_BG  = "#FFF8E1"   # light amber (tip odd)
-C_GREEN_BG  = "#E8F5E9"   # light green (tip even)
-C_GOLD      = "#F9A825"   # star gold
-C_TEAL_BG   = "#E0F2F1"   # teal bg (Đà Nẵng section)
-C_TEAL      = "#00796B"   # teal accent
-C_PURPLE_BG = "#F3E5F5"   # purple bg (quote section)
+# Color palette — Gen Z feminine, modern, trendy
+C_PRIMARY   = "#C2006F"   # vibrant hot pink (header, badges)
+C_ACCENT    = "#F50057"   # bright magenta-pink (links, accents)
+C_LIGHT     = "#FFF5FB"   # soft pink background
+C_PINK_BG   = "#FCE4EC"   # light pink sections
+C_AMBER_BG  = "#FFF8E1"   # amber
+C_GREEN_BG  = "#E8F5E9"   # green
+C_GOLD      = "#FFB300"   # warm amber gold
+C_TEAL_BG   = "#E0F2F1"   # teal bg (Đà Nẵng)
+C_TEAL      = "#00897B"   # teal accent
+C_PURPLE_BG = "#EDE7F6"   # purple bg (music, quote)
 C_PURPLE    = "#7B1FA2"   # purple accent
-C_BEAUTY_BG = "#FCE4EC"   # beauty tip bg (already C_PINK_BG alias)
+C_BEAUTY_BG = "#FCE4EC"   # beauty tip bg
+C_CORAL     = "#E64A19"   # coral/orange (food)
+C_CORAL_BG  = "#FBE9E7"   # light coral bg
+C_STICKER   = "#FFF0F8"   # sticker rows bg
+C_STRIPE    = "#FF80AB"   # header top/bottom stripe
 # ──────────────────────────────────────────────────────────────────────────────
 
 logging.basicConfig(
@@ -79,7 +83,7 @@ def md_to_html(text):
     return text
 
 
-def build_html(data):
+def build_html(data):  # noqa: C901
     articles         = data["articles"]
     danang_articles  = data.get("danang_articles", [])
     date_str         = data["date"]
@@ -92,58 +96,66 @@ def build_html(data):
     quote            = data.get("quote", "")
     guy              = data.get("guy")
 
+    # ── Design helpers ────────────────────────────────────────────────────────
+    def _sticker(emojis, bg=C_STICKER):
+        return (f'<tr><td bgcolor="{bg}" style="background-color:{bg};padding:10px 0;'
+                f'text-align:center;font-size:20px;letter-spacing:5px;font-family:Arial,sans-serif;">'
+                f'{emojis}</td></tr>')
+
+    def _badge(emoji, text, color, bg=C_LIGHT):
+        return (f'<tr><td bgcolor="{bg}" style="background-color:{bg};padding:12px 22px 6px;">'
+                f'<table cellpadding="0" cellspacing="0"><tr>'
+                f'<td bgcolor="{color}" style="background-color:{color};border-radius:20px;padding:5px 16px;">'
+                f'<span style="color:#FFFFFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">'
+                f'{emoji}&nbsp;{text}</span></td></tr></table></td></tr>')
+
     # ── Articles ─────────────────────────────────────────────────────────────
+    ART_BG = ["#FFFFFF", "#FFF8FC"]   # alternating card backgrounds
     articles_html = ""
     for i, art in enumerate(articles, 1):
+        art_bg = ART_BG[(i - 1) % 2]
         summary_block = ""
         if art.get("summary"):
             summary_block = f"""
             <tr>
-              <td colspan="2" style="padding:10px 0 0 44px;">
-                <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-                  <tr>
-                    <td bgcolor="#FFF0F5" style="background-color:#FFF0F5;padding:12px 14px;border-left:3px solid {C_ACCENT};">
-                      <p style="margin:0;font-size:13px;color:#333333;line-height:1.7;">{h(art["summary"])}</p>
-                    </td>
-                  </tr>
-                </table>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFF5FB" style="background-color:#FFF5FB;padding:10px 14px;border-left:3px solid {C_ACCENT};border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">{h(art["summary"])}</p>
+                  </td>
+                </tr></table>
               </td>
             </tr>"""
 
-        pub_html  = f'<span style="color:#888;">{h(art["publisher"])}</span>&nbsp;&nbsp;' if art.get("publisher") else ""
-        link_html = f'<a href="{h(art["link"], quote=True)}" style="color:{C_ACCENT};text-decoration:none;font-size:12px;">&#128279;&nbsp;Đọc thêm &#8594;</a>' if art.get("link") else ""
+        pub_html  = f'<span style="color:#aaa;font-size:11px;">{h(art["publisher"])}</span>&nbsp;&nbsp;' if art.get("publisher") else ""
+        link_html = (f'<a href="{h(art["link"], quote=True)}" style="color:{C_ACCENT};text-decoration:none;'
+                     f'font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a>') if art.get("link") else ""
 
         articles_html += f"""
           <tr>
-            <td bgcolor="#FFFFFF" style="background-color:#FFFFFF;padding:20px 30px;">
+            <td bgcolor="{art_bg}" style="background-color:{art_bg};padding:18px 24px 16px;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td width="32" valign="top" style="padding-right:12px;padding-top:2px;">
-                    <table role="presentation" cellpadding="0" cellspacing="0">
-                      <tr>
-                        <td bgcolor="{C_PRIMARY}" width="28" height="28" align="center" valign="middle"
-                            style="background-color:{C_PRIMARY};width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
-                          <span style="color:#FFFFFF;font-size:13px;font-weight:bold;font-family:Arial,sans-serif;">{i}</span>
-                        </td>
-                      </tr>
-                    </table>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="{C_ACCENT}" width="28" height="28" align="center" valign="middle"
+                          style="background-color:{C_ACCENT};width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">{i}</span>
+                      </td>
+                    </tr></table>
                   </td>
                   <td valign="top">
-                    <p style="margin:0 0 6px;font-size:15px;font-weight:bold;color:{C_PRIMARY};line-height:1.4;font-family:Arial,sans-serif;">{h(art["title"])}</p>
-                    <p style="margin:0;font-size:12px;font-family:Arial,sans-serif;">{pub_html}{link_html}</p>
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:{C_PRIMARY};line-height:1.4;font-family:Arial,sans-serif;">{h(art["title"])}</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;">{pub_html}{link_html}</p>
                   </td>
                 </tr>
                 {summary_block}
               </table>
             </td>
           </tr>
-          <tr>
-            <td style="padding:0 30px;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-                <tr><td height="1" bgcolor="#F8D7E3" style="background-color:#F8D7E3;font-size:0;line-height:0;">&nbsp;</td></tr>
-              </table>
-            </td>
-          </tr>"""
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFCCE0" style="background-color:#FFCCE0;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>"""
 
     # ── Đà Nẵng section ──────────────────────────────────────────────────────
     danang_html = ""
@@ -153,160 +165,140 @@ def build_html(data):
             summary_block = ""
             if art.get("summary"):
                 summary_block = f"""
-                <tr>
-                  <td colspan="2" style="padding:8px 0 0 44px;">
-                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-                      <tr>
-                        <td bgcolor="#E0F2F1" style="background-color:#E0F2F1;padding:10px 14px;border-left:3px solid {C_TEAL};">
-                          <p style="margin:0;font-size:13px;color:#333333;line-height:1.7;">{h(art["summary"])}</p>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>"""
-            pub_html  = f'<span style="color:#888;">{h(art["publisher"])}</span>&nbsp;&nbsp;' if art.get("publisher") else ""
-            link_html = f'<a href="{h(art["link"], quote=True)}" style="color:{C_TEAL};text-decoration:none;font-size:12px;">&#128279;&nbsp;Đọc thêm &#8594;</a>' if art.get("link") else ""
+                <tr><td colspan="2" style="padding:8px 0 0 42px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                    <td bgcolor="{C_TEAL_BG}" style="background-color:{C_TEAL_BG};padding:10px 14px;border-left:3px solid {C_TEAL};border-radius:0 4px 4px 0;">
+                      <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">{h(art["summary"])}</p>
+                    </td>
+                  </tr></table>
+                </td></tr>"""
+            pub_html  = f'<span style="color:#aaa;font-size:11px;">{h(art["publisher"])}</span>&nbsp;&nbsp;' if art.get("publisher") else ""
+            link_html = (f'<a href="{h(art["link"], quote=True)}" style="color:{C_TEAL};text-decoration:none;'
+                         f'font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a>') if art.get("link") else ""
             danang_items += f"""
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:12px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:14px;">
                 <tr>
-                  <td width="32" valign="top" style="padding-right:12px;padding-top:2px;">
-                    <table role="presentation" cellpadding="0" cellspacing="0">
-                      <tr>
-                        <td bgcolor="{C_TEAL}" width="28" height="28" align="center" valign="middle"
-                            style="background-color:{C_TEAL};width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
-                          <span style="color:#FFFFFF;font-size:13px;font-weight:bold;font-family:Arial,sans-serif;">{i}</span>
-                        </td>
-                      </tr>
-                    </table>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="{C_TEAL}" width="28" height="28" align="center" valign="middle"
+                          style="background-color:{C_TEAL};width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">{i}</span>
+                      </td>
+                    </tr></table>
                   </td>
                   <td valign="top">
-                    <p style="margin:0 0 6px;font-size:15px;font-weight:bold;color:{C_TEAL};line-height:1.4;font-family:Arial,sans-serif;">{h(art["title"])}</p>
-                    <p style="margin:0;font-size:12px;font-family:Arial,sans-serif;">{pub_html}{link_html}</p>
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:{C_TEAL};line-height:1.4;font-family:Arial,sans-serif;">{h(art["title"])}</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;">{pub_html}{link_html}</p>
                   </td>
                 </tr>
                 {summary_block}
               </table>"""
 
         danang_html = f"""
-  <tr>
-    <td bgcolor="{C_TEAL_BG}" style="background-color:{C_TEAL_BG};padding:20px 30px;border-top:3px solid {C_TEAL};">
-      <p style="margin:0 0 16px;font-size:11px;color:{C_TEAL};letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;font-weight:bold;">
-        &#127968;&nbsp;G&#243;c &#272;&#224; N&#7861;ng h&#244;m nay
-      </p>
-      {danang_items}
-    </td>
-  </tr>"""
+  {_sticker("🌊 ☀️ 🏖️ ☀️ 🌊", C_TEAL_BG)}
+  {_badge("🏖️", "Góc Đà Nẵng hôm nay", C_TEAL, C_TEAL_BG)}
+  <tr><td bgcolor="{C_TEAL_BG}" style="background-color:{C_TEAL_BG};padding:14px 24px 20px;">
+    {danang_items}
+  </td></tr>"""
 
     # ── Viral MXH ────────────────────────────────────────────────────────────
     viral_html = ""
     if viral:
         viral_html = f"""
-  <tr>
-    <td bgcolor="{C_PINK_BG}" style="background-color:{C_PINK_BG};padding:20px 30px;border-top:3px solid {C_ACCENT};">
-      <p style="margin:0 0 12px;font-size:11px;color:{C_ACCENT};letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;font-weight:bold;">
-        &#128293;&nbsp;M&#7841;ng x&#227; h&#7897;i h&#244;m nay
-      </p>
-      {md_to_html(viral)}
-    </td>
-  </tr>"""
-
-    # ── Tips: 3 mandatory sub-sections ───────────────────────────────────────
-    tips_html = ""
-    if tip_beauty or tip_exercise or tip_health:
-        tips_header = """
-  <tr>
-    <td bgcolor="#F5F7FA" style="background-color:#F5F7FA;padding:12px 30px;">
-      <p style="margin:0;font-size:11px;color:#999999;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;font-weight:bold;">
-        &#127774;&nbsp;Tips d&#224;nh cho ch&#7883; em h&#244;m nay
-      </p>
-    </td>
-  </tr>"""
-        tip_beauty_html = f"""
-  <tr>
-    <td bgcolor="#FCE4EC" style="background-color:#FCE4EC;padding:20px 30px;border-top:3px solid #AD1457;">
-      <p style="margin:0 0 12px;font-size:11px;color:#AD1457;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;font-weight:bold;">
-        &#10024;&nbsp;Tip l&#224;m &#273;&#7865;p &amp; ch&#259;m da
-      </p>
-      {md_to_html(tip_beauty) if tip_beauty else '<p style="margin:0;font-size:13px;color:#999;">Đang cập nhật...</p>'}
-    </td>
-  </tr>""" if tip_beauty else ""
-        tip_exercise_html = f"""
-  <tr>
-    <td bgcolor="#E8F5E9" style="background-color:#E8F5E9;padding:20px 30px;border-top:3px solid #2E7D32;">
-      <p style="margin:0 0 12px;font-size:11px;color:#2E7D32;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;font-weight:bold;">
-        &#127939;&#65039;&nbsp;Tip t&#7853;p th&#7875; d&#7909;c &amp; gi&#7919; d&#225;ng
-      </p>
-      {md_to_html(tip_exercise) if tip_exercise else '<p style="margin:0;font-size:13px;color:#999;">Đang cập nhật...</p>'}
-    </td>
-  </tr>""" if tip_exercise else ""
-        tip_health_html = f"""
-  <tr>
-    <td bgcolor="#E3F2FD" style="background-color:#E3F2FD;padding:20px 30px;border-top:3px solid #1565C0;">
-      <p style="margin:0 0 12px;font-size:11px;color:#1565C0;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;font-weight:bold;">
-        &#129338;&nbsp;Tip s&#7913;c kh&#7887;e: huy&#7871;t &#225;p, c&#7897;t s&#7889;ng, vai g&#225;y
-      </p>
-      {md_to_html(tip_health) if tip_health else '<p style="margin:0;font-size:13px;color:#999;">Đang cập nhật...</p>'}
-    </td>
-  </tr>""" if tip_health else ""
-        tips_html = tips_header + tip_beauty_html + tip_exercise_html + tip_health_html
+  {_sticker("🔥 💬 📱 💬 🔥", C_PINK_BG)}
+  {_badge("🔥", "Mạng xã hội hôm nay", C_ACCENT, C_PINK_BG)}
+  <tr><td bgcolor="{C_PINK_BG}" style="background-color:{C_PINK_BG};padding:14px 24px 20px;">
+    {md_to_html(viral)}
+  </td></tr>"""
 
     # ── Music + Fashion Trending ─────────────────────────────────────────────
     music_fashion_html = ""
     if music_fashion:
         music_fashion_html = f"""
-  <tr>
-    <td bgcolor="#EDE7F6" style="background-color:#EDE7F6;padding:20px 30px;border-top:3px solid #7B1FA2;">
-      <p style="margin:0 0 12px;font-size:11px;color:#7B1FA2;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;font-weight:bold;">
-        &#127925;&nbsp;&#193;m nh&#7841;c &amp; Th&#7901;i trang h&#244;m nay
-      </p>
-      {md_to_html(music_fashion)}
-    </td>
-  </tr>"""
+  {_sticker("🎵 👗 ✨ 👗 🎵", C_PURPLE_BG)}
+  {_badge("🎵", "Âm nhạc & Thời trang hôm nay", C_PURPLE, C_PURPLE_BG)}
+  <tr><td bgcolor="{C_PURPLE_BG}" style="background-color:{C_PURPLE_BG};padding:14px 24px 20px;">
+    {md_to_html(music_fashion)}
+  </td></tr>"""
 
     # ── Food of the Day ───────────────────────────────────────────────────────
     food_of_day_html = ""
     if food_of_day:
         food_of_day_html = f"""
-  <tr>
-    <td bgcolor="#FFF3E0" style="background-color:#FFF3E0;padding:20px 30px;border-top:3px solid #E65100;">
-      <p style="margin:0 0 12px;font-size:11px;color:#E65100;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;font-weight:bold;">
-        &#127869;&nbsp;M&#243;n ngon h&#244;m nay
-      </p>
-      {md_to_html(food_of_day)}
-    </td>
-  </tr>"""
+  {_sticker("🍜 😋 🍽️ 😋 🍜", C_CORAL_BG)}
+  {_badge("🍽️", "Món ngon hôm nay", C_CORAL, C_CORAL_BG)}
+  <tr><td bgcolor="#FFF3E0" style="background-color:#FFF3E0;padding:14px 24px 20px;">
+    {md_to_html(food_of_day)}
+  </td></tr>"""
+
+    # ── Tips: 3 mandatory sub-sections ───────────────────────────────────────
+    tips_html = ""
+    if tip_beauty or tip_exercise or tip_health:
+        def _tip_card(icon_emoji, icon_bg, label_color, card_bg, border_color, label, content):
+            return f"""
+  <tr><td bgcolor="{card_bg}" style="background-color:{card_bg};padding:16px 24px;border-top:2px solid {border_color};">
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td width="52" valign="top" style="padding-right:14px;">
+        <table cellpadding="0" cellspacing="0"><tr>
+          <td bgcolor="{icon_bg}" width="44" height="44" align="center" valign="middle"
+              style="background-color:{icon_bg};width:44px;height:44px;border-radius:22px;text-align:center;vertical-align:middle;font-size:22px;font-family:Arial,sans-serif;">
+            {icon_emoji}
+          </td>
+        </tr></table>
+      </td>
+      <td valign="top">
+        <p style="margin:0 0 8px;font-size:12px;font-weight:bold;color:{label_color};letter-spacing:1px;text-transform:uppercase;font-family:Arial,sans-serif;">{label}</p>
+        {md_to_html(content) if content else '<p style="margin:0;font-size:13px;color:#999;">Đang cập nhật...</p>'}
+      </td>
+    </tr></table>
+  </td></tr>"""
+
+        tips_html = (
+            _sticker("💄 💪 🩺 💪 💄")
+            + _badge("💡", "Tips dành cho chị em hôm nay", C_PRIMARY)
+            + _tip_card("💄", "#AD1457", "#AD1457", "#FCE4EC", "#F8BBD9",
+                        "Tip làm đẹp &amp; chăm da", tip_beauty)
+            + _tip_card("🏃", "#2E7D32", "#2E7D32", "#E8F5E9", "#C8E6C9",
+                        "Tip tập thể dục &amp; giữ dáng", tip_exercise)
+            + _tip_card("🩺", "#1565C0", "#1565C0", "#E3F2FD", "#BBDEFB",
+                        "Tip sức khỏe: huyết áp, cột sống, vai gáy", tip_health)
+        )
 
     # ── Motivational Quote ────────────────────────────────────────────────────
     quote_html = ""
     if quote:
         quote_html = f"""
-  <tr>
-    <td bgcolor="{C_PURPLE_BG}" style="background-color:{C_PURPLE_BG};padding:20px 30px;border-top:3px solid {C_PURPLE};">
-      <p style="margin:0 0 12px;font-size:11px;color:{C_PURPLE};letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;font-weight:bold;">
-        &#128150;&nbsp;C&#226;u ch&#226;m ng&#244;n h&#244;m nay
-      </p>
-      {md_to_html(quote)}
-    </td>
-  </tr>"""
+  {_sticker("💬 ✨ 💭 ✨ 💬", C_PURPLE_BG)}
+  {_badge("💬", "Câu châm ngôn hôm nay", C_PURPLE, C_PURPLE_BG)}
+  <tr><td bgcolor="{C_PURPLE_BG}" style="background-color:{C_PURPLE_BG};padding:14px 24px 20px;">
+    {md_to_html(quote)}
+  </td></tr>"""
 
     # ── Handsome guy ─────────────────────────────────────────────────────────
     guy_html = ""
     if guy:
         img_block = ""
         if guy.get("image_url"):
-            img_block = f'<img src="{h(guy["image_url"], quote=True)}" alt="{h(guy["name"])}" width="140" height="190" style="width:140px;max-width:140px;height:auto;border-radius:10px;display:block;margin:0 auto 10px;box-shadow:0 2px 8px rgba(0,0,0,.15);border:0;outline:none;" />'
+            img_block = (f'<img src="{h(guy["image_url"], quote=True)}" alt="{h(guy["name"])}" '
+                         f'width="140" height="190" style="width:140px;max-width:140px;height:auto;'
+                         f'border-radius:12px;display:block;margin:0 auto 10px;'
+                         f'box-shadow:0 4px 14px rgba(194,0,111,.25);border:3px solid #FFD6ED;outline:none;" />')
         tags_html = " ".join(
-            f'<span style="background:{C_PRIMARY};color:#fff;font-size:10px;padding:2px 8px;border-radius:10px;margin-right:4px;margin-bottom:4px;display:inline-block;font-family:Arial,sans-serif;">{h(t)}</span>'
+            f'<span style="background:{C_ACCENT};color:#fff;font-size:10px;padding:3px 10px;'
+            f'border-radius:12px;margin-right:4px;margin-bottom:4px;display:inline-block;'
+            f'font-family:Arial,sans-serif;">{h(t)}</span>'
             for t in guy.get("tags", [])
         )
 
         def _info_row(label, val):
             if not val:
                 return ""
-            return f'<tr><td style="font-size:11px;color:#888;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>{label}</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">{h(val)}</td></tr>'
+            return (f'<tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;'
+                    f'font-family:Arial,sans-serif;white-space:nowrap;"><strong>{label}</strong></td>'
+                    f'<td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">{h(val)}</td></tr>')
 
         info_table = (
-            f'<table cellpadding="0" cellspacing="0" style="margin:8px 0;">'
+            '<table cellpadding="0" cellspacing="0" style="margin:8px 0;">'
             + _info_row("Ngày sinh", guy.get("birthday") or (guy.get("born") and f"Năm {guy['born']}") or "")
             + _info_row("Chiều cao", guy.get("height"))
             + _info_row("Cân nặng", guy.get("weight"))
@@ -318,38 +310,36 @@ def build_html(data):
             + _info_row("Sở thích", guy.get("hobbies"))
             + "</table>"
         )
-
         works_html = ""
         if guy.get("top_works"):
-            works_html = f'<p style="margin:6px 0 2px;font-size:11px;color:{C_ACCENT};font-weight:bold;font-family:Arial,sans-serif;">&#127942; Tác phẩm nổi bật:</p><p style="margin:0 0 4px;font-size:12px;color:#555;font-family:Arial,sans-serif;">{h(guy["top_works"])}</p>'
+            works_html = (f'<p style="margin:6px 0 2px;font-size:11px;color:{C_ACCENT};font-weight:bold;'
+                          f'font-family:Arial,sans-serif;">🏆 Tác phẩm nổi bật:</p>'
+                          f'<p style="margin:0 0 4px;font-size:12px;color:#555;font-family:Arial,sans-serif;">{h(guy["top_works"])}</p>')
         awards_html = ""
         if guy.get("awards"):
-            awards_html = f'<p style="margin:6px 0 2px;font-size:11px;color:{C_GOLD};font-weight:bold;font-family:Arial,sans-serif;">&#127881; Giải thưởng:</p><p style="margin:0 0 8px;font-size:12px;color:#555;font-family:Arial,sans-serif;">{h(guy["awards"])}</p>'
+            awards_html = (f'<p style="margin:6px 0 2px;font-size:11px;color:{C_GOLD};font-weight:bold;'
+                           f'font-family:Arial,sans-serif;">🏅 Giải thưởng:</p>'
+                           f'<p style="margin:0 0 8px;font-size:12px;color:#555;font-family:Arial,sans-serif;">{h(guy["awards"])}</p>')
 
         guy_html = f"""
-  <tr>
-    <td bgcolor="{C_LIGHT}" style="background-color:{C_LIGHT};padding:20px 30px;border-top:3px solid {C_GOLD};">
-      <p style="margin:0 0 14px;font-size:11px;color:{C_GOLD};letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;font-weight:bold;">
-        &#127775;&nbsp;Trai &#272;&#7865;p H&#244;m Nay
-      </p>
-      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
-        <tr>
-          <td width="150" valign="top" style="padding-right:16px;text-align:center;">
-            {img_block}
-            <p style="margin:4px 0 0;text-align:center;">{tags_html}</p>
-          </td>
-          <td valign="top">
-            <p style="margin:0 0 2px;font-size:20px;font-weight:bold;color:{C_PRIMARY};font-family:Arial,sans-serif;">&#128149;&nbsp;{h(guy["name"])}</p>
-            <p style="margin:0 0 4px;font-size:12px;color:#888;font-family:Arial,sans-serif;">{h(guy.get("origin",""))} &nbsp;|&nbsp; {h(guy.get("job",""))}</p>
-            {info_table}
-            <p style="margin:8px 0;font-size:13px;color:#333;line-height:1.7;font-family:Arial,sans-serif;">{h(guy.get("intro",""))}</p>
-            {works_html}
-            {awards_html}
-          </td>
-        </tr>
-      </table>
-    </td>
-  </tr>"""
+  {_sticker("💗 😍 💗 😍 💗", "#FFF0F8")}
+  {_badge("🌟", "Crush Hôm Nay", C_GOLD, "#FFF9E6")}
+  <tr><td bgcolor="{C_LIGHT}" style="background-color:{C_LIGHT};padding:16px 24px 22px;border-top:3px solid {C_GOLD};">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td width="158" valign="top" style="padding-right:16px;text-align:center;">
+        {img_block}
+        <p style="margin:6px 0 0;text-align:center;">{tags_html}</p>
+      </td>
+      <td valign="top">
+        <p style="margin:0 0 2px;font-size:20px;font-weight:bold;color:{C_PRIMARY};font-family:Arial,sans-serif;">💗 {h(guy["name"])}</p>
+        <p style="margin:0 0 6px;font-size:12px;color:#aaa;font-family:Arial,sans-serif;">{h(guy.get("origin",""))} &nbsp;|&nbsp; {h(guy.get("job",""))}</p>
+        {info_table}
+        <p style="margin:8px 0;font-size:13px;color:#333;line-height:1.75;font-family:Arial,sans-serif;">{h(guy.get("intro",""))}</p>
+        {works_html}
+        {awards_html}
+      </td>
+    </tr></table>
+  </td></tr>"""
 
     return f"""<!DOCTYPE html>
 <html lang="vi" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml">
@@ -361,34 +351,47 @@ def build_html(data):
 <body style="margin:0;padding:0;background-color:{C_LIGHT};-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
 
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="{C_LIGHT}" style="background-color:{C_LIGHT};">
-<tr><td align="center" style="padding:24px 12px;">
+<tr><td align="center" style="padding:20px 12px 28px;">
 
 <table role="presentation" width="600" cellpadding="0" cellspacing="0"
-       style="max-width:600px;width:100%;background-color:#FFFFFF;border-radius:10px;" bgcolor="#FFFFFF">
+       style="max-width:600px;width:100%;background-color:#FFFFFF;border-radius:14px;
+              box-shadow:0 4px 24px rgba(194,0,111,.12);" bgcolor="#FFFFFF">
 
-  <!-- HEADER -->
+  <!-- HEADER TOP STICKER STRIPE -->
   <tr>
-    <td bgcolor="{C_PRIMARY}" style="background-color:{C_PRIMARY};padding:28px 30px 22px 30px;text-align:center;border-radius:10px 10px 0 0;">
-      <p style="margin:0 0 6px;font-size:11px;color:#F8BBD9;letter-spacing:2px;font-family:Arial,sans-serif;text-transform:uppercase;">
-        &#127800;&nbsp;{date_str}&nbsp;&#127800;
-      </p>
-      <h1 style="margin:0;font-size:24px;font-weight:bold;color:#FFFFFF;font-family:Arial,sans-serif;line-height:1.2;">
-        &#128150; Th&#244;ng T&#7845;n X&#227; Heo Xinh &#272;&#7865;p
-      </h1>
-      <p style="margin:8px 0 0;font-size:13px;color:#F8BBD9;font-family:Arial,sans-serif;">
-        B&#7843;n tin h&#224;ng ng&#224;y d&#224;nh cho chị em v&#259;n ph&#242;ng
-      </p>
+    <td bgcolor="{C_STRIPE}" style="background-color:{C_STRIPE};padding:8px 20px;text-align:center;border-radius:14px 14px 0 0;">
+      <p style="margin:0;font-size:20px;letter-spacing:6px;font-family:Arial,sans-serif;">💅 ✨ 🌸 💕 🌸 ✨ 💅</p>
     </td>
   </tr>
 
-  <!-- SECTION LABEL: TIN TỨC -->
+  <!-- HEADER MAIN -->
   <tr>
-    <td bgcolor="#F5F7FA" style="background-color:#F5F7FA;padding:12px 30px;">
-      <p style="margin:0;font-size:11px;color:#999999;letter-spacing:1px;font-family:Arial,sans-serif;text-transform:uppercase;font-weight:bold;">
-        &#127757;&nbsp;Tin t&#7913;c h&#244;m nay
+    <td bgcolor="{C_PRIMARY}" style="background-color:{C_PRIMARY};padding:20px 30px 24px;text-align:center;">
+      <p style="margin:0 0 10px;font-size:26px;font-weight:bold;color:#FFFFFF;font-family:Arial,sans-serif;line-height:1.2;">
+        💌 Thông Tấn Xã Heo Xinh Đẹp
       </p>
+      <p style="margin:0 0 14px;font-size:13px;color:#F8BBD9;font-family:Arial,sans-serif;">
+        Bản tin hàng ngày dành cho chị em văn phòng 💕
+      </p>
+      <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
+        <tr>
+          <td bgcolor="#AD1457" style="background-color:#AD1457;border-radius:20px;padding:6px 20px;">
+            <span style="color:#FFFFFF;font-size:13px;font-weight:bold;font-family:Arial,sans-serif;">📅 {date_str}</span>
+          </td>
+        </tr>
+      </table>
     </td>
   </tr>
+
+  <!-- HEADER BOTTOM FLOWER STRIPE -->
+  <tr>
+    <td bgcolor="#FFB7D5" style="background-color:#FFB7D5;padding:7px 20px;text-align:center;">
+      <p style="margin:0;font-size:18px;letter-spacing:5px;font-family:Arial,sans-serif;">🌸 🌷 💐 🌷 🌸</p>
+    </td>
+  </tr>
+
+  <!-- SECTION BADGE: TIN TỨC -->
+  {_badge("🌏", "Tin tức hôm nay", C_PRIMARY, C_LIGHT)}
 
   <!-- ARTICLES -->
   {articles_html}
@@ -416,13 +419,15 @@ def build_html(data):
 
   <!-- FOOTER -->
   <tr>
-    <td bgcolor="{C_PRIMARY}" style="background-color:{C_PRIMARY};padding:20px 30px;text-align:center;border-radius:0 0 10px 10px;">
+    <td bgcolor="{C_PRIMARY}" style="background-color:{C_PRIMARY};padding:16px 30px 12px;text-align:center;">
+      <p style="margin:0 0 6px;font-size:20px;letter-spacing:5px;font-family:Arial,sans-serif;">🌸 💕 🌸 💕 🌸</p>
       <p style="margin:0 0 4px;font-size:13px;color:#F8BBD9;font-family:Arial,sans-serif;">
-        &#127800;&nbsp;Ch&#250;c ch&#7883; em m&#7897;t ng&#224;y vui v&#7867; v&#224; n&#259;ng su&#7845;t!&nbsp;&#127800;
+        Chúc chị em một ngày vui vẻ và năng suất! ✨
       </p>
-      <p style="margin:6px 0 0;font-size:11px;color:#E91E8C88;font-family:Arial,sans-serif;color:#F48FB1;">
-        TTXHXD &mdash; T&#7893;ng h&#7907;p b&#7903;i Groq AI &amp; ngu&#7891;n tin VN
+      <p style="margin:0 0 10px;font-size:11px;color:#F48FB1;font-family:Arial,sans-serif;">
+        TTXHXD — Tổng hợp bởi Groq AI &amp; nguồn tin VN 💌
       </p>
+      <p style="margin:0;font-size:18px;letter-spacing:5px;font-family:Arial,sans-serif;border-radius:0 0 14px 14px;">🌷 ✨ 🌷 ✨ 🌷</p>
     </td>
   </tr>
 
