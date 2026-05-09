@@ -65,9 +65,10 @@ jobs:
       - name: Deploy to Cloudflare Pages
         if: steps.check.outputs.skip == 'false'
         env:
+          CF_TOKEN: ${{ secrets.CLOUDFLARE_OAUTH_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: 8d14dd57d0b4ead34dd4af6a027dc439
         run: |
           mkdir -p ~/.config/.wrangler/config
-          printf '[default]\noauth_token = "%s"\n' "${{ secrets.CLOUDFLARE_OAUTH_TOKEN }}" \
+          { echo '[default]'; echo "oauth_token = \"${CF_TOKEN}\""; } \
             > ~/.config/.wrangler/config/default.toml
           npx wrangler pages deploy docs --project-name ttxhxd --branch master --commit-dirty=true
