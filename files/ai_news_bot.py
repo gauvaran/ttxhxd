@@ -567,10 +567,10 @@ def build_web_html(data, date_slug=None):
     btn_style = f"background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:5px 12px;border-radius:4px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;text-decoration:none;display:inline-block;"
     pdf_slug  = date_slug or _date_slug()
     nav = f"""<div id="web-nav" style="background:{C_PRIMARY};padding:8px 16px;font-family:Arial,sans-serif;font-size:13px;position:sticky;top:0;z-index:999;border-bottom:2px solid {C_ACCENT};display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;">
-  <span id="nav-prev" style="color:#C9950C;">&#8592;</span>
+  <a id="nav-prev" href="#" style="color:#FFE082;text-decoration:none;visibility:hidden;">&#8592; --/--</a>
   <a href="all.html" style="color:#FFD700;text-decoration:none;font-weight:bold;">&#128240; T&#7845;t c&#7843; b&#7843;n tin</a>
-  <span style="color:#FFFFFF;">{h(data['date'])}</span>
-  <span id="nav-next" style="color:#C9950C;">&#8594;</span>
+  <span style="color:#FFFFFF;font-weight:bold;">{h(data['date'])}</span>
+  <a id="nav-next" href="#" style="color:#FFE082;text-decoration:none;visibility:hidden;">--/-- &#8594;</a>
   <a href="{pdf_slug}.pdf" download="{pdf_slug}.pdf" style="{btn_style}">&#128196; T&#7843;i PDF</a>
   <button onclick="sharePage()" style="{btn_style}">&#128279; Chia s&#7867;</button>
 </div>
@@ -585,14 +585,29 @@ function sharePage(){{
   if(!m)return;
   var slug=m[1];
   function fmt(s){{var p=s.split('-');return p[2]+'/'+p[1];}}
-  var lnkStyle='color:#FFE082;text-decoration:none;';
   fetch('dates.json?_='+Date.now())
     .then(function(r){{return r.json();}})
     .then(function(dates){{
       var idx=dates.indexOf(slug);
-      if(idx>0){{var p=dates[idx-1];document.getElementById('nav-prev').innerHTML='<a href="'+p+'.html" style="'+lnkStyle+'">&#8592; '+fmt(p)+'</a>';}}
-      if(idx>=0&&idx<dates.length-1){{var n=dates[idx+1];document.getElementById('nav-next').innerHTML='<a href="'+n+'.html" style="'+lnkStyle+'">'+fmt(n)+' &#8594;</a>';}}
+      var prevEl=document.getElementById('nav-prev');
+      var nextEl=document.getElementById('nav-next');
+      if(idx>0){{
+        var pd=dates[idx-1];
+        prevEl.href=pd+'.html';
+        prevEl.innerHTML='&#8592; '+fmt(pd);
+        prevEl.style.visibility='visible';
+      }}
+      if(idx>=0&&idx<dates.length-1){{
+        var nd=dates[idx+1];
+        nextEl.href=nd+'.html';
+        nextEl.innerHTML=fmt(nd)+' &#8594;';
+        nextEl.style.visibility='visible';
+      }}
     }}).catch(function(){{}});
+  document.addEventListener('keydown',function(e){{
+    if(e.key==='ArrowLeft'){{var p=document.getElementById('nav-prev');if(p&&p.style.visibility==='visible')location.href=p.href;}}
+    if(e.key==='ArrowRight'){{var n=document.getElementById('nav-next');if(n&&n.style.visibility==='visible')location.href=n.href;}}
+  }});
 }})();
 </script>
 """

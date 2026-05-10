@@ -19,11 +19,11 @@
 </style>
 </head>
 <body style="margin:0;padding:0;background-color:#FFF5FB;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
-<div id="web-nav" style="background:#C2006F;padding:8px 16px;font-family:Arial,sans-serif;font-size:13px;position:sticky;top:0;z-index:999;border-bottom:2px solid #F50057;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;">
-  <span id="nav-prev" style="color:#F48FB1;">&#8592;</span>
+<div id="web-nav" style="background:#8B6508;padding:8px 16px;font-family:Arial,sans-serif;font-size:13px;position:sticky;top:0;z-index:999;border-bottom:2px solid #C9950C;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;">
+  <a id="nav-prev" href="#" style="color:#FFE082;text-decoration:none;visibility:hidden;">&#8592; --/--</a>
   <a href="all.html" style="color:#FFD700;text-decoration:none;font-weight:bold;">&#128240; T&#7845;t c&#7843; b&#7843;n tin</a>
-  <span style="color:#FFFFFF;">15/04/2026</span>
-  <span id="nav-next" style="color:#F48FB1;">&#8594;</span>
+  <span style="color:#FFFFFF;font-weight:bold;">15/04/2026</span>
+  <a id="nav-next" href="#" style="color:#FFE082;text-decoration:none;visibility:hidden;">--/-- &#8594;</a>
   <a href="2026-04-15.pdf" download="2026-04-15.pdf" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:5px 12px;border-radius:4px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;text-decoration:none;display:inline-block;">&#128196; T&#7843;i PDF</a>
   <button onclick="sharePage()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:5px 12px;border-radius:4px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;text-decoration:none;display:inline-block;">&#128279; Chia s&#7867;</button>
 </div>
@@ -31,21 +31,36 @@
 function sharePage(){
   var title='TTXHXD – 15/04/2026';
   if(navigator.share){navigator.share({title:title,url:location.href});}
-  else{navigator.clipboard.writeText(location.href).then(function(){alert('Đã sao chép link!');}); }
+  else{navigator.clipboard.writeText(location.href).then(function(){alert('\u0110\u00e3 sao ch\u00e9p link!');}); }
 }
 (function(){
   var m=location.pathname.match(/(\d{4}-\d{2}-\d{2})\.html/);
   if(!m)return;
   var slug=m[1];
   function fmt(s){var p=s.split('-');return p[2]+'/'+p[1];}
-  var lnkStyle='color:#F8BBD9;text-decoration:none;';
   fetch('dates.json?_='+Date.now())
-    .then(function(r){return r.json();})
-    .then(function(dates){
+    .then(function(r){return r.json();}
+    ).then(function(dates){
       var idx=dates.indexOf(slug);
-      if(idx>0){var p=dates[idx-1];document.getElementById('nav-prev').innerHTML='<a href="'+p+'.html" style="'+lnkStyle+'">&#8592; '+fmt(p)+'</a>';}
-      if(idx>=0&&idx<dates.length-1){var n=dates[idx+1];document.getElementById('nav-next').innerHTML='<a href="'+n+'.html" style="'+lnkStyle+'">'+fmt(n)+' &#8594;</a>';}
+      var prevEl=document.getElementById('nav-prev');
+      var nextEl=document.getElementById('nav-next');
+      if(idx>0){
+        var pd=dates[idx-1];
+        prevEl.href=pd+'.html';
+        prevEl.innerHTML='&#8592; '+fmt(pd);
+        prevEl.style.visibility='visible';
+      }
+      if(idx>=0&&idx<dates.length-1){
+        var nd=dates[idx+1];
+        nextEl.href=nd+'.html';
+        nextEl.innerHTML=fmt(nd)+' &#8594;';
+        nextEl.style.visibility='visible';
+      }
     }).catch(function(){});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'){var p=document.getElementById('nav-prev');if(p&&p.style.visibility==='visible')location.href=p.href;}
+    if(e.key==='ArrowRight'){var n=document.getElementById('nav-next');if(n&&n.style.visibility==='visible')location.href=n.href;}
+  });
 })();
 </script>
 
