@@ -168,19 +168,20 @@ def _groq_summarize_vi(title, raw_text):
     clean = (raw_text or "").strip()
     if len(clean) < 80:
         prompt = (
-            "Bạn là biên tập viên tin tức Việt Nam, viết cho nữ nhân viên văn phòng. "
-            f"Viết tóm tắt khoảng 250 từ, tiếng Việt, dí dỏm, thân thiện về bài báo:\n\n"
+            "Bạn là biên tập viên tin tức. Viết tóm tắt khoảng 250 từ, tiếng Việt, "
+            "rõ ràng và sinh động về bài báo sau:\n\n"
             f"Tiêu đề: {title}\n\n"
-            "Phân tích bối cảnh, ý nghĩa, tác động thực tế của sự kiện này. "
-            "Viết tự nhiên như kể chuyện cho bạn nghe, không khô khan."
+            "Nêu bối cảnh, diễn biến chính và ý nghĩa thực tế của sự kiện. "
+            "Viết liền mạch, không dùng gạch đầu dòng. "
+            "Không xưng hô với độc giả, không dùng câu chào mở đầu."
         )
     else:
         prompt = (
-            "Bạn là biên tập viên tin tức Việt Nam, viết cho nữ nhân viên văn phòng. "
-            "Dựa vào nội dung bên dưới, viết tóm tắt khoảng 250 từ, tiếng Việt, dí dỏm, thân thiện.\n"
-            "QUAN TRỌNG: tóm tắt phải bám sát tiêu đề. "
-            "Nếu nội dung không khớp tiêu đề, ưu tiên diễn giải theo tiêu đề.\n"
-            "Viết tự nhiên như kể chuyện — nêu bối cảnh, diễn biến, ý nghĩa thực tế.\n\n"
+            "Bạn là biên tập viên tin tức. Dựa vào nội dung bên dưới, "
+            "viết tóm tắt khoảng 250 từ, tiếng Việt, rõ ràng và sinh động.\n"
+            "Tóm tắt phải bám sát tiêu đề — nếu nội dung lạc đề, ưu tiên diễn giải theo tiêu đề.\n"
+            "Nêu bối cảnh, diễn biến, ý nghĩa thực tế. Viết liền mạch, không gạch đầu dòng.\n"
+            "Không xưng hô với độc giả, không dùng câu chào mở đầu, không lặp lại cùng kiểu mở đầu.\n\n"
             f"Tiêu đề: {title}\n\nNội dung: {clean[:4000]}"
         )
     return _llm_call(prompt, max_tokens=800, temperature=0.4)
