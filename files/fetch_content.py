@@ -325,6 +325,36 @@ def _groq_food_tip(date_str):
     return _llm_call(prompt, max_tokens=350, temperature=0.8)
 
 
+def _load_prev_seen():
+    """Extract article titles and links from the most recent previous newsletter HTML."""
+    docs_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs")
+    if not os.path.isdir(docs_dir):
+        return set()
+    override = os.environ.get("DATE_OVERRIDE")
+    ref_date = override or datetime.datetime.now().strftime("%Y-%m-%d")
+    dated = sorted(
+        f[:-5] for f in os.listdir(docs_dir)
+        if re.match(r'\d{4}-\d{2}-\d{2}\.html$', f) and f[:-5] < ref_date
+    )
+    if not dated:
+        return set()
+    try:
+        content = open(os.path.join(docs_dir, dated[-1] + ".html"), encoding="utf-8").read()
+    except Exception:
+        return set()
+    seen = set()
+    # Article titles: <p style="...font-weight:bold;color:#8B6508...">TITLE</p>
+    for raw_title in re.findall(r'font-weight:bold;color:#8B6508[^>]*>([^<]{5,})</p>', content):
+        clean = re.sub(r'&[^;]+;', ' ', raw_title).strip()
+        if len(clean) > 5:
+            seen.add(clean[:50].lower())
+    # Article source links (not local .html/.pdf)
+    for link in re.findall(r'href="(https?://[^\s"]+)"', content):
+        if not any(s in link for s in ('.html', '.pdf', 'ttxhxd', 'pages.dev')):
+            seen.add(link.split('?')[0])
+    return seen
+
+
 def _fetch_rss_articles(target=6, feeds=None, seed=None):
     import random as _random
     socket.setdefaulttimeout(12)
@@ -332,8 +362,8 @@ def _fetch_rss_articles(target=6, feeds=None, seed=None):
     raw = []
     feed_list = feeds if feeds is not None else RSS_FEEDS
 
-    # With a seed we fetch more entries per feed so shuffle gives real variety.
-    per_feed = (5 if seed is not None else 1) if feeds is None else 8
+    # Always fetch 5 entries per feed to have alternatives for cross-day dedup.
+    per_feed = 8 if feeds is not None else 5
     for feed_url, publisher in feed_list:
         try:
             feed = feedparser.parse(feed_url, request_headers=headers)
@@ -357,15 +387,27 @@ def _fetch_rss_articles(target=6, feeds=None, seed=None):
         _random.seed(seed)
         _random.shuffle(raw)
 
-    # Deduplicate by title similarity
-    seen, deduped = set(), []
-    for item in raw:
-        key = item["title"][:40].lower()
-        if key not in seen:
-            seen.add(key)
-            deduped.append(item)
+    # Load yesterday's seen articles for cross-day deduplication (daily runs only).
+    prev_seen = _load_prev_seen() if seed is None else set()
 
-    return deduped[:target]
+    # Two-pass dedup: fresh articles first, stale as fallback.
+    seen_titles = set()
+    fresh, stale = [], []
+    for item in raw:
+        key = item["title"][:50].lower()
+        if key in seen_titles:
+            continue
+        seen_titles.add(key)
+        link_base = item["link"].split('?')[0] if item.get("link") else ""
+        if key in prev_seen or link_base in prev_seen:
+            stale.append(item)
+        else:
+            fresh.append(item)
+
+    result = fresh[:target]
+    if len(result) < target:
+        result += stale[:target - len(result)]
+    return result
 
 
 def fetch_content():
