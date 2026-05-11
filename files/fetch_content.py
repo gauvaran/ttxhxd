@@ -47,6 +47,13 @@ DANANG_FEEDS = [
     ("https://tuoitre.vn/rss/mien-trung.rss",                 "Tuổi Trẻ - Miền Trung"),
 ]
 
+# Entertainment/showbiz feeds — grounded sources for viral section
+VIRAL_FEEDS = [
+    ("https://vnexpress.net/rss/giai-tri.rss",   "VnExpress Giải trí"),
+    ("https://soha.vn/rss/giai-tri.rss",         "Soha Giải trí"),
+    ("https://nld.com.vn/rss/giai-tri.rss",      "NLĐ Giải trí"),
+]
+
 try:
     import sys as _sys, os as _os
     _sys.path.insert(0, _os.path.dirname(__file__))
@@ -187,22 +194,61 @@ def _groq_summarize_vi(title, raw_text):
     return _llm_call(prompt, max_tokens=800, temperature=0.4)
 
 
-def _groq_viral_content(date_str):
+def _fetch_viral_articles(n=8):
+    """Fetch recent entertainment/showbiz articles from proven RSS sources."""
+    raw = []
+    for url, publisher in VIRAL_FEEDS:
+        try:
+            feed = feedparser.parse(url)
+            for entry in feed.entries[:6]:
+                title = _strip_html(entry.get("title", "")).strip()
+                desc  = _strip_html(entry.get("summary", entry.get("description", ""))).strip()
+                link  = entry.get("link", "")
+                if title and link:
+                    raw.append({"title": title, "desc": desc[:300], "link": link, "publisher": publisher})
+        except Exception as e:
+            print(f"Viral feed error ({publisher}): {e}", file=sys.stderr)
+    # deduplicate by title prefix
+    seen, out = set(), []
+    for item in raw:
+        key = item["title"][:40].lower()
+        if key not in seen:
+            seen.add(key)
+            out.append(item)
+    return out[:n]
+
+
+def _groq_viral_content(date_str, articles):
+    if not articles:
+        return ""
+    context = "\n".join(
+        f"[{i+1}] [{a['publisher']}] {a['title']}\n    Mô tả: {a['desc']}"
+        for i, a in enumerate(articles)
+    )
+    # Build a lookup: ref number → markdown link for post-processing
+    ref_map = {
+        str(i + 1): f"[{a['publisher']}]({a['link']})"
+        for i, a in enumerate(articles)
+    }
     prompt = (
-        f"Hôm nay là {date_str}. Bạn là người nghiện MXH Việt Nam, theo dõi sát Facebook, TikTok, Threads.\n\n"
-        "Viết ĐÚNG 3 nội dung viral/trending đang hot trên MXH Việt Nam gần đây.\n\n"
-        "Format mỗi item:\n"
-        "### 🔥 [Tên trend / sự kiện / câu nói hot]\n"
-        "📍 *Nguồn: [nền tảng + kênh/fanpage/hashtag cụ thể, ví dụ: TikTok @..., Facebook group '...', Threads #...]*\n"
-        "[2-3 câu: tại sao hot, ví dụ câu nói/tình huống cụ thể, phản ứng cộng đồng]\n\n"
+        f"Hôm nay là {date_str}. Dưới đây là {len(articles)} tin giải trí/showbiz thật vừa đăng hôm nay:\n\n"
+        f"{context}\n\n"
+        "Từ danh sách trên, chọn ĐÚNG 3 tin hot nhất/dễ gây xôn xao MXH nhất và viết theo format:\n\n"
+        "### 🔥 [Tiêu đề hấp dẫn, ngắn gọn]\n"
+        "📍 *Nguồn: REF[N]* (N là số thứ tự bài trong danh sách)\n"
+        "[2-3 câu: viết lại sinh động, dí dỏm, nêu bật điều gây tò mò/tranh cãi, góc nhìn cộng đồng]\n\n"
         "Yêu cầu:\n"
-        "- Ưu tiên: câu nói/slang đang viral (kiểu 'thôi kệ', 'đỉnh của chóp', nhưng phải là trend MỚI NHẤT hiện tại)\n"
-        "- Có thể là: meme đang lan, clip triệu view, sự kiện gây tranh cãi, challenge TikTok\n"
-        "- Phải dẫn nguồn cụ thể (tên kênh, fanpage, hashtag thật)\n"
-        "- Tiếng Việt sinh động, chêm tiếng lóng tự nhiên\n"
+        "- Chỉ dùng thông tin từ các bài có sẵn — KHÔNG bịa thêm chi tiết, số liệu, hoặc tên người\n"
+        "- Dùng đúng REF[N] để tham chiếu, ví dụ REF[3] cho bài số 3\n"
+        "- Tiếng Việt sinh động, chêm tiếng lóng tự nhiên, có thể thêm emoji\n"
         "- 3 item liền nhau, không thêm gì khác"
     )
-    return _llm_call(prompt, max_tokens=600, temperature=0.9)
+    raw = _llm_call(prompt, max_tokens=700, temperature=0.8)
+    # Replace REF[N] with actual markdown links
+    import re as _re
+    def _replace_ref(m):
+        return ref_map.get(m.group(1), m.group(0))
+    return _re.sub(r"REF\[(\d+)\]", _replace_ref, raw)
 
 
 def _groq_music_fashion_trend(date_str):
@@ -455,9 +501,12 @@ def fetch_content():
             "summary": summary or art["desc"][:300],
         })
 
-    # ── Phase 4: Viral MXH content ────────────────────────────────────────────
+    # ── Phase 4: Viral MXH content (grounded in real articles) ──────────────
+    print("Fetching viral/entertainment articles...", file=sys.stderr)
+    viral_articles = _fetch_viral_articles(n=8)
+    print(f"  Got {len(viral_articles)} viral articles", file=sys.stderr)
     print("Generating viral content...", file=sys.stderr)
-    viral = _groq_viral_content(date_iso) if ai_key else ""
+    viral = _groq_viral_content(date_iso, viral_articles) if ai_key else ""
     time.sleep(2)
 
     # ── Phase 4b: Music + Fashion trending ───────────────────────────────────
