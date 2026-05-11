@@ -75,6 +75,11 @@ def md_to_html(text):
     text = _re.sub(r'`([^`]+)`', r'<code style="background:#F3F4F6;color:#1F2937;border:1px solid #D1D5DB;padding:1px 5px;border-radius:3px;font-size:12px;">\1</code>', text)
     text = _re.sub(r'\*\*(.+?)\*\*', r'<strong>\1</strong>', text)
     text = _re.sub(r'\*(.+?)\*', r'<em>\1</em>', text)
+    text = _re.sub(
+        r'\[([^\]]+)\]\((https?://[^)]+)\)',
+        r'<a href="\2" style="color:#C9950C;text-decoration:underline;" target="_blank">\1</a>',
+        text
+    )
     text = _re.sub(r'^#{1,3}\s+(.+)$', r'<strong style="font-size:14px;">\1</strong>', text, flags=_re.MULTILINE)
     text = _re.sub(r'^[\-\*]\s+(.+)$', r'&nbsp;&nbsp;&#8226;&nbsp;\1', text, flags=_re.MULTILINE)
     text = _re.sub(r'\n{2,}', '</p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;">', text)
