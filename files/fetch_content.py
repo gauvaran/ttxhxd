@@ -54,6 +54,10 @@ VIRAL_FEEDS = [
     ("https://nld.com.vn/rss/giai-tri.rss",      "NLĐ Giải trí"),
 ]
 
+# Music + fashion feeds — grounded sources for music/fashion section
+MUSIC_FEEDS   = [("https://tuoitre.vn/rss/am-nhac.rss",    "Tuổi Trẻ Âm nhạc")]
+FASHION_FEEDS = [("https://tuoitre.vn/rss/thoi-trang.rss", "Tuổi Trẻ Thời trang")]
+
 try:
     import sys as _sys, os as _os
     _sys.path.insert(0, _os.path.dirname(__file__))
@@ -251,24 +255,85 @@ def _groq_viral_content(date_str, articles):
     return _re.sub(r"REF\[(\d+)\]", _replace_ref, raw)
 
 
-def _groq_music_fashion_trend(date_str):
+def _fetch_music_fashion_articles():
+    """Fetch recent music and fashion articles from proven RSS sources."""
+    music, fashion = [], []
+    for feeds, bucket in [(MUSIC_FEEDS, music), (FASHION_FEEDS, fashion)]:
+        for url, publisher in feeds:
+            try:
+                feed = feedparser.parse(url)
+                for entry in feed.entries[:6]:
+                    title = _strip_html(entry.get("title", "")).strip()
+                    desc  = _strip_html(entry.get("summary", entry.get("description", ""))).strip()
+                    link  = entry.get("link", "")
+                    if title and link:
+                        bucket.append({"title": title, "desc": desc[:300],
+                                       "link": link, "publisher": publisher})
+            except Exception as e:
+                print(f"Music/fashion feed error ({publisher}): {e}", file=sys.stderr)
+    # deduplicate each bucket by title prefix
+    def _dedup(lst):
+        seen, out = set(), []
+        for item in lst:
+            key = item["title"][:40].lower()
+            if key not in seen:
+                seen.add(key)
+                out.append(item)
+        return out
+    return _dedup(music)[:5], _dedup(fashion)[:5]
+
+
+def _groq_music_fashion_trend(date_str, music_articles, fashion_articles):
+    if not music_articles and not fashion_articles:
+        return ""
+    import re as _re
+
+    def _build_context(arts):
+        return "\n".join(
+            f"[{i+1}] {a['title']}\n    Mô tả: {a['desc']}"
+            for i, a in enumerate(arts)
+        )
+
+    def _build_ref_map(arts):
+        return {str(i + 1): f"[{a['publisher']}]({a['link']})" for i, a in enumerate(arts)}
+
+    music_ctx   = _build_context(music_articles)
+    fashion_ctx = _build_context(fashion_articles)
+    music_refs  = _build_ref_map(music_articles)
+    # fashion refs offset by len(music) so they don't clash
+    offset = len(music_articles)
+    fashion_refs = {str(i + 1): f"[{a['publisher']}]({a['link']})" for i, a in enumerate(fashion_articles)}
+
     prompt = (
-        f"Hôm nay là {date_str}. Bạn là người theo dõi âm nhạc Việt Nam và thời trang châu Á hàng ngày.\n\n"
-        "Viết 2 item trending:\n\n"
+        f"Hôm nay là {date_str}. Dưới đây là các tin tức thật về âm nhạc và thời trang:\n\n"
+        f"ÂM NHẠC ({len(music_articles)} bài):\n{music_ctx}\n\n"
+        f"THỜI TRANG ({len(fashion_articles)} bài):\n{fashion_ctx}\n\n"
+        "Chọn 1 tin âm nhạc hay nhất và 1 tin thời trang hay nhất, viết theo format:\n\n"
         "**ÂM NHẠC 🎵**\n"
-        "### 🎵 [Tên bài hát / MV / album Việt Nam đang hot nhất]\n"
-        "📍 *Ca sĩ — [Số view/stream nếu biết] — [YouTube/TikTok/Spotify]*\n"
-        "[2-3 câu: lý do đang được yêu thích, lyrics/câu hook đáng nhớ, vibe của bài]\n\n"
+        "### 🎵 [Tiêu đề hấp dẫn]\n"
+        "📍 *Nguồn: MREF[N]* (N là số thứ tự trong danh sách ÂM NHẠC)\n"
+        "[2-3 câu: viết sinh động, nêu bật điểm thú vị, cảm xúc, lý do đáng nghe/xem]\n\n"
         "**THỜI TRANG 👗**\n"
-        "### 👗 [Trend thời trang đang hot ở VN hoặc châu Á]\n"
-        "📍 *[Instagram/TikTok/Shopee/Lazada — thương hiệu hoặc kênh nổi bật]*\n"
-        "[2-3 câu: mô tả trend trông như thế nào, ai đang mặc, gợi ý mix đơn giản cho nữ văn phòng]\n\n"
+        "### 👗 [Tiêu đề hấp dẫn]\n"
+        "📍 *Nguồn: FREF[N]* (N là số thứ tự trong danh sách THỜI TRANG)\n"
+        "[2-3 câu: mô tả trend, ai đang mặc, gợi ý mix cho nữ văn phòng]\n\n"
         "Yêu cầu:\n"
-        "- Âm nhạc: ưu tiên V-pop, nhạc Việt mới nhất — hit thật, MV thật, không bịa\n"
-        "- Thời trang: trend thực tế đang bán chạy/được chia sẻ nhiều tại VN\n"
-        "- Có nguồn/tên cụ thể"
+        "- Chỉ dùng thông tin từ các bài có sẵn — KHÔNG bịa thêm chi tiết, số liệu, view\n"
+        "- Dùng MREF[N] cho âm nhạc, FREF[N] cho thời trang\n"
+        "- Tiếng Việt sinh động, có thể thêm emoji\n"
+        "- Chỉ 2 item, không thêm gì khác"
     )
-    return _llm_call(prompt, max_tokens=500, temperature=0.85)
+    raw = _llm_call(prompt, max_tokens=600, temperature=0.8)
+
+    def _replace_mref(m):
+        return music_refs.get(m.group(1), m.group(0))
+
+    def _replace_fref(m):
+        return fashion_refs.get(m.group(1), m.group(0))
+
+    raw = _re.sub(r"MREF\[(\d+)\]", _replace_mref, raw)
+    raw = _re.sub(r"FREF\[(\d+)\]", _replace_fref, raw)
+    return raw
 
 
 def _groq_motivational_quote(date_str):
@@ -509,9 +574,12 @@ def fetch_content():
     viral = _groq_viral_content(date_iso, viral_articles) if ai_key else ""
     time.sleep(2)
 
-    # ── Phase 4b: Music + Fashion trending ───────────────────────────────────
+    # ── Phase 4b: Music + Fashion trending (grounded in real articles) ───────
+    print("Fetching music/fashion articles...", file=sys.stderr)
+    music_arts, fashion_arts = _fetch_music_fashion_articles()
+    print(f"  Got {len(music_arts)} music, {len(fashion_arts)} fashion articles", file=sys.stderr)
     print("Generating music/fashion trend...", file=sys.stderr)
-    music_fashion = _groq_music_fashion_trend(date_iso) if ai_key else ""
+    music_fashion = _groq_music_fashion_trend(date_iso, music_arts, fashion_arts) if ai_key else ""
     time.sleep(2)
 
     # ── Phase 4c: Food of the day ─────────────────────────────────────────────
