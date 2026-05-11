@@ -43,9 +43,15 @@ RSS_FEEDS = [
 ]
 
 DANANG_FEEDS = [
+    # Primary: official Đà Nẵng city portal (all content is Đà Nẵng-specific)
+    ("https://1022.vn/rss",                                    "1022.vn - Cổng TTĐT Đà Nẵng"),
+    # Secondary: national papers with Đà Nẵng section (filtered by keyword)
     ("https://tuoitre.vn/rss/da-nang.rss",                    "Tuổi Trẻ - Đà Nẵng"),
     ("https://tuoitre.vn/rss/mien-trung.rss",                 "Tuổi Trẻ - Miền Trung"),
 ]
+
+# Keywords to filter Đà Nẵng relevance (for feeds that mix national news)
+_DANANG_KW = {"đà nẵng", "da nang", "danang", "1022.vn"}
 
 # Entertainment/showbiz feeds — grounded sources for viral section
 VIRAL_FEEDS = [
@@ -553,7 +559,15 @@ def fetch_content():
 
     # ── Phase 3: Đà Nẵng dedicated news ──────────────────────────────────────
     print("Fetching Đà Nẵng RSS feeds...", file=sys.stderr)
-    raw_danang = _fetch_rss_articles(target=3, feeds=DANANG_FEEDS, seed=date_seed)
+    # Fetch extra so keyword filter still yields 3 after dropping off-topic articles.
+    # Both 1022.vn and Tuổi Trẻ feeds carry some national news — filter all uniformly.
+    raw_danang_all = _fetch_rss_articles(target=20, feeds=DANANG_FEEDS, seed=date_seed)
+    raw_danang = [
+        a for a in raw_danang_all
+        if any(kw in (a["title"] + a.get("desc", "")).lower() for kw in _DANANG_KW)
+    ][:3]
+    if len(raw_danang) < 3:
+        raw_danang = raw_danang_all[:3]   # fallback: use whatever we have
     danang_articles = []
     for i, art in enumerate(raw_danang):
         print(f"  DaNang {i+1}/{len(raw_danang)}: {art['title'][:50]}...", file=sys.stderr)
