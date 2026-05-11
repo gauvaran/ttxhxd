@@ -18,7 +18,7 @@ GUYS = [
         "top_works": "'Lạc Trôi', 'Có Chắc Yêu Là Đây', 'Making My Way', 'Hãy Trao Cho Anh'",
         "awards": "MTV EMA Đông Nam Á, Làn Sóng Xanh nhiều lần, VTV Awards",
         "intro": "Sơn Tùng M-TP sinh ngày 05/07/1994 từ Thái Bình — nghệ sĩ Việt Nam đầu tiên có MV đạt hàng trăm triệu view trên YouTube. Cao 1m75, style thời trang đỉnh, nhạc tự viết-tự produce-tự đạo diễn concept. 'Making My Way' phá kỷ lục streaming VN, 'Lạc Trôi' gây bão quốc tế.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/S%C6%A1n_T%C3%B9ng_M-TP_in_2019.jpg/440px-S%C6%A1n_T%C3%B9ng_M-TP_in_2019.jpg",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Son_Tung_M-TP_1_%282021%29.png",
         "tags": ["V-pop", "producer", "icon"],
     },
     {
@@ -32,7 +32,7 @@ GUYS = [
         "top_works": "'Tội Ác', 'Em Của Ngày Hôm Qua', 'Muôn Kiếp Nhân Sinh', album 'SOOBIN'",
         "awards": "VTV Awards, Cống hiến Awards, MTV Vietnam",
         "intro": "SOOBIN sinh ngày 07/01/1995, cao 1m80 — gương mặt góc cạnh, phong thái điềm tĩnh đầy nội tâm. Album solo 'SOOBIN' được đánh giá là một trong những album Việt xuất sắc nhất thập kỷ. Người ta mê anh không chỉ vì visual mà còn vì chiều sâu nghệ thuật.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/Choi_Soo-bin_%28%EC%B5%9C%EC%88%98%EB%B9%88%29_220121.jpg/400px-Choi_Soo-bin_%28%EC%B5%9C%EC%88%98%EB%B9%88%29_220121.jpg", "tags": ["V-pop", "nhạc sĩ", "indie"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/33/SOOBIN_ATVNCG2024_%28cropped%29.jpg", "tags": ["V-pop", "nhạc sĩ", "indie"],
     },
     {
         "name": "Isaac (Jun Phạm)",
@@ -45,7 +45,7 @@ GUYS = [
         "top_works": "'Thằng Điên', 'Nồng Nàn Hơi Thở Em', phim 'Song Lang' (LHP Busan)",
         "awards": "Diễn viên xuất sắc LHP Busan, đề cử nhiều giải thưởng điện ảnh",
         "intro": "Isaac sinh ngày 22/11/1994, cao 1m79 — từ 365 đến solo career thành công vang dội. Vai diễn trong 'Song Lang' đoạt giải tại LHP Busan, đưa tên tuổi ra quốc tế. Ballad ngọt, diễn xuất chất, body gym đẹp — combo hoàn hảo.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Jun_Pham_GDHH.png/400px-Jun_Pham_GDHH.png", "tags": ["V-pop", "diễn viên", "ballad"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/b3/Isaac_at_the_Song_Gallery_2021.jpg", "tags": ["V-pop", "diễn viên", "ballad"],
     },
     {
         "name": "Đen Vâu",
@@ -110,10 +110,10 @@ GUYS = [
         "top_works": "'Người Lạ Ơi' (collab Karik), 'Ngủ Một Mình', 'Làm Gì Đây'",
         "awards": "Top BXH nhạc Việt, hàng chục triệu stream, giới chuyên môn đánh giá cao",
         "intro": "Rhyder sinh ngày 06/03/2000 — hiện tượng V-pop với chất nhạc R&B-soul thuần túy hiếm gặp. Viết, sản xuất và hát đều đỉnh. 'Người Lạ Ơi' với Karik viral từ Bắc đến Nam. Style laid-back chill, khuôn mặt điền trai.",
-        "image_url": "", "tags": ["V-pop", "R&B", "Gen Z"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a1/RHYDER_3.png", "tags": ["V-pop", "R&B", "Gen Z"],
     },
     {
-        "name": "Đinh Quốc Thiên",
+        "name": "Trần Quốc Thiên (ca sĩ Quốc Thiên)",
         "origin": "Việt Nam 🇻🇳", "job": "Ca sĩ",
         "birthday": "10/11/1990", "height": "1m78", "weight": "67 kg",
         "blood_type": "A", "zodiac": "Bọ Cạp ♏",
@@ -122,8 +122,8 @@ GUYS = [
         "hobbies": "Guitar, thể dục, du lịch gia đình",
         "top_works": "'Tình Yêu Màu Nắng', Top 4 Giọng Hát Việt mùa 1, 'Anh Vẫn Đứng Đây'",
         "awards": "Top 4 Giọng Hát Việt, nhiều giải âm nhạc trong nước",
-        "intro": "Đinh Quốc Thiên sinh ngày 10/11/1990, cao 1m78 — giọng hát trong trẻo, phong thái điềm tĩnh, nụ cười hiền lành đặc trưng. Top 4 Giọng Hát Việt mùa 1 đưa anh đến với khán giả cả nước. Ngoài đời là người chồng người cha tử tế — đủ để chị em thấy ấm lòng!",
-        "image_url": "", "tags": ["V-pop", "ballad", "ca sĩ"],
+        "intro": "Trần Quốc Thiên sinh ngày 10/11/1990, cao 1m78 — giọng hát trong trẻo, phong thái điềm tĩnh, nụ cười hiền lành đặc trưng. Top 4 Giọng Hát Việt mùa 1 đưa anh đến với khán giả cả nước. Ngoài đời là người chồng người cha tử tế — đủ để chị em thấy ấm lòng!",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a1/Qu%E1%BB%91c_Thi%C3%AAn.JPG", "tags": ["V-pop", "ballad", "ca sĩ"],
     },
     {
         "name": "Anh Tú (Voi Bản Đôn)",
@@ -136,7 +136,7 @@ GUYS = [
         "top_works": "'Anh Trai Say Hi' (gameshow viral 2024), nhiều clip hài triệu view",
         "awards": "Top trending MXH Việt Nam 2024, được yêu thích rộng rãi qua 'Anh Trai Say Hi'",
         "intro": "Anh Tú Voi Bản Đôn sinh ngày 14/02/1993 — độc nhất showbiz Việt: gia đình người Ê Đê có truyền thống thuần dưỡng voi tại Buôn Đôn! Tính cách hài hước tự nhiên, thân thiện không khách sáo. 'Anh Trai Say Hi' 2024 khiến anh bùng nổ trên toàn quốc.",
-        "image_url": "", "tags": ["V-pop", "gameshow", "Tây Nguyên"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/1/14/ATDL2024.jpg", "tags": ["V-pop", "gameshow", "Tây Nguyên"],
     },
     {
         "name": "Jack (J97)",
@@ -149,7 +149,7 @@ GUYS = [
         "top_works": "'Hoa Hải Đường', 'Bạc Phận', 'Muộn Rồi Mà Sao Còn', 'Sóng Gió'",
         "awards": "Top nhạc số Việt Nam nhiều tuần, hàng trăm triệu view",
         "intro": "Jack sinh ngày 05/01/1997 — khuôn mặt điền trai, ánh mắt buồn man mác, giọng hát đặc trưng không lẫn vào đâu. 'Muộn Rồi Mà Sao Còn' triệu view, 'Sóng Gió' là bài đôi ăn ý nhất V-pop. Vừa muốn bảo vệ anh vừa muốn được bảo vệ — mâu thuẫn nhưng đúng!",
-        "image_url": "", "tags": ["V-pop", "ballad"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a0/Jack_-_J97.png", "tags": ["V-pop", "ballad"],
     },
 
     # ── 🇰🇷 BTS ───────────────────────────────────────────────────────────────
@@ -164,7 +164,7 @@ GUYS = [
         "top_works": "Album 'Layover' (#1 Billboard 200), 'Stigma', 'Singularity', 'Sweet Night' (OST Itaewon Class)",
         "awards": "Grammy nomination, Daesang MAMA/Melon, Billboard Artist of the Year",
         "intro": "V sinh ngày 30/12/1995 — được tạp chí GQ, Vogue, Hollywood Reporter bình chọn đẹp trai nhất thế giới nhiều lần. Khuôn mặt đối xứng hoàn hảo, giọng baritone trầm ấm hiếm có. Nhiếp ảnh gia tài năng và collector đồ cổ nghiêm túc. Solo album 'Layover' phá kỷ lục nhiều nước.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Kim_Tae-hyung_at_the_2023_Melon_Music_Awards_%28cropped%29.jpg/440px-Kim_Tae-hyung_at_the_2023_Melon_Music_Awards_%28cropped%29.jpg",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/7/74/V_%28Kim_Tae-hyung%29_at_a_fanmeet_in_May_2016_01.jpg",
         "tags": ["K-pop", "BTS", "visual icon"],
     },
     {
@@ -178,7 +178,7 @@ GUYS = [
         "top_works": "'Seven' (#1 Billboard Hot 100), 'Standing Next to You', album 'Golden'",
         "awards": "#1 Billboard Hot 100, MTV VMAs, Grammy nomination, AMA, Billboard Music Awards",
         "intro": "Jungkook sinh ngày 01/09/1997 — 'Golden Maknae' với tài năng toàn diện. Body gym 6-pack khiến cả internet ngừng thở. 'Seven' là ca khúc solo Hàn Quốc đầu tiên giữ #1 Billboard Hot 100 trong 8 tuần liên tiếp — kỷ lục lịch sử!",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/230916_Jungkook_Shoot_1_%28cropped%29.jpg/440px-230916_Jungkook_Shoot_1_%28cropped%29.jpg",
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/2/23/Jeon_Jungkook_at_the_White_House%2C_31_May_2022.jpg",
         "tags": ["K-pop", "BTS", "6-pack 🔥"],
     },
     {
@@ -192,7 +192,7 @@ GUYS = [
         "top_works": "'The Astronaut', 'Epiphany', 'Awake', 'Super Tuna' (viral meme toàn cầu)",
         "awards": "Grammy nomination, Daesang MAMA/Melon/MMA, Billboard Music Awards",
         "intro": "Jin sinh ngày 04/12/1992 — tự phong 'Worldwide Handsome' và cả thế giới đồng ý. Xuất ngũ với body đỉnh hơn trước khi đi — quân đội Hàn Quốc là gym tốt nhất! Giọng tenor trong vắt, khiếu hài hước vô đối, nụ cười windshield-wiper iconic.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4b/BTS_Jin_at_Maison_Fred%2C_13_March_2025_04.png/400px-BTS_Jin_at_Maison_Fred%2C_13_March_2025_04.png", "tags": ["K-pop", "BTS", "Worldwide Handsome"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/b1/BTS_Jin_on_June_12%2C_2024_%282%29.jpg", "tags": ["K-pop", "BTS", "Worldwide Handsome"],
     },
     {
         "name": "Jimin (Park Jimin)",
@@ -218,7 +218,7 @@ GUYS = [
         "top_works": "Album solo 'Indigo' (2022), 'Wild Flower', phát biểu tại LHQ (UN Speech 2018/2021)",
         "awards": "Grammy nomination, Billboard Music Awards, Grammy Foundation Award",
         "intro": "RM sinh ngày 12/09/1994 — leader BTS, IQ 148, tự học tiếng Anh qua xem 'Friends'. Collector nghệ thuật đương đại nghiêm túc, hiến tặng cho các bảo tàng quốc gia Hàn Quốc. Phát biểu tại Đại Hội Đồng LHQ năm 2018 và 2021. Cao 1m81, lúm đồng tiền hai bên má siêu cute.",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/RM_at_W_Korea_Love_Your_W%2C_November_2023.jpg/400px-RM_at_W_Korea_Love_Your_W%2C_November_2023.jpg", "tags": ["K-pop", "BTS", "rapper", "intellectual"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/b1/RM_in_November_2023.jpg", "tags": ["K-pop", "BTS", "rapper", "intellectual"],
     },
     {
         "name": "J-Hope (Jung Hoseok)",
@@ -231,7 +231,7 @@ GUYS = [
         "top_works": "Album 'Jack in the Box' (2022), 'MORE', headline Lollapalooza 2022, 'ON THE STREET'",
         "awards": "Grammy nomination, Billboard Music Awards, headline festival quốc tế",
         "intro": "J-Hope sinh ngày 18/02/1994 — 'sunshine' của BTS với năng lượng dồi dào không giới hạn. Nghệ sĩ Hàn Quốc đầu tiên headline solo tại Lollapalooza 2022 (festival âm nhạc lớn Mỹ). Nhảy đường phố đỉnh, phong cách thời trang táo bạo. Xuất ngũ về là anh bùng cháy ngay!",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/J-Hope_at_W_Korea_Breast_Cancer_Campaign%2C_15_October_2025.png/400px-J-Hope_at_W_Korea_Breast_Cancer_Campaign%2C_15_October_2025.png", "tags": ["K-pop", "BTS", "dancer"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/3/3a/J-Hope_in_2025.jpg", "tags": ["K-pop", "BTS", "dancer"],
     },
 
     # ── 🇰🇷 EXO ───────────────────────────────────────────────────────────────
@@ -246,7 +246,7 @@ GUYS = [
         "top_works": "Album solo 'City Lights', 'Delight' (1M copies), 'Bambi', EXO 'Ko Ko Bop'",
         "awards": "Daesang MAMA/Melon, Gaon Chart Awards, Bonsang Golden Disc/Seoul Music Awards",
         "intro": "Baekhyun sinh ngày 06/05/1992 — vocal main EXO, nghệ sĩ solo bán hơn 1 triệu album mỗi comeback. Nụ cười mắt híp ngây thơ, aegyo hàng đầu K-pop nhưng lên sân khấu thì charisma hoàn toàn khác. Xuất ngũ xong bùng cháy trở lại không kịp thở!",
-        "image_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/%ED%95%98%EC%96%80%EB%A8%B8%EB%A6%AC_%EB%B0%B1%ED%98%84_3.jpg/400px-%ED%95%98%EC%96%80%EB%A8%B8%EB%A6%AC_%EB%B0%B1%ED%98%84_3.jpg", "tags": ["K-pop", "EXO", "solo artist"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/4/48/%ED%95%98%EC%96%80%EB%A8%B8%EB%A6%AC_%EB%B0%B1%ED%98%84_3.jpg", "tags": ["K-pop", "EXO", "solo artist"],
     },
     {
         "name": "Kai (Kim Jongin)",
@@ -259,7 +259,7 @@ GUYS = [
         "top_works": "EXO 'Tempo', 'Power'; solo 'KAI', 'Peaches', 'Rover'",
         "awards": "Daesang MAMA/Melon (với EXO), MTV VMAs, Vogue Korea/Harper's Bazaar cover",
         "intro": "Kai sinh ngày 14/01/1994 — main dancer EXO, tập ballet từ nhỏ nên body và di chuyển sân khấu uyển chuyển đẳng cấp cao. Solo album 'Peaches' được tạp chí Vogue đánh giá như một tác phẩm nghệ thuật thật sự. Global ambassador của Gucci — không phải ngẫu nhiên!",
-        "image_url": "", "tags": ["K-pop", "EXO", "dancer", "Gucci"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/b1/EXO_Kai_%EC%B9%B4%EC%9D%B4.jpg", "tags": ["K-pop", "EXO", "dancer", "Gucci"],
     },
     {
         "name": "Sehun (Oh Sehun)",
@@ -300,7 +300,7 @@ GUYS = [
         "top_works": "SKZ 'MIROH', 'God's Menu', 'MANIAC', 'S-Class', solo stage 'Latchkey'",
         "awards": "Daesang MAMA/Melon (với SKZ), Billboard Music Awards, MTV VMAs",
         "intro": "Felix sinh ngày 15/09/2000 — người Úc gốc Hàn với làn da trắng muốt, tàn nhang siêu cute và giọng bass trầm 'không thuộc về người thường'. Vũ đạo bùng nổ, năng lượng sân khấu đỉnh cao. Ngoài đời nấu ăn ngon, yêu gia đình và tử tế không giới hạn.",
-        "image_url": "", "tags": ["K-pop", "Stray Kids", "performer"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/1/1e/20230930_Felix.jpg", "tags": ["K-pop", "Stray Kids", "performer"],
     },
     {
         "name": "Hyunjin (Hwang Hyunjin)",
@@ -313,7 +313,7 @@ GUYS = [
         "top_works": "SKZ 'MIROH', 'Thunderous', 'MIROH'; tranh sơn dầu đấu giá từ thiện hàng trăm triệu won",
         "awards": "Daesang MAMA, MTV VMAs; tranh đấu giá 200+ triệu won cho từ thiện",
         "intro": "Hyunjin sinh ngày 20/03/2000 — visual chính SKZ, khuôn mặt như tranh vẽ. Tài năng hội họa thật sự — tranh sơn dầu đấu giá thu về hàng trăm triệu won cho từ thiện. Múa đẹp như nghệ sĩ đương đại, nghệ sĩ toàn diện không thể gắn nhãn 'chỉ là idol'.",
-        "image_url": "", "tags": ["K-pop", "Stray Kids", "họa sĩ"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a3/Hyunjin_of_Stray_Kids%2C_March_5%2C_2025.png", "tags": ["K-pop", "Stray Kids", "họa sĩ"],
     },
 
     # ── 🇰🇷 TXT, NCT, ENHYPEN, SEVENTEEN ─────────────────────────────────────
@@ -341,7 +341,7 @@ GUYS = [
         "top_works": "SEVENTEEN 'Left & Right', 'Rock with You'; unit MINGYU x WONWOO",
         "awards": "Daesang MAMA/Melon (với SVT), Billboard Global 200",
         "intro": "Wonwoo sinh ngày 17/07/1996 — rapper SEVENTEEN với phong thái lạnh lùng bí ẩn nhưng siêu funny khi livestream. Khuôn mặt góc cạnh sắc bén, mắt một mí hút hồn, giọng rap trầm đặc trưng. Mọt sách nghiêm túc, thích triết học — depth không chỉ ở visual!",
-        "image_url": "", "tags": ["K-pop", "SEVENTEEN", "rapper"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a1/230113_WONWOO.jpg", "tags": ["K-pop", "SEVENTEEN", "rapper"],
     },
     {
         "name": "Taeyong (Lee Taeyong)",
@@ -380,7 +380,7 @@ GUYS = [
         "top_works": "ENHYPEN 'Given-Taken', 'Bite Me', 'Sweet Venom'; solo 'BÊTE NOIRE'",
         "awards": "MAMA Rookie, Melon Music Awards, Golden Disc Awards (với ENHYPEN)",
         "intro": "Jay sinh ngày 20/04/2002 — người Mỹ gốc Hàn trong ENHYPEN, nói 4 thứ tiếng, tập gym cực nghiêm túc. Body rắn chắc nhất ENHYPEN với visible abs. Thẳng thắn và hài hước không cần filter. Bad boy với trái tim tốt — ngầu trên sân khấu, cười toe toét ngoài đời.",
-        "image_url": "", "tags": ["K-pop", "ENHYPEN", "6-pack 🔥"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a3/JAY_%28ENHYPEN%29_220624.jpg", "tags": ["K-pop", "ENHYPEN", "6-pack 🔥"],
     },
     {
         "name": "Cha Eunwoo (Lee Dongmin)",
@@ -592,7 +592,7 @@ GUYS = [
         "top_works": "'Story of Yanxi Palace' (2018), 'Ancient Love Poetry', 'Reset' (2022)",
         "awards": "Weibo Drama Awards, Mango TV Awards, iQiyi Starlight Awards",
         "intro": "Hứa Khải sinh ngày 26/12/1994, cao 1m87 — cao và đẹp nhất C-drama hiện tại. Body gym 6-pack visible, brand ambassador nhiều thương hiệu thể thao cao cấp. Khuôn mặt tinh anh, vừa đóng lạnh lùng vừa đóng tình lang ngọt ngào đều thuyết phục!",
-        "image_url": "", "tags": ["C-pop", "diễn viên", "6-pack 🔥"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/b/b1/%E6%BC%94%E5%91%98%E8%AE%B8%E5%87%AF.jpg", "tags": ["C-pop", "diễn viên", "6-pack 🔥"],
     },
     {
         "name": "Ngô Lỗi (Wu Lei)",
@@ -618,7 +618,7 @@ GUYS = [
         "top_works": "'Ever Night' (2018), 'ZERO' (2022 phim điện ảnh), 'Sword Snow Stride'",
         "awards": "FIRST Youth Film Festival, Weibo New Actor Awards, iQiyi New Generation Awards",
         "intro": "Trần Phi Vũ sinh ngày 02/02/1999, cao 1m85 — con trai đạo diễn Trần Khải Ca, tự gây dựng tên tuổi bằng tài năng thật. Từng học ballet chuyên nghiệp nên body tỷ lệ rất đẹp, di chuyển thanh thoát. Thư sinh nghệ sĩ có chiều sâu thật sự!",
-        "image_url": "", "tags": ["C-pop", "diễn viên", "ballet"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/2/23/Arthur_Chen_at_Tokyo_International_Film_Festival_2019_%2849033320297%29.jpg", "tags": ["C-pop", "diễn viên", "ballet"],
     },
     {
         "name": "Tống Uy Long (Song Weilong)",
@@ -631,7 +631,7 @@ GUYS = [
         "top_works": "'Because of You' (2020), 'Love in Flames of War', cover Vogue/GQ China",
         "awards": "Weibo New Stars Awards, Mango TV Awards, GQ Men of the Year (thời trang)",
         "intro": "Tống Uy Long sinh ngày 24/07/1999, cao 1m87 — nam thần trẻ đang lên mạnh, cover tạp chí Vogue/GQ China liên tục. Body bóng rổ và gym tỷ lệ vai-eo cực đẹp. Khuôn mặt lạnh lùng ẩn chứa nét lãng mạn — biểu tượng tầm châu lục đang hình thành!",
-        "image_url": "", "tags": ["C-pop", "người mẫu", "diễn viên"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/4/4e/Song_Weilong_in_2016.jpg", "tags": ["C-pop", "người mẫu", "diễn viên"],
     },
     {
         "name": "Bạch Kính Đình (Bai Jingting)",
@@ -826,10 +826,10 @@ GUYS = [
         "top_works": "'Day Day Up' (Hồ Nam TV), 'Nirvana in Fire II', 'Lost Track of Time'",
         "awards": "Mango TV Popular Star Awards, Weibo New Idol Awards",
         "intro": "Hà Tuấn Lâm sinh ngày 07/07/1998, cao 1m82 — idol trẻ đang lên với ngoại hình thư sinh điển trai. Chinh phục khán giả qua 'Day Day Up' với hài hước tự nhiên và vũ đạo ấn tượng. Đẹp kiểu clean và tươi sáng — cái tên đáng theo dõi!",
-        "image_url": "", "tags": ["C-pop", "idol", "thư sinh"],
+        "image_url": "https://upload.wikimedia.org/wikipedia/commons/a/a1/He_Junlin_at_the_2023_Weibo_Night.jpg", "tags": ["C-pop", "idol", "thư sinh"],
     },
     {
-        "name": "Lương Gia Huy (Connor Leong)",
+        "name": "Lương Tĩnh Khang (Connor Leong)",
         "origin": "Trung Quốc 🇨🇳", "job": "Diễn viên",
         "birthday": "19/07/1999", "height": "1m84", "weight": "70 kg",
         "blood_type": "AB", "zodiac": "Cự Giải ♋",
@@ -838,7 +838,7 @@ GUYS = [
         "hobbies": "Bơi lội, gym, xem phim nghệ thuật, nhạc indie",
         "top_works": "'A Little Thing Called First Love' (2019), 'You Are My Destiny' (2020)",
         "awards": "Weibo Drama Awards, iQiyi New Generation Awards",
-        "intro": "Lương Gia Huy sinh ngày 19/07/1999, cao 1m84 — đẹp như 'idol Hàn Quốc bước vào phim Trung Quốc'. Khuôn mặt trắng trẻo tỷ lệ hoàn hảo, nụ cười ngây thơ. Body bơi lội cân đối. 'A Little Thing Called First Love' làm bùng nổ fandom!",
+        "intro": "Lương Tĩnh Khang sinh ngày 19/07/1999, cao 1m84 — đẹp như 'idol Hàn Quốc bước vào phim Trung Quốc'. Khuôn mặt trắng trẻo tỷ lệ hoàn hảo, nụ cười ngây thơ. Body bơi lội cân đối. 'A Little Thing Called First Love' làm bùng nổ fandom!",
         "image_url": "", "tags": ["C-pop", "diễn viên", "thư sinh"],
     },
     {
