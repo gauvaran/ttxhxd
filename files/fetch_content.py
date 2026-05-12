@@ -42,16 +42,15 @@ RSS_FEEDS = [
     ("https://vnexpress.net/rss/khoa-hoc-cong-nghe.rss",      "VnExpress - Công nghệ"),
 ]
 
-DANANG_FEEDS = [
-    # Primary: official Đà Nẵng city portal (all content is Đà Nẵng-specific)
-    ("https://1022.vn/rss",                                    "1022.vn - Cổng TTĐT Đà Nẵng"),
-    # Secondary: national papers with Đà Nẵng section (filtered by keyword)
-    ("https://tuoitre.vn/rss/da-nang.rss",                    "Tuổi Trẻ - Đà Nẵng"),
-    ("https://tuoitre.vn/rss/mien-trung.rss",                 "Tuổi Trẻ - Miền Trung"),
+# Đà Nẵng-specific sources (no national papers)
+# baodanang.vn uses Google News sitemap (no RSS); 1022.vn has RSS
+BAODANANG_SITEMAP = "https://baodanang.vn/sitemap-news.xml"
+DANANG_RSS_FEEDS  = [
+    ("https://1022.vn/rss", "1022.vn - Cổng TTĐT Đà Nẵng"),
 ]
 
-# Keywords to filter Đà Nẵng relevance (for feeds that mix national news)
-_DANANG_KW = {"đà nẵng", "da nang", "danang", "1022.vn"}
+# Keywords to filter 1022.vn articles that are not Đà Nẵng-specific
+_DANANG_KW = {"đà nẵng", "da nang", "danang"}
 
 # Entertainment/showbiz feeds — grounded sources for viral section
 VIRAL_FEEDS = [
@@ -205,17 +204,45 @@ def _groq_summarize_vi(title, raw_text):
 
 
 def _fetch_danang_articles(n=3):
-    """Fetch Đà Nẵng-specific articles: 1022.vn first, then Tuổi Trẻ feeds.
-    No shuffle — preserves feed priority order so 1022.vn leads.
-    Filters by keyword and skips articles with old URLs (>90 days)."""
-    import time as _time
+    """Fetch Đà Nẵng-specific articles.
+    Source 1: baodanang.vn Google News sitemap — the city's official newspaper, 100% local.
+    Source 2: 1022.vn RSS — Đà Nẵng city portal, filtered by keyword.
+    No shuffle, no national papers."""
     import re as _re
-    cutoff_year = datetime.datetime.now().year - 1   # reject anything from prev year+
     out, seen = [], set()
-    for url, publisher in DANANG_FEEDS:
+
+    # ── Source 1: baodanang.vn news sitemap ──────────────────────────────────
+    try:
+        req = urllib.request.Request(
+            BAODANANG_SITEMAP,
+            headers={"User-Agent": "Mozilla/5.0 (compatible; TTXHXDBot/1.0)"}
+        )
+        with urllib.request.urlopen(req, timeout=12) as r:
+            xml = r.read().decode("utf-8", errors="ignore")
+        # Parse <url> blocks: extract loc + title
+        for block in _re.findall(r'<url>(.*?)</url>', xml, _re.DOTALL):
+            loc   = (_re.search(r'<loc>(.*?)</loc>', block) or type('', (), {'group': lambda s, x: ''})()).group(1).strip()
+            raw_t = (_re.search(r'<news:title>(.*?)</news:title>', block, _re.DOTALL) or type('', (), {'group': lambda s, x: ''})()).group(1).strip()
+            # Entities may wrap CDATA: &lt;![CDATA[title]]&gt; — decode then strip
+            title = raw_t.replace('&lt;', '<').replace('&gt;', '>').replace('&amp;', '&')
+            title = _re.sub(r'<!\[CDATA\[(.*?)\]\]>', r'\1', title).strip()
+            if not title or not loc:
+                continue
+            key = title[:40].lower()
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append({"title": title, "publisher": "Báo Đà Nẵng", "link": loc, "desc": ""})
+            if len(out) >= n:
+                return out
+    except Exception as e:
+        print(f"baodanang.vn sitemap error: {e}", file=sys.stderr)
+
+    # ── Source 2: 1022.vn RSS (fallback / supplement) ─────────────────────
+    for url, publisher in DANANG_RSS_FEEDS:
         try:
             feed = feedparser.parse(url)
-            for entry in feed.entries[:12]:
+            for entry in feed.entries[:20]:
                 title = _strip_html(entry.get("title", "")).strip()
                 link  = entry.get("link", "")
                 desc  = _strip_html(entry.get("summary", entry.get("description", ""))).strip()
@@ -224,21 +251,16 @@ def _fetch_danang_articles(n=3):
                 key = title[:40].lower()
                 if key in seen:
                     continue
-                # Skip stale articles: Tuổi Trẻ embeds year in URL (e.g. 20250806)
-                url_years = _re.findall(r'20(\d{2})\d{4}', link)
-                if url_years and int("20" + url_years[0]) < datetime.datetime.now().year:
-                    continue
-                # Keyword filter — apply to all feeds including 1022.vn
                 text = (title + " " + desc).lower()
                 if not any(kw in text for kw in _DANANG_KW):
                     continue
                 seen.add(key)
-                out.append({"title": title, "publisher": publisher,
-                            "link": link, "desc": desc})
+                out.append({"title": title, "publisher": publisher, "link": link, "desc": desc})
                 if len(out) >= n:
                     return out
         except Exception as e:
-            print(f"Đà Nẵng feed error ({publisher}): {e}", file=sys.stderr)
+            print(f"Đà Nẵng RSS error ({publisher}): {e}", file=sys.stderr)
+
     return out
 
 
