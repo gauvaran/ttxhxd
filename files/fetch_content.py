@@ -203,6 +203,44 @@ def _groq_summarize_vi(title, raw_text):
     return _llm_call(prompt, max_tokens=800, temperature=0.4)
 
 
+def _fetch_baomoi(slug, n=10):
+    """Scrape a baomoi.com page (tag or listing) via Next.js __NEXT_DATA__ JSON.
+    slug examples: 'tag/da-nang', 'tin-moi'
+    Returns list of dicts: title, publisher, link, desc, date (datetime)."""
+    import json as _json
+    url = f"https://baomoi.com/{slug}.epi"
+    try:
+        req = urllib.request.Request(
+            url, headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"}
+        )
+        with urllib.request.urlopen(req, timeout=12) as r:
+            html = r.read().decode("utf-8", errors="ignore")
+        m = re.search(r'<script id="__NEXT_DATA__"[^>]*>(.*?)</script>', html, re.DOTALL)
+        if not m:
+            return []
+        data = _json.loads(m.group(1))
+        items = data["props"]["pageProps"]["resp"]["data"]["content"]["items"]
+    except Exception as e:
+        print(f"baomoi fetch error ({slug}): {e}", file=sys.stderr)
+        return []
+    out = []
+    for it in items:
+        title = it.get("title", "").strip()
+        raw_url = it.get("url", "")
+        link = "https://baomoi.com" + raw_url.split("#")[0]
+        desc  = it.get("description", "")
+        pub   = (it.get("publisher") or {}).get("name", "Báo Mới")
+        ts    = it.get("date")
+        pub_dt = datetime.datetime.fromtimestamp(ts) if ts else None
+        if not title or not link:
+            continue
+        out.append({"title": title, "publisher": pub, "link": link,
+                    "desc": desc, "pub_dt": pub_dt})
+        if len(out) >= n:
+            break
+    return out
+
+
 def _fetch_danang_articles(n=3):
     """Fetch Đà Nẵng-specific articles.
     Source 1: baodanang.vn Google News sitemap — the city's official newspaper, 100% local.
@@ -238,7 +276,19 @@ def _fetch_danang_articles(n=3):
     except Exception as e:
         print(f"baodanang.vn sitemap error: {e}", file=sys.stderr)
 
-    # ── Source 2: 1022.vn RSS (fallback / supplement) ─────────────────────
+    # ── Source 2: baomoi.com tag/da-nang ─────────────────────────────────
+    if len(out) < n:
+        for it in _fetch_baomoi("tag/da-nang", n=10):
+            key = it["title"][:40].lower()
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append({"title": it["title"], "publisher": it["publisher"],
+                        "link": it["link"], "desc": it["desc"]})
+            if len(out) >= n:
+                return out
+
+    # ── Source 3: 1022.vn RSS (final fallback) ────────────────────────────
     for url, publisher in DANANG_RSS_FEEDS:
         try:
             feed = feedparser.parse(url)
@@ -600,9 +650,15 @@ def fetch_content():
     # seed: unique integer per date so each day picks a different article subset
     date_seed = int(today.strftime("%Y%m%d")) if _override else None
 
-    # ── Phase 1: Fetch main VN RSS articles ───────────────────────────────────
+    # ── Phase 1: Fetch main VN articles (7 RSS by topic + 2 baomoi unique) ──
     print("Fetching VN RSS feeds...", file=sys.stderr)
-    raw_articles = _fetch_rss_articles(target=9, seed=date_seed)
+    raw_rss = _fetch_rss_articles(target=7, seed=date_seed)
+    print("Fetching baomoi tin-moi...", file=sys.stderr)
+    raw_baomoi = _fetch_baomoi("tin-moi", n=20)
+    # Add 2 unique baomoi articles not already in RSS pool
+    rss_keys = {a["title"][:40].lower() for a in raw_rss}
+    baomoi_unique = [b for b in raw_baomoi if b["title"][:40].lower() not in rss_keys]
+    raw_articles = raw_rss + baomoi_unique[:2]
 
     # ── Phase 2: Groq summarize main articles ─────────────────────────────────
     articles = []
