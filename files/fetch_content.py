@@ -204,6 +204,44 @@ def _groq_summarize_vi(title, raw_text):
     return _llm_call(prompt, max_tokens=800, temperature=0.4)
 
 
+def _fetch_danang_articles(n=3):
+    """Fetch Đà Nẵng-specific articles: 1022.vn first, then Tuổi Trẻ feeds.
+    No shuffle — preserves feed priority order so 1022.vn leads.
+    Filters by keyword and skips articles with old URLs (>90 days)."""
+    import time as _time
+    import re as _re
+    cutoff_year = datetime.datetime.now().year - 1   # reject anything from prev year+
+    out, seen = [], set()
+    for url, publisher in DANANG_FEEDS:
+        try:
+            feed = feedparser.parse(url)
+            for entry in feed.entries[:12]:
+                title = _strip_html(entry.get("title", "")).strip()
+                link  = entry.get("link", "")
+                desc  = _strip_html(entry.get("summary", entry.get("description", ""))).strip()
+                if not title or not link:
+                    continue
+                key = title[:40].lower()
+                if key in seen:
+                    continue
+                # Skip stale articles: Tuổi Trẻ embeds year in URL (e.g. 20250806)
+                url_years = _re.findall(r'20(\d{2})\d{4}', link)
+                if url_years and int("20" + url_years[0]) < datetime.datetime.now().year:
+                    continue
+                # Keyword filter — apply to all feeds including 1022.vn
+                text = (title + " " + desc).lower()
+                if not any(kw in text for kw in _DANANG_KW):
+                    continue
+                seen.add(key)
+                out.append({"title": title, "publisher": publisher,
+                            "link": link, "desc": desc})
+                if len(out) >= n:
+                    return out
+        except Exception as e:
+            print(f"Đà Nẵng feed error ({publisher}): {e}", file=sys.stderr)
+    return out
+
+
 def _fetch_viral_articles(n=8):
     """Fetch recent entertainment/showbiz articles from proven RSS sources."""
     raw = []
@@ -559,15 +597,8 @@ def fetch_content():
 
     # ── Phase 3: Đà Nẵng dedicated news ──────────────────────────────────────
     print("Fetching Đà Nẵng RSS feeds...", file=sys.stderr)
-    # Fetch extra so keyword filter still yields 3 after dropping off-topic articles.
-    # Both 1022.vn and Tuổi Trẻ feeds carry some national news — filter all uniformly.
-    raw_danang_all = _fetch_rss_articles(target=20, feeds=DANANG_FEEDS, seed=date_seed)
-    raw_danang = [
-        a for a in raw_danang_all
-        if any(kw in (a["title"] + a.get("desc", "")).lower() for kw in _DANANG_KW)
-    ][:3]
-    if len(raw_danang) < 3:
-        raw_danang = raw_danang_all[:3]   # fallback: use whatever we have
+    raw_danang = _fetch_danang_articles(n=3)
+    print(f"  Got {len(raw_danang)} Đà Nẵng articles", file=sys.stderr)
     danang_articles = []
     for i, art in enumerate(raw_danang):
         print(f"  DaNang {i+1}/{len(raw_danang)}: {art['title'][:50]}...", file=sys.stderr)
