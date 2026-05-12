@@ -56,8 +56,10 @@ C_CORAL     = "#E64A19"   # coral/orange (food)
 C_CORAL_BG  = "#FBE9E7"   # light coral bg
 C_STICKER   = "#FFFFF0"   # sticker rows bg (ivory)
 C_STRIPE    = "#FFD54F"   # header stripe (golden amber)
-C_FINANCE   = "#1565C0"   # dark blue (finance section)
+C_FINANCE    = "#1565C0"   # dark blue (finance section)
 C_FINANCE_BG = "#E3F2FD"  # light blue bg (finance section)
+C_POLICY     = "#283593"   # indigo (policy/legal section)
+C_POLICY_BG  = "#E8EAF6"  # light indigo bg
 # ──────────────────────────────────────────────────────────────────────────────
 
 logging.basicConfig(
@@ -103,6 +105,7 @@ def build_html(data):  # noqa: C901
     quote            = data.get("quote", "")
     guy              = data.get("guy")
     finance          = data.get("finance", {})
+    policy           = data.get("policy", "")
 
     # ── Design helpers ────────────────────────────────────────────────────────
     def _sticker(emojis, bg=C_STICKER):
@@ -335,6 +338,19 @@ def build_html(data):  # noqa: C901
 
   </td></tr>"""
 
+    # ── Policy & Legal digest ─────────────────────────────────────────────────
+    policy_html = ""
+    if policy:
+        policy_html = f"""
+  {_sticker("⚖️ 📋 🏛️ 📋 ⚖️", C_POLICY_BG)}
+  {_badge("⚖️", "Chính sách & Pháp luật tài chính", C_POLICY, C_POLICY_BG)}
+  <tr><td bgcolor="{C_POLICY_BG}" style="background-color:{C_POLICY_BG};padding:14px 24px 20px;">
+    <p style="margin:0 0 10px;font-size:12px;color:#555;font-style:italic;font-family:Arial,sans-serif;">
+      Quy định mới ban hành &amp; sắp có hiệu lực — tổng hợp từ nguồn tài chính chính thống
+    </p>
+    {md_to_html(policy)}
+  </td></tr>"""
+
     # ── Viral MXH ────────────────────────────────────────────────────────────
     viral_html = ""
     if viral:
@@ -414,7 +430,8 @@ def build_html(data):  # noqa: C901
         img_block = ""
         if guy.get("image_url"):
             img_block = (f'<img src="{h(guy["image_url"], quote=True)}" alt="{h(guy["name"])}" '
-                         f'width="140" height="190" style="width:140px;max-width:140px;height:auto;'
+                         f'width="140" height="190" referrerpolicy="no-referrer" '
+                         f'style="width:140px;max-width:140px;height:auto;'
                          f'border-radius:12px;display:block;margin:0 auto 10px;'
                          f'box-shadow:0 4px 14px rgba(139,101,8,.20);border:3px solid #FFE082;outline:none;" />')
         tags_html = " ".join(
@@ -536,6 +553,9 @@ def build_html(data):  # noqa: C901
   <!-- BẢN TIN TÀI CHÍNH -->
   {finance_html}
 
+  <!-- CHÍNH SÁCH & PHÁP LUẬT -->
+  {policy_html}
+
   <!-- VIRAL MXH -->
   {viral_html}
 
@@ -627,6 +647,10 @@ def build_plain_text(data):
             lines.append(f"   ETH: {crypto.get('eth_usd','')} USD")
             lines.append(f"   USDT/VNĐ: {crypto.get('usdt_vnd','')} đ (phi chính thức)")
         lines.append("\n📌 Nguồn: Vietcombank · vang.today · CoinGecko (tham khảo)")
+    if data.get("policy"):
+        lines.append("\n" + "─" * 50)
+        lines.append("⚖️ CHÍNH SÁCH & PHÁP LUẬT TÀI CHÍNH")
+        lines.append(data["policy"])
     if data.get("viral"):
         lines.append("\n" + "─" * 50)
         lines.append("🔥 MẠNG XÃ HỘI HÔM NAY")

@@ -53,15 +53,32 @@ DANANG_RSS_FEEDS  = [
 _DANANG_KW = {"đà nẵng", "da nang", "danang"}
 
 # Entertainment/showbiz feeds — grounded sources for viral section
+# Cross-source scoring: story in 3 feeds = viral signal, story in 1 feed = noise
 VIRAL_FEEDS = [
     ("https://vnexpress.net/rss/giai-tri.rss",   "VnExpress Giải trí"),
     ("https://soha.vn/rss/giai-tri.rss",         "Soha Giải trí"),
     ("https://nld.com.vn/rss/giai-tri.rss",      "NLĐ Giải trí"),
+    ("https://kenh14.vn/rss/home.rss",           "Kenh14"),
 ]
 
 # Music + fashion feeds — grounded sources for music/fashion section
 MUSIC_FEEDS   = [("https://tuoitre.vn/rss/am-nhac.rss",    "Tuổi Trẻ Âm nhạc")]
 FASHION_FEEDS = [("https://tuoitre.vn/rss/thoi-trang.rss", "Tuổi Trẻ Thời trang")]
+
+# Policy/legal RSS feeds — financial & regulatory focus
+POLICY_FEEDS = [
+    ("https://tinnhanhchungkhoan.vn/rss/home.rss", "Tin Nhanh Chứng Khoán"),
+    ("https://vnexpress.net/rss/kinh-doanh.rss",   "VnExpress Kinh doanh"),
+    ("https://cafebiz.vn/rss/home.rss",            "CafeBiz"),
+    ("https://tuoitre.vn/rss/phap-luat.rss",       "Tuổi Trẻ Pháp luật"),
+]
+
+_POLICY_KW = {
+    "nghị định", "thông tư", "quyết định", "có hiệu lực", "ban hành",
+    "lãi suất", "thuế", "ngân hàng", "chứng khoán", "bất động sản",
+    "nhnn", "bộ tài chính", "tài chính", "ngân sách", "pháp luật",
+    "quy định", "điều chỉnh", "chính sách", "hiệu lực",
+}
 
 try:
     import sys as _sys, os as _os
@@ -314,61 +331,142 @@ def _fetch_danang_articles(n=3):
     return out
 
 
-def _fetch_viral_articles(n=8):
-    """Fetch recent entertainment/showbiz articles from proven RSS sources."""
+def _fetch_viral_articles(n=12):
+    """Fetch entertainment articles with cross-source virality scoring.
+    Articles covered by multiple feeds are ranked higher — reliable viral signal.
+    Returns top-n sorted by source count desc (multi-source stories first)."""
+    from collections import defaultdict
+
+    def _norm_key(title):
+        # Normalize title to match the same story across different outlets
+        return re.sub(r'\W+', '', title[:28].lower())
+
     raw = []
     for url, publisher in VIRAL_FEEDS:
         try:
             feed = feedparser.parse(url)
-            for entry in feed.entries[:6]:
+            for entry in feed.entries[:15]:  # wider window per feed
                 title = _strip_html(entry.get("title", "")).strip()
                 desc  = _strip_html(entry.get("summary", entry.get("description", ""))).strip()
                 link  = entry.get("link", "")
                 if title and link:
-                    raw.append({"title": title, "desc": desc[:300], "link": link, "publisher": publisher})
+                    raw.append({"title": title, "desc": desc[:300],
+                                "link": link, "publisher": publisher,
+                                "_nk": _norm_key(title)})
         except Exception as e:
             print(f"Viral feed error ({publisher}): {e}", file=sys.stderr)
-    # deduplicate by title prefix
-    seen, out = set(), []
+
+    # Count how many distinct sources cover each story (by normalized title key)
+    key_sources = defaultdict(set)
     for item in raw:
-        key = item["title"][:40].lower()
-        if key not in seen:
-            seen.add(key)
-            out.append(item)
+        key_sources[item["_nk"]].add(item["publisher"])
+
+    # Sort by source count desc → dedup → return top n
+    seen, out = set(), []
+    for item in sorted(raw, key=lambda x: -len(key_sources[x["_nk"]])):
+        dedup_key = item["title"][:40].lower()
+        if dedup_key in seen:
+            continue
+        seen.add(dedup_key)
+        src_count = len(key_sources[item["_nk"]])
+        out.append({k: v for k, v in item.items() if not k.startswith("_")} |
+                   {"_sources": src_count})
     return out[:n]
 
 
-def _groq_viral_content(date_str, articles):
+def _fetch_policy_articles(n=5):
+    """Fetch policy/legal articles from financial RSS feeds, filtered by keywords."""
+    raw, seen = [], set()
+    for url, publisher in POLICY_FEEDS:
+        try:
+            feed = feedparser.parse(url)
+            for entry in feed.entries[:12]:
+                title = _strip_html(entry.get("title", "")).strip()
+                desc  = _strip_html(entry.get("summary", entry.get("description", ""))).strip()
+                link  = entry.get("link", "")
+                if not title or not link:
+                    continue
+                key = title[:40].lower()
+                if key in seen:
+                    continue
+                text = (title + " " + desc).lower()
+                if any(kw in text for kw in _POLICY_KW):
+                    seen.add(key)
+                    raw.append({"title": title, "desc": desc[:300],
+                                "link": link, "publisher": publisher})
+        except Exception as e:
+            print(f"Policy feed error ({publisher}): {e}", file=sys.stderr)
+    return raw[:n]
+
+
+def _groq_policy_summary(date_str, articles):
     if not articles:
         return ""
     context = "\n".join(
         f"[{i+1}] [{a['publisher']}] {a['title']}\n    Mô tả: {a['desc']}"
         for i, a in enumerate(articles)
     )
-    # Build a lookup: ref number → markdown link for post-processing
     ref_map = {
         str(i + 1): f"[{a['publisher']}]({a['link']})"
         for i, a in enumerate(articles)
     }
     prompt = (
-        f"Hôm nay là {date_str}. Dưới đây là {len(articles)} tin giải trí/showbiz thật vừa đăng hôm nay:\n\n"
+        f"Hôm nay là {date_str}. Dưới đây là {len(articles)} tin tức về chính sách, pháp luật tài chính vừa đăng:\n\n"
         f"{context}\n\n"
-        "Từ danh sách trên, chọn ĐÚNG 3 tin hot nhất/dễ gây xôn xao MXH nhất và viết theo format:\n\n"
-        "### 🔥 [Tiêu đề hấp dẫn, ngắn gọn]\n"
-        "📍 *Nguồn: REF[N]* (N là số thứ tự bài trong danh sách)\n"
-        "[2-3 câu: viết lại sinh động, dí dỏm, nêu bật điều gây tò mò/tranh cãi, góc nhìn cộng đồng]\n\n"
+        "Từ danh sách trên, chọn TỐI ĐA 3 tin quan trọng nhất ảnh hưởng đến người dân/doanh nghiệp và viết theo format:\n\n"
+        "### 📋 [Tiêu đề ngắn gọn]\n"
+        "📍 *Nguồn: PREF[N]*\n"
+        "💡 **Tác động:** [1-2 câu: ảnh hưởng thực tế đến người dân, nhân viên ngân hàng, doanh nghiệp]\n\n"
         "Yêu cầu:\n"
-        "- Chỉ dùng thông tin từ các bài có sẵn — KHÔNG bịa thêm chi tiết, số liệu, hoặc tên người\n"
-        "- Dùng đúng REF[N] để tham chiếu, ví dụ REF[3] cho bài số 3\n"
+        "- Chỉ dùng thông tin từ các bài có sẵn — KHÔNG bịa thêm số văn bản, ngày tháng\n"
+        "- Dùng đúng PREF[N] (N là số thứ tự bài trong danh sách)\n"
+        "- Tiếng Việt rõ ràng, ngắn gọn, dễ hiểu với người không chuyên pháp luật\n"
+        "- Ưu tiên tin có từ khóa: Nghị định, Thông tư, lãi suất, thuế, có hiệu lực\n"
+        "- Nếu không có tin chính sách thực sự, chỉ viết 1-2 item\n"
+        "- Chỉ output đúng format, không thêm lời mở đầu hay kết luận"
+    )
+    raw = _llm_call(prompt, max_tokens=600, temperature=0.3)
+    def _replace_pref(m):
+        return ref_map.get(m.group(1), m.group(0))
+    return re.sub(r"PREF\[(\d+)\]", _replace_pref, raw)
+
+
+def _groq_viral_content(date_str, articles):
+    if not articles:
+        return ""
+
+    def _src_label(a):
+        s = a.get("_sources", 1)
+        return f"🔴 {s} nguồn đưa tin" if s >= 3 else (f"🟠 {s} nguồn" if s == 2 else "")
+
+    context = "\n".join(
+        f"[{i+1}] {_src_label(a)} [{a['publisher']}] {a['title']}\n    Mô tả: {a['desc']}"
+        for i, a in enumerate(articles)
+    )
+    ref_map = {
+        str(i + 1): f"[{a['publisher']}]({a['link']})"
+        for i, a in enumerate(articles)
+    }
+    prompt = (
+        f"Hôm nay là {date_str}. Dưới đây là {len(articles)} tin giải trí/showbiz VN được {len(VIRAL_FEEDS)} nguồn thu thập:\n\n"
+        f"{context}\n\n"
+        "🔴 = nhiều nguồn cùng đưa tin → khả năng cao đang hot trên MXH\n\n"
+        "Từ danh sách trên, chọn ĐÚNG 3 tin gây xôn xao MXH nhất và viết theo format:\n\n"
+        "### 🔥 [Tiêu đề hấp dẫn, ngắn gọn]\n"
+        "📍 *Nguồn: REF[N]*\n"
+        "[2-3 câu: viết lại sinh động, dí dỏm, nêu bật điều gây tò mò/tranh cãi/sốc, góc nhìn cộng đồng]\n\n"
+        "Ưu tiên chọn: scandal, tin sốc, bắt giữ, drama, viral clip, kết hôn/chia tay bất ngờ — "
+        "đặc biệt ưu tiên bài có nhiều nguồn đưa tin (🔴/🟠)\n"
+        "Yêu cầu:\n"
+        "- Chỉ dùng thông tin từ các bài có sẵn — KHÔNG bịa thêm chi tiết, số liệu, tên người\n"
+        "- Dùng đúng REF[N] (N là số thứ tự bài trong danh sách)\n"
         "- Tiếng Việt sinh động, chêm tiếng lóng tự nhiên, có thể thêm emoji\n"
         "- 3 item liền nhau, không thêm gì khác"
     )
     raw = _llm_call(prompt, max_tokens=700, temperature=0.8)
-    # Replace REF[N] with actual markdown links
-    import re as _re
     def _replace_ref(m):
         return ref_map.get(m.group(1), m.group(0))
-    return _re.sub(r"REF\[(\d+)\]", _replace_ref, raw)
+    return re.sub(r"REF\[(\d+)\]", _replace_ref, raw)
 
 
 def _fetch_music_fashion_articles():
@@ -873,7 +971,7 @@ def fetch_content():
 
     # ── Phase 4: Viral MXH content (grounded in real articles) ──────────────
     print("Fetching viral/entertainment articles...", file=sys.stderr)
-    viral_articles = _fetch_viral_articles(n=8)
+    viral_articles = _fetch_viral_articles(n=12)
     print(f"  Got {len(viral_articles)} viral articles", file=sys.stderr)
     print("Generating viral content...", file=sys.stderr)
     viral = _groq_viral_content(date_iso, viral_articles) if ai_key else ""
@@ -914,6 +1012,14 @@ def fetch_content():
     # ── Phase 8: Financial data ───────────────────────────────────────────────
     finance = _fetch_finance_data()
 
+    # ── Phase 9: Policy & Legal digest ───────────────────────────────────────
+    print("Fetching policy/legal articles...", file=sys.stderr)
+    policy_articles = _fetch_policy_articles(n=5)
+    print(f"  Got {len(policy_articles)} policy articles", file=sys.stderr)
+    print("Generating policy digest...", file=sys.stderr)
+    policy = _groq_policy_summary(date_iso, policy_articles) if ai_key else ""
+    time.sleep(2)
+
     return {
         "date": date_str,
         "articles": articles,
@@ -927,6 +1033,7 @@ def fetch_content():
         "quote": quote,
         "guy": guy,
         "finance": finance,
+        "policy": policy,
         "gemini": bool(gemini_key),
     }
 
