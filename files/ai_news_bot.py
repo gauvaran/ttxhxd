@@ -92,7 +92,27 @@ def md_to_html(text):
     return text
 
 
-def build_html(data):  # noqa: C901
+def _guy_img_src(image_url, embed=True):
+    """Return img src: base64 data URI (embed=True, for email/PDF) or raw URL (web)."""
+    import base64 as _b64
+    if not image_url:
+        return ""
+    if image_url.startswith("assets/"):
+        local = os.path.join(DOCS_DIR, image_url)
+        if not os.path.exists(local):
+            return ""
+        if embed:
+            if os.path.getsize(local) > 900_000:
+                return ""  # skip very large images in email
+            ext = image_url.rsplit(".", 1)[-1].lower()
+            mime = "image/jpeg" if ext in ("jpg", "jpeg") else f"image/{ext}"
+            data = _b64.b64encode(open(local, "rb").read()).decode()
+            return f"data:{mime};base64,{data}"
+        return image_url  # web: relative URL served by Cloudflare
+    return image_url  # remote URL fallback
+
+
+def build_html(data, embed_images=True):  # noqa: C901
     articles         = data["articles"]
     danang_articles  = data.get("danang_articles", [])
     date_str         = data["date"]
@@ -429,11 +449,16 @@ def build_html(data):  # noqa: C901
     if guy:
         img_block = ""
         if guy.get("image_url"):
-            img_block = (f'<img src="{h(guy["image_url"], quote=True)}" alt="{h(guy["name"])}" '
-                         f'width="140" height="190" referrerpolicy="no-referrer" '
-                         f'style="width:140px;max-width:140px;height:auto;'
-                         f'border-radius:12px;display:block;margin:0 auto 10px;'
-                         f'box-shadow:0 4px 14px rgba(139,101,8,.20);border:3px solid #FFE082;outline:none;" />')
+            src = _guy_img_src(guy["image_url"], embed=embed_images)
+            if src:
+                is_data = src.startswith("data:")
+                src_attr = src if is_data else h(src, quote=True)
+                rp = "" if is_data else 'referrerpolicy="no-referrer" '
+                img_block = (f'<img src="{src_attr}" alt="{h(guy["name"])}" '
+                             f'{rp}width="140" height="190" '
+                             f'style="width:140px;max-width:140px;height:auto;'
+                             f'border-radius:12px;display:block;margin:0 auto 10px;'
+                             f'box-shadow:0 4px 14px rgba(139,101,8,.20);border:3px solid #FFE082;outline:none;" />')
         tags_html = " ".join(
             f'<span style="background:{C_ACCENT};color:#fff;font-size:10px;padding:3px 10px;'
             f'border-radius:12px;margin-right:4px;margin-bottom:4px;display:inline-block;'
@@ -811,7 +836,7 @@ function sharePage(){{
 @media print { #web-nav { display:none !important; } body { background:#fff !important; } }
 </style>
 """
-    email_html = build_html(data)
+    email_html = build_html(data, embed_images=False)
     email_html = _re.sub(r'(</head>)', print_css + r'\1', email_html, count=1)
     return _re.sub(r'(<body[^>]*>)', lambda m: m.group(0) + '\n' + nav, email_html, count=1)
 
