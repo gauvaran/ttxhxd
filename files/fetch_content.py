@@ -552,6 +552,105 @@ def _groq_food_tip(date_str):
     return _llm_call(prompt, max_tokens=350, temperature=0.8)
 
 
+def _fetch_vietcombank_rates():
+    """Fetch exchange rates from Vietcombank XML API. Returns (rates_list, updated_str)."""
+    TARGET = ["USD", "EUR", "JPY", "CNY", "GBP", "AUD", "SGD", "KRW"]
+    LABELS = {
+        "USD": "🇺🇸 USD", "EUR": "🇪🇺 EUR", "JPY": "🇯🇵 JPY", "CNY": "🇨🇳 CNY",
+        "GBP": "🇬🇧 GBP", "AUD": "🇦🇺 AUD", "SGD": "🇸🇬 SGD", "KRW": "🇰🇷 KRW",
+    }
+    url = "https://portal.vietcombank.com.vn/Usercontrols/TVPortal.TyGia/pXML.aspx?b=10"
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=12) as r:
+            xml = r.read().decode("utf-8", errors="ignore")
+        dt_m    = re.search(r'<DateTime>(.*?)</DateTime>', xml)
+        updated = dt_m.group(1).strip() if dt_m else ""
+        rates   = []
+        _safe = lambda m, g: m.group(g) if m else ""
+        for code in TARGET:
+            m = re.search(rf'CurrencyCode="{code}"[^/]*/>', xml)
+            if not m:
+                continue
+            exrate = m.group(0)
+            buy  = _safe(re.search(r'Buy="([^"]+)"',  exrate), 1)
+            sell = _safe(re.search(r'Sell="([^"]+)"', exrate), 1)
+            if buy and sell and buy != "-":
+                rates.append({"code": LABELS.get(code, code), "buy": buy, "sell": sell})
+        return rates, updated
+    except Exception as e:
+        print(f"Vietcombank rate error: {e}", file=sys.stderr)
+        return [], ""
+
+
+def _scrape_giavang(brand, max_rows=6):
+    """Scrape price table from giavang.org. Returns list of {name, buy, sell}."""
+    url = f"https://giavang.org/trong-nuoc/{brand}/"
+    try:
+        req = urllib.request.Request(
+            url, headers={"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"}
+        )
+        with urllib.request.urlopen(req, timeout=12) as r:
+            html = r.read().decode("utf-8", errors="ignore")
+        _price_re = re.compile(r'^[0-9]{1,3}[.,][0-9]{3}')
+        rows = re.findall(r'<tr[^>]*>(.*?)</tr>', html, re.DOTALL)
+        out, seen = [], set()
+        for row in rows:
+            cells = re.findall(r'<t[dh][^>]*>(.*?)</t[dh]>', row, re.DOTALL)
+            cells = [re.sub(r'<[^>]+>', '', c).strip() for c in cells]
+            cells = [c for c in cells if c]
+            prices = [c for c in cells if _price_re.match(c)]
+            names  = [c for c in cells if not _price_re.match(c)]
+            if len(prices) < 2 or not names:
+                continue
+            name = names[-1]   # last non-price cell is the product name
+            key  = name[:30].lower()
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append({"name": name, "buy": prices[0], "sell": prices[-1]})
+            if len(out) >= max_rows:
+                break
+        return out
+    except Exception as e:
+        print(f"giavang.org ({brand}) error: {e}", file=sys.stderr)
+        return []
+
+
+def _fetch_finance_data():
+    """Fetch financial data: exchange rates, gold and silver prices."""
+    def _find(rows, kws, fallback_idx=0):
+        for kw in kws:
+            for r in rows:
+                if kw.lower() in r["name"].lower():
+                    return r
+        return rows[fallback_idx] if rows else None
+
+    print("Fetching exchange rates (Vietcombank)...", file=sys.stderr)
+    rates, rates_updated = _fetch_vietcombank_rates()
+
+    print("Fetching SJC gold prices (giavang.org)...", file=sys.stderr)
+    sjc_all = _scrape_giavang("sjc")
+
+    print("Fetching Doji gold prices (giavang.org)...", file=sys.stderr)
+    doji_all = _scrape_giavang("doji")
+
+    print("Fetching Phú Quý prices (giavang.org)...", file=sys.stderr)
+    phuquy_all = _scrape_giavang("phu-quy", max_rows=10)
+
+    return {
+        "exchange_rates":  rates,
+        "rates_updated":   rates_updated,
+        "sjc_luong":   _find(sjc_all,    ["1L, 10L", "1L,10L", "1 lượng"], 0),
+        "sjc_nhan":    _find(sjc_all,    ["nhẫn", "99,99%"]),
+        "doji_sjc":    _find(doji_all,   ["SJC"], 0),
+        "doji_nhan":   _find(doji_all,   ["nhẫn", "hưng thịnh"]),
+        "pq_nhan":     _find(phuquy_all, ["nhẫn tròn phú quý"]),
+        "silver_pq":   _find(phuquy_all, ["bạc"]),
+        "source_note": "Tỷ giá: Vietcombank · Vàng/Bạc: giavang.org",
+    }
+
+
 def _load_prev_seen():
     """Extract article titles and links from the most recent previous newsletter HTML."""
     docs_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs")
@@ -729,6 +828,9 @@ def fetch_content():
     # ── Phase 7: Handsome guy of the day ─────────────────────────────────────
     guy = get_daily_guy(today)
 
+    # ── Phase 8: Financial data ───────────────────────────────────────────────
+    finance = _fetch_finance_data()
+
     return {
         "date": date_str,
         "articles": articles,
@@ -741,6 +843,7 @@ def fetch_content():
         "tip_health": tip_health,
         "quote": quote,
         "guy": guy,
+        "finance": finance,
         "gemini": bool(gemini_key),
     }
 

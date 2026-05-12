@@ -56,6 +56,8 @@ C_CORAL     = "#E64A19"   # coral/orange (food)
 C_CORAL_BG  = "#FBE9E7"   # light coral bg
 C_STICKER   = "#FFFFF0"   # sticker rows bg (ivory)
 C_STRIPE    = "#FFD54F"   # header stripe (golden amber)
+C_FINANCE   = "#1565C0"   # dark blue (finance section)
+C_FINANCE_BG = "#E3F2FD"  # light blue bg (finance section)
 # ──────────────────────────────────────────────────────────────────────────────
 
 logging.basicConfig(
@@ -100,6 +102,7 @@ def build_html(data):  # noqa: C901
     tip_health   = data.get("tip_health", "")
     quote            = data.get("quote", "")
     guy              = data.get("guy")
+    finance          = data.get("finance", {})
 
     # ── Design helpers ────────────────────────────────────────────────────────
     def _sticker(emojis, bg=C_STICKER):
@@ -204,6 +207,92 @@ def build_html(data):  # noqa: C901
   {_badge("🏖️", "Góc Đà Nẵng hôm nay", C_TEAL, C_TEAL_BG)}
   <tr><td bgcolor="{C_TEAL_BG}" style="background-color:{C_TEAL_BG};padding:14px 24px 20px;">
     {danang_items}
+  </td></tr>"""
+
+    # ── Finance Section ───────────────────────────────────────────────────────
+    finance_html = ""
+    if finance:
+        _C_FIN  = C_FINANCE
+        _C_FBG  = C_FINANCE_BG
+
+        def _fx_row(r):
+            return (
+                f'<tr>'
+                f'<td style="padding:5px 10px 5px 0;font-size:13px;color:#333;font-family:Arial,sans-serif;white-space:nowrap;">{h(r["code"])}</td>'
+                f'<td style="padding:5px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">{h(r["buy"])}</td>'
+                f'<td style="padding:5px 0 5px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">{h(r["sell"])}</td>'
+                f'</tr>'
+            )
+
+        def _price_row(label, entry, unit="nghìn đ/lượng"):
+            if not entry:
+                return ""
+            return (
+                f'<tr style="border-bottom:1px solid #BBDEFB;">'
+                f'<td style="padding:6px 10px 6px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">{h(label)}</td>'
+                f'<td style="padding:6px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">{h(entry["buy"])}</td>'
+                f'<td style="padding:6px 0 6px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">{h(entry["sell"])}</td>'
+                f'<td style="padding:6px 0 6px 8px;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">{h(unit)}</td>'
+                f'</tr>'
+            )
+
+        rates   = finance.get("exchange_rates", [])
+        updated = finance.get("rates_updated", "")
+        # Parse time from "M/D/YYYY H:MM:SS AM" → "HH:MM AM"
+        _tm = re.search(r'(\d+:\d+)', updated or "")
+        updated_short = _tm.group(1) + " " + ("AM" if "AM" in updated else "PM") if _tm else ""
+
+        fx_rows_html = "".join(_fx_row(r) for r in rates) if rates else '<tr><td colspan="3" style="font-size:13px;color:#aaa;padding:8px 0;font-family:Arial,sans-serif;">Chưa có dữ liệu</td></tr>'
+        rates_note   = f'<p style="margin:4px 0 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">Cập nhật: {h(updated_short)} · Nguồn: Vietcombank (tham khảo)</p>' if updated_short else ""
+
+        gold_rows_html = (
+            _price_row("🥇 SJC 1 lượng",                    finance.get("sjc_luong"))
+            + _price_row("🥇 SJC nhẫn 99,99%",              finance.get("sjc_nhan"))
+            + _price_row("💛 Doji SJC",                      finance.get("doji_sjc"))
+            + _price_row("💛 Doji nhẫn tròn",                finance.get("doji_nhan"))
+            + _price_row("✨ Phú Quý nhẫn tròn",             finance.get("pq_nhan"))
+        ) or '<tr><td colspan="4" style="font-size:13px;color:#aaa;padding:8px 0;font-family:Arial,sans-serif;">Chưa có dữ liệu</td></tr>'
+
+        silver_entry = finance.get("silver_pq")
+        silver_html = _price_row("🥈 Bạc mỹ nghệ Phú Quý 99.9", silver_entry, "nghìn đ/chỉ") if silver_entry else ""
+
+        finance_html = f"""
+  {_sticker("💰 📈 💵 📈 💰", _C_FBG)}
+  {_badge("💰", "Bản tin tài chính hôm nay", _C_FIN, _C_FBG)}
+  <tr><td bgcolor="{_C_FBG}" style="background-color:{_C_FBG};padding:16px 24px 20px;">
+
+    <!-- Exchange rates -->
+    <p style="margin:0 0 8px;font-size:13px;font-weight:bold;color:{_C_FIN};font-family:Arial,sans-serif;">💱 Tỷ giá hôm nay</p>
+    <table cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr style="border-bottom:2px solid {_C_FIN};">
+          <th style="padding:4px 10px 4px 0;font-size:11px;color:#555;text-align:left;font-family:Arial,sans-serif;">Đồng tiền</th>
+          <th style="padding:4px 8px;font-size:11px;color:#1B5E20;text-align:right;font-family:Arial,sans-serif;">Mua vào</th>
+          <th style="padding:4px 0 4px 8px;font-size:11px;color:#B71C1C;text-align:right;font-family:Arial,sans-serif;">Bán ra</th>
+        </tr>
+      </thead>
+      <tbody>{fx_rows_html}</tbody>
+    </table>
+    {rates_note}
+
+    <!-- Gold prices -->
+    <p style="margin:14px 0 8px;font-size:13px;font-weight:bold;color:{_C_FIN};font-family:Arial,sans-serif;">🥇 Giá vàng &amp; bạc hôm nay</p>
+    <table cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr style="border-bottom:2px solid {_C_FIN};">
+          <th style="padding:4px 10px 4px 0;font-size:11px;color:#555;text-align:left;font-family:Arial,sans-serif;">Loại</th>
+          <th style="padding:4px 8px;font-size:11px;color:#1B5E20;text-align:right;font-family:Arial,sans-serif;">Mua vào</th>
+          <th style="padding:4px 0 4px 8px;font-size:11px;color:#B71C1C;text-align:right;font-family:Arial,sans-serif;">Bán ra</th>
+          <th style="padding:4px 0 4px 8px;font-size:11px;color:#aaa;text-align:right;font-family:Arial,sans-serif;">Đơn vị</th>
+        </tr>
+      </thead>
+      <tbody>
+        {gold_rows_html}
+        {silver_html}
+      </tbody>
+    </table>
+    <p style="margin:8px 0 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">📌 Giá tham khảo · Nguồn: giavang.org</p>
+
   </td></tr>"""
 
     # ── Viral MXH ────────────────────────────────────────────────────────────
@@ -404,6 +493,9 @@ def build_html(data):  # noqa: C901
   <!-- GÓC ĐÀ NẴNG -->
   {danang_html}
 
+  <!-- BẢN TIN TÀI CHÍNH -->
+  {finance_html}
+
   <!-- VIRAL MXH -->
   {viral_html}
 
@@ -470,6 +562,26 @@ def build_plain_text(data):
                 lines.append(f"   {art['link']}")
             if art.get("summary"):
                 lines.append(f"\n   {art['summary']}\n")
+    if data.get("finance"):
+        fin = data["finance"]
+        lines.append("\n" + "─" * 50)
+        lines.append("💰 BẢN TIN TÀI CHÍNH HÔM NAY\n")
+        rates = fin.get("exchange_rates", [])
+        if rates:
+            lines.append("💱 Tỷ giá (Vietcombank):")
+            for r in rates:
+                lines.append(f"   {r['code']}: Mua {r['buy']} / Bán {r['sell']}")
+        lines.append("\n🥇 Giá vàng:")
+        for key, label in [("sjc_luong", "SJC 1 lượng"), ("sjc_nhan", "SJC nhẫn 99,99%"),
+                            ("doji_sjc", "Doji SJC"), ("doji_nhan", "Doji nhẫn tròn"),
+                            ("pq_nhan", "Phú Quý nhẫn tròn")]:
+            e = fin.get(key)
+            if e:
+                lines.append(f"   {label}: Mua {e['buy']} / Bán {e['sell']} (nghìn đ/lượng)")
+        s = fin.get("silver_pq")
+        if s:
+            lines.append(f"\n🥈 Bạc Phú Quý 99.9: Mua {s['buy']} / Bán {s['sell']} (nghìn đ/chỉ)")
+        lines.append("\n📌 Nguồn: Vietcombank · giavang.org (tham khảo)")
     if data.get("viral"):
         lines.append("\n" + "─" * 50)
         lines.append("🔥 MẠNG XÃ HỘI HÔM NAY")
