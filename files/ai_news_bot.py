@@ -217,44 +217,80 @@ def build_html(data):  # noqa: C901
 
         def _fx_row(r):
             return (
-                f'<tr>'
+                f'<tr style="border-bottom:1px solid #BBDEFB;">'
                 f'<td style="padding:5px 10px 5px 0;font-size:13px;color:#333;font-family:Arial,sans-serif;white-space:nowrap;">{h(r["code"])}</td>'
                 f'<td style="padding:5px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">{h(r["buy"])}</td>'
                 f'<td style="padding:5px 0 5px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">{h(r["sell"])}</td>'
                 f'</tr>'
             )
 
-        def _price_row(label, entry, unit="nghìn đ/lượng"):
-            if not entry:
-                return ""
+        def _gold_row(item):
+            chg_html = (f'<span style="font-size:10px;color:{"#1B5E20" if "↑" in item["change"] else "#B71C1C"};">'
+                        f'{h(item["change"])}</span>') if item.get("change") else ""
             return (
                 f'<tr style="border-bottom:1px solid #BBDEFB;">'
-                f'<td style="padding:6px 10px 6px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">{h(label)}</td>'
-                f'<td style="padding:6px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">{h(entry["buy"])}</td>'
-                f'<td style="padding:6px 0 6px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">{h(entry["sell"])}</td>'
-                f'<td style="padding:6px 0 6px 8px;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">{h(unit)}</td>'
+                f'<td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">{h(item["label"])}</td>'
+                f'<td style="padding:5px 8px;font-size:12px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">{h(item["buy"])}</td>'
+                f'<td style="padding:5px 4px;font-size:12px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">{h(item["sell"])}</td>'
+                f'<td style="padding:5px 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;white-space:nowrap;">{chg_html}&nbsp;{h(item.get("unit",""))}</td>'
                 f'</tr>'
             )
 
+        # Exchange rates
         rates   = finance.get("exchange_rates", [])
         updated = finance.get("rates_updated", "")
-        # Parse time from "M/D/YYYY H:MM:SS AM" → "HH:MM AM"
         _tm = re.search(r'(\d+:\d+)', updated or "")
         updated_short = _tm.group(1) + " " + ("AM" if "AM" in updated else "PM") if _tm else ""
+        fx_rows_html = "".join(_fx_row(r) for r in rates) if rates else \
+            '<tr><td colspan="3" style="font-size:13px;color:#aaa;padding:8px 0;font-family:Arial,sans-serif;">Chưa có dữ liệu</td></tr>'
+        rates_note = (f'<p style="margin:4px 0 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">'
+                      f'Cập nhật: {h(updated_short)} · Nguồn: Vietcombank (tham khảo)</p>') if updated_short else ""
 
-        fx_rows_html = "".join(_fx_row(r) for r in rates) if rates else '<tr><td colspan="3" style="font-size:13px;color:#aaa;padding:8px 0;font-family:Arial,sans-serif;">Chưa có dữ liệu</td></tr>'
-        rates_note   = f'<p style="margin:4px 0 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">Cập nhật: {h(updated_short)} · Nguồn: Vietcombank (tham khảo)</p>' if updated_short else ""
+        # Gold (vang.today)
+        gold_list    = finance.get("gold_list", [])
+        gold_updated = finance.get("gold_updated", "")
+        gold_rows_html = "".join(_gold_row(g) for g in gold_list) if gold_list else \
+            '<tr><td colspan="4" style="font-size:13px;color:#aaa;padding:8px 0;font-family:Arial,sans-serif;">Chưa có dữ liệu</td></tr>'
+        gold_note = (f'<p style="margin:4px 0 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">'
+                     f'Cập nhật: {h(gold_updated.strip())} · Nguồn: vang.today</p>') if gold_updated.strip() else ""
 
-        gold_rows_html = (
-            _price_row("🥇 SJC 1 lượng",                    finance.get("sjc_luong"))
-            + _price_row("🥇 SJC nhẫn 99,99%",              finance.get("sjc_nhan"))
-            + _price_row("💛 Doji SJC",                      finance.get("doji_sjc"))
-            + _price_row("💛 Doji nhẫn tròn",                finance.get("doji_nhan"))
-            + _price_row("✨ Phú Quý nhẫn tròn",             finance.get("pq_nhan"))
-        ) or '<tr><td colspan="4" style="font-size:13px;color:#aaa;padding:8px 0;font-family:Arial,sans-serif;">Chưa có dữ liệu</td></tr>'
-
+        # Silver
         silver_entry = finance.get("silver_pq")
-        silver_html = _price_row("🥈 Bạc mỹ nghệ Phú Quý 99.9", silver_entry, "nghìn đ/chỉ") if silver_entry else ""
+        silver_row_html = ""
+        if silver_entry:
+            silver_row_html = (
+                f'<tr style="border-bottom:1px solid #BBDEFB;">'
+                f'<td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">🥈 Bạc mỹ nghệ Phú Quý 99.9</td>'
+                f'<td style="padding:5px 8px;font-size:12px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;">{h(silver_entry["buy"])}</td>'
+                f'<td style="padding:5px 4px;font-size:12px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;">{h(silver_entry["sell"])}</td>'
+                f'<td style="padding:5px 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">nghìn đ/chỉ</td>'
+                f'</tr>'
+            )
+
+        # Crypto
+        crypto = finance.get("crypto", {})
+        crypto_html = ""
+        if crypto:
+            crypto_html = f"""
+    <p style="margin:14px 0 8px;font-size:13px;font-weight:bold;color:{_C_FIN};font-family:Arial,sans-serif;">₿ Crypto hôm nay</p>
+    <table cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
+      <tr style="border-bottom:1px solid #BBDEFB;">
+        <td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">₿ Bitcoin (BTC)</td>
+        <td style="padding:5px 0;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;">{h(crypto.get("btc_usd",""))} USD</td>
+        <td style="padding:5px 0 5px 8px;font-size:11px;color:#888;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">≈ {h(crypto.get("btc_vnd",""))}</td>
+      </tr>
+      <tr style="border-bottom:1px solid #BBDEFB;">
+        <td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">Ξ Ethereum (ETH)</td>
+        <td style="padding:5px 0;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;">{h(crypto.get("eth_usd",""))} USD</td>
+        <td style="padding:5px 0 5px 8px;font-size:11px;color:#888;font-family:Arial,sans-serif;text-align:right;"></td>
+      </tr>
+      <tr>
+        <td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">💵 USDT/VNĐ</td>
+        <td style="padding:5px 0;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;">{h(crypto.get("usdt_vnd",""))} đ</td>
+        <td style="padding:5px 0 5px 8px;font-size:11px;color:#888;font-family:Arial,sans-serif;text-align:right;">tỷ giá phi chính thức</td>
+      </tr>
+    </table>
+    <p style="margin:4px 0 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">Nguồn: CoinGecko</p>"""
 
         finance_html = f"""
   {_sticker("💰 📈 💵 📈 💰", _C_FBG)}
@@ -275,23 +311,27 @@ def build_html(data):  # noqa: C901
     </table>
     {rates_note}
 
-    <!-- Gold prices -->
+    <!-- Gold + silver prices -->
     <p style="margin:14px 0 8px;font-size:13px;font-weight:bold;color:{_C_FIN};font-family:Arial,sans-serif;">🥇 Giá vàng &amp; bạc hôm nay</p>
     <table cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
       <thead>
         <tr style="border-bottom:2px solid {_C_FIN};">
           <th style="padding:4px 10px 4px 0;font-size:11px;color:#555;text-align:left;font-family:Arial,sans-serif;">Loại</th>
           <th style="padding:4px 8px;font-size:11px;color:#1B5E20;text-align:right;font-family:Arial,sans-serif;">Mua vào</th>
-          <th style="padding:4px 0 4px 8px;font-size:11px;color:#B71C1C;text-align:right;font-family:Arial,sans-serif;">Bán ra</th>
-          <th style="padding:4px 0 4px 8px;font-size:11px;color:#aaa;text-align:right;font-family:Arial,sans-serif;">Đơn vị</th>
+          <th style="padding:4px 4px;font-size:11px;color:#B71C1C;text-align:right;font-family:Arial,sans-serif;">Bán ra</th>
+          <th style="padding:4px 0;font-size:11px;color:#aaa;text-align:right;font-family:Arial,sans-serif;">Biến động</th>
         </tr>
       </thead>
       <tbody>
         {gold_rows_html}
-        {silver_html}
+        {silver_row_html}
       </tbody>
     </table>
-    <p style="margin:8px 0 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">📌 Giá tham khảo · Nguồn: giavang.org</p>
+    {gold_note}
+    <p style="margin:2px 0 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">📌 Bạc: giavang.org · Đơn vị vàng: triệu đ/lượng</p>
+
+    <!-- Crypto -->
+    {crypto_html}
 
   </td></tr>"""
 
@@ -571,17 +611,22 @@ def build_plain_text(data):
             lines.append("💱 Tỷ giá (Vietcombank):")
             for r in rates:
                 lines.append(f"   {r['code']}: Mua {r['buy']} / Bán {r['sell']}")
-        lines.append("\n🥇 Giá vàng:")
-        for key, label in [("sjc_luong", "SJC 1 lượng"), ("sjc_nhan", "SJC nhẫn 99,99%"),
-                            ("doji_sjc", "Doji SJC"), ("doji_nhan", "Doji nhẫn tròn"),
-                            ("pq_nhan", "Phú Quý nhẫn tròn")]:
-            e = fin.get(key)
-            if e:
-                lines.append(f"   {label}: Mua {e['buy']} / Bán {e['sell']} (nghìn đ/lượng)")
+        gold_list = fin.get("gold_list", [])
+        if gold_list:
+            lines.append("\n🥇 Giá vàng (vang.today):")
+            for g in gold_list:
+                chg = f" {g['change']}" if g.get("change") else ""
+                lines.append(f"   {g['label']}: Mua {g['buy']} / Bán {g['sell']}{chg} ({g.get('unit','')})")
         s = fin.get("silver_pq")
         if s:
             lines.append(f"\n🥈 Bạc Phú Quý 99.9: Mua {s['buy']} / Bán {s['sell']} (nghìn đ/chỉ)")
-        lines.append("\n📌 Nguồn: Vietcombank · giavang.org (tham khảo)")
+        crypto = fin.get("crypto", {})
+        if crypto:
+            lines.append("\n₿ Crypto (CoinGecko):")
+            lines.append(f"   BTC: {crypto.get('btc_usd','')} USD ≈ {crypto.get('btc_vnd','')}")
+            lines.append(f"   ETH: {crypto.get('eth_usd','')} USD")
+            lines.append(f"   USDT/VNĐ: {crypto.get('usdt_vnd','')} đ (phi chính thức)")
+        lines.append("\n📌 Nguồn: Vietcombank · vang.today · CoinGecko (tham khảo)")
     if data.get("viral"):
         lines.append("\n" + "─" * 50)
         lines.append("🔥 MẠNG XÃ HỘI HÔM NAY")

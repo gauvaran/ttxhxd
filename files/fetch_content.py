@@ -552,6 +552,90 @@ def _groq_food_tip(date_str):
     return _llm_call(prompt, max_tokens=350, temperature=0.8)
 
 
+def _fetch_vangtodaygold():
+    """Fetch gold prices from vang.today free JSON API.
+    Returns list of {label, buy, sell, change, currency}."""
+    KEYS = {
+        "SJL1L10":   "🥇 SJC 1 lượng",
+        "SJ9999":    "💍 SJC nhẫn tròn",
+        "DOJINHTV":  "💛 DOJI nhẫn tròn",
+        "PQHN24NTT": "✨ PNJ nhẫn tròn 24K",
+        "XAUUSD":    "🌍 Vàng thế giới",
+    }
+    url = "https://www.vang.today/api/prices"
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=10) as r:
+            data = json.loads(r.read().decode())
+        if not data.get("success"):
+            return [], ""
+        prices_raw = data.get("prices", {})
+        updated = data.get("time", "") + " " + data.get("date", "")
+
+        def _fmt_vnd(val):
+            # 164000000 → "164.00 triệu"
+            return f"{val / 1_000_000:.2f} triệu"
+
+        def _fmt_delta(d):
+            if not d:
+                return ""
+            arrow = "↑" if d > 0 else "↓"
+            return f"{abs(d)/1_000_000:.2f} {arrow}"
+
+        out = []
+        for key, label in KEYS.items():
+            item = prices_raw.get(key)
+            if not item:
+                continue
+            currency = item.get("currency", "VND")
+            if currency == "VND":
+                buy  = _fmt_vnd(item["buy"])  if item.get("buy")  else "-"
+                sell = _fmt_vnd(item["sell"]) if item.get("sell", 0) > 0 else "-"
+                chg  = _fmt_delta(item.get("change_buy", 0))
+                unit = "triệu đ/lượng"
+            else:
+                buy  = f"{item['buy']:,}"   if item.get("buy")  else "-"
+                sell = f"{item['sell']:,}"  if item.get("sell") else "-"
+                chg  = ""
+                unit = currency
+            out.append({"label": label, "buy": buy, "sell": sell,
+                        "change": chg, "unit": unit})
+        return out, updated
+    except Exception as e:
+        print(f"vang.today error: {e}", file=sys.stderr)
+        return [], ""
+
+
+def _fetch_crypto():
+    """Fetch BTC, ETH, USDT prices from CoinGecko (free, no auth).
+    Returns dict {btc_usd, eth_usd, usdt_vnd, btc_vnd}."""
+    url = ("https://api.coingecko.com/api/v3/simple/price"
+           "?ids=bitcoin,ethereum,tether&vs_currencies=usd,vnd")
+    try:
+        req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urllib.request.urlopen(req, timeout=10) as r:
+            data = json.loads(r.read().decode())
+
+        def _fmt_usd(val):
+            return f"{val:,.0f}"
+
+        def _fmt_vnd_b(val):
+            return f"{val/1_000_000_000:.3f} tỷ"
+
+        btc = data.get("bitcoin", {})
+        eth = data.get("ethereum", {})
+        usdt = data.get("tether", {})
+        return {
+            "btc_usd":  _fmt_usd(btc.get("usd", 0)),
+            "btc_vnd":  _fmt_vnd_b(btc.get("vnd", 0)),
+            "eth_usd":  _fmt_usd(eth.get("usd", 0)),
+            "usdt_vnd": f"{usdt.get('vnd', 0):,}",
+        }
+    except Exception as e:
+        print(f"CoinGecko error: {e}", file=sys.stderr)
+        return {}
+
+
 def _fetch_vietcombank_rates():
     """Fetch exchange rates from Vietcombank XML API. Returns (rates_list, updated_str)."""
     TARGET = ["USD", "EUR", "JPY", "CNY", "GBP", "AUD", "SGD", "KRW"]
@@ -618,7 +702,7 @@ def _scrape_giavang(brand, max_rows=6):
 
 
 def _fetch_finance_data():
-    """Fetch financial data: exchange rates, gold and silver prices."""
+    """Fetch financial data: exchange rates, gold/silver prices, crypto."""
     def _find(rows, kws, fallback_idx=0):
         for kw in kws:
             for r in rows:
@@ -629,25 +713,24 @@ def _fetch_finance_data():
     print("Fetching exchange rates (Vietcombank)...", file=sys.stderr)
     rates, rates_updated = _fetch_vietcombank_rates()
 
-    print("Fetching SJC gold prices (giavang.org)...", file=sys.stderr)
-    sjc_all = _scrape_giavang("sjc")
+    print("Fetching gold prices (vang.today)...", file=sys.stderr)
+    gold_list, gold_updated = _fetch_vangtodaygold()
 
-    print("Fetching Doji gold prices (giavang.org)...", file=sys.stderr)
-    doji_all = _scrape_giavang("doji")
-
-    print("Fetching Phú Quý prices (giavang.org)...", file=sys.stderr)
+    print("Fetching silver prices (giavang.org/phu-quy)...", file=sys.stderr)
     phuquy_all = _scrape_giavang("phu-quy", max_rows=10)
+    silver_pq  = _find(phuquy_all, ["bạc"])
+
+    print("Fetching crypto prices (CoinGecko)...", file=sys.stderr)
+    crypto = _fetch_crypto()
 
     return {
         "exchange_rates":  rates,
         "rates_updated":   rates_updated,
-        "sjc_luong":   _find(sjc_all,    ["1L, 10L", "1L,10L", "1 lượng"], 0),
-        "sjc_nhan":    _find(sjc_all,    ["nhẫn", "99,99%"]),
-        "doji_sjc":    _find(doji_all,   ["SJC"], 0),
-        "doji_nhan":   _find(doji_all,   ["nhẫn", "hưng thịnh"]),
-        "pq_nhan":     _find(phuquy_all, ["nhẫn tròn phú quý"]),
-        "silver_pq":   _find(phuquy_all, ["bạc"]),
-        "source_note": "Tỷ giá: Vietcombank · Vàng/Bạc: giavang.org",
+        "gold_list":       gold_list,
+        "gold_updated":    gold_updated,
+        "silver_pq":       silver_pq,
+        "crypto":          crypto,
+        "source_note": "Tỷ giá: Vietcombank · Vàng: vang.today · Crypto: CoinGecko",
     }
 
 
