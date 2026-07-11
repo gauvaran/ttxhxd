@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<style>
+@media screen and (max-width:620px) {
+  table[width="600"] { width:100% !important; }
+  td { word-break:break-word; overflow-wrap:break-word; }
+  td[style*="padding:28px 30px"], td[style*="padding:20px 30px"], td[style*="padding:16px 30px"], td[style*="padding:12px 30px"] { padding-left:14px !important; padding-right:14px !important; }
+  /* stack guy image above text on mobile */
+  td[width="150"] { display:block !important; width:100% !important; padding-right:0 !important; text-align:center !important; margin-bottom:10px; }
+  td[width="150"] img { margin:0 auto !important; }
+  td[width="32"] { display:none; }
+  img { max-width:100% !important; height:auto !important; }
+}
+@media print { #web-nav { display:none !important; } body { background:#fff !important; } }
+</style>
+</head>
+<body style="margin:0;padding:0;background-color:#FFFDE7;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+<div id="web-nav" style="background:#8B6508;padding:8px 16px;font-family:Arial,sans-serif;font-size:13px;position:sticky;top:0;z-index:999;border-bottom:2px solid #C9950C;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;">
+  <a id="nav-prev" href="#" style="color:#FFE082;text-decoration:none;visibility:hidden;">&#8592; --/--</a>
+  <a href="all.html" style="color:#FFD700;text-decoration:none;font-weight:bold;">&#128240; T&#7845;t c&#7843; b&#7843;n tin</a>
+  <span style="color:#FFFFFF;font-weight:bold;">11/07/2026</span>
+  <a id="nav-next" href="#" style="color:#FFE082;text-decoration:none;visibility:hidden;">--/-- &#8594;</a>
+  <a href="2026-07-11.pdf" download="2026-07-11.pdf" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:5px 12px;border-radius:4px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;text-decoration:none;display:inline-block;">&#128196; T&#7843;i PDF</a>
+  <button onclick="sharePage()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:5px 12px;border-radius:4px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;text-decoration:none;display:inline-block;">&#128279; Chia s&#7867;</button>
+</div>
+<script>
+function sharePage(){
+  var title='TTXHXD – 11/07/2026';
+  if(navigator.share){navigator.share({title:title,url:location.href});}
+  else{navigator.clipboard.writeText(location.href).then(function(){alert('Đã sao chép link!');}); }
+}
+(function(){
+  var m=location.pathname.match(/(\d{4}-\d{2}-\d{2})\.html/);
+  if(!m)return;
+  var slug=m[1];
+  function fmt(s){var p=s.split('-');return p[2]+'/'+p[1];}
+  fetch('dates.json?_='+Date.now())
+    .then(function(r){return r.json();})
+    .then(function(dates){
+      var idx=dates.indexOf(slug);
+      var prevEl=document.getElementById('nav-prev');
+      var nextEl=document.getElementById('nav-next');
+      if(idx>0){
+        var pd=dates[idx-1];
+        prevEl.href=pd+'.html';
+        prevEl.innerHTML='&#8592; '+fmt(pd);
+        prevEl.style.visibility='visible';
+      }
+      if(idx>=0&&idx<dates.length-1){
+        var nd=dates[idx+1];
+        nextEl.href=nd+'.html';
+        nextEl.innerHTML=fmt(nd)+' &#8594;';
+        nextEl.style.visibility='visible';
+      }
+    }).catch(function(){});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'){var p=document.getElementById('nav-prev');if(p&&p.style.visibility==='visible')location.href=p.href;}
+    if(e.key==='ArrowRight'){var n=document.getElementById('nav-next');if(n&&n.style.visibility==='visible')location.href=n.href;}
+  });
+})();
+</script>
+
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#FFFDE7" style="background-color:#FFFDE7;">
+<tr><td align="center" style="padding:20px 12px 28px;">
+
+<table role="presentation" width="600" cellpadding="0" cellspacing="0"
+       style="max-width:600px;width:100%;background-color:#FFFFFF;border-radius:14px;
+              box-shadow:0 4px 24px rgba(139,101,8,.12);" bgcolor="#FFFFFF">
+
+  <!-- HEADER TOP STICKER STRIPE -->
+  <tr>
+    <td bgcolor="#FFD54F" style="background-color:#FFD54F;padding:8px 20px;text-align:center;border-radius:14px 14px 0 0;">
+      <p style="margin:0;font-size:20px;letter-spacing:6px;font-family:Arial,sans-serif;">💅 ✨ 🌸 💕 🌸 ✨ 💅</p>
+    </td>
+  </tr>
+
+  <!-- HEADER MAIN -->
+  <tr>
+    <td bgcolor="#8B6508" style="background-color:#8B6508;padding:20px 30px 24px;text-align:center;">
+      <p style="margin:0 0 10px;font-size:26px;font-weight:bold;color:#FFFFFF;font-family:Arial,sans-serif;line-height:1.2;">
+        💌 Thông Tấn Xã Heo Xinh Đẹp
+      </p>
+      <p style="margin:0 0 14px;font-size:13px;color:#FFE082;font-family:Arial,sans-serif;">
+        Bản tin hàng ngày dành cho chị em văn phòng 💕
+      </p>
+      <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
+        <tr>
+          <td bgcolor="#7B5000" style="background-color:#7B5000;border-radius:20px;padding:6px 20px;">
+            <span style="color:#FFFFFF;font-size:13px;font-weight:bold;font-family:Arial,sans-serif;">📅 11/07/2026</span>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- HEADER BOTTOM FLOWER STRIPE -->
+  <tr>
+    <td bgcolor="#FFD54F" style="background-color:#FFD54F;padding:7px 20px;text-align:center;">
+      <p style="margin:0;font-size:18px;letter-spacing:5px;font-family:Arial,sans-serif;">✨ 🌼 💛 🌼 ✨</p>
+    </td>
+  </tr>
+
+  <!-- SECTION BADGE: TIN TỨC -->
+  <tr><td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:12px 22px 6px;"><table cellpadding="0" cellspacing="0"><tr><td bgcolor="#8B6508" style="background-color:#8B6508;border-radius:20px;padding:5px 16px;"><span style="color:#FFFFFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">🌏&nbsp;Tin tức hôm nay</span></td></tr></table></td></tr>
+
+  <!-- ARTICLES -->
+  
+          <tr>
+            <td bgcolor="#FFFFFF" style="background-color:#FFFFFF;padding:18px 24px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#C9950C" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#C9950C;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">1</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#8B6508;line-height:1.4;font-family:Arial,sans-serif;">Chứng khoán Việt Nam ra sao nửa cuối năm?</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">VnExpress - Kinh doanh</span>&nbsp;&nbsp;<a href="https://vnexpress.net/chung-khoan-viet-nam-ra-sao-nua-cuoi-nam-5095207.html" style="color:#C9950C;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+            <tr>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid #C9950C;border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Thị trường chứng khoán Việt Nam được kỳ vọng sẽ chứng kiến những diễn biến tích cực trong nửa cuối năm, với nhiều công ty chứng khoán đưa ra dự báo lạc quan về khả năng VN-Index tăng trưởng mạnh mẽ, thậm chí có thể vượt mốc 2.000 điểm. Bối cảnh này được củng cố bởi hai động lực chính: triển vọng nâng hạng thị trường và sự tăng trưởng bền vững của lợi nhuận doanh nghiệp.
+
+Cụ thể, động lực nâng hạng từ thị trường cận biên lên thị trường mới nổi đang là yếu tố then chốt thu hút sự chú ý của giới đầu tư quốc tế. Nếu quá trình này diễn ra thuận lợi, dòng vốn ngoại dự kiến sẽ đổ vào thị trường Việt Nam mạnh mẽ hơn, tạo lực đẩy đáng kể cho chỉ số VN-Index. Đây không chỉ là một sự thay đổi về mặt kỹ thuật mà còn là sự công nhận về quy mô và tính thanh khoản của thị trường, mở ra cơ hội tiếp cận nguồn vốn lớn hơn từ các quỹ đầu tư toàn cầu.
+
+Song song đó, sự phục hồi và tăng trưởng lợi nhuận của các doanh nghiệp niêm yết đóng vai trò nền tảng vững chắc cho đà tăng của thị trường. Khi kết quả kinh doanh được cải thiện, giá trị nội tại của cổ phiếu tăng lên, thu hút nhà đầu tư trong và ngoài nước. Sự tăng trưởng này phản ánh sức khỏe của nền kinh tế, khả năng thích ứng của doanh nghiệp và triển vọng kinh doanh tích cực trong bối cảnh kinh tế vĩ mô ổn định. Những yếu tố này cùng nhau tạo nên bức tranh đầy hứa hẹn cho thị trường chứng khoán Việt Nam trong những tháng cuối năm.</p>
+                  </td>
+                </tr></table>
+              </td>
+            </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>
+          <tr>
+            <td bgcolor="#FFFEF5" style="background-color:#FFFEF5;padding:18px 24px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#C9950C" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#C9950C;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">2</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#8B6508;line-height:1.4;font-family:Arial,sans-serif;">Pháp sẽ cấm quảng cáo nhiên liệu hóa thạch</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">VnExpress - Kinh doanh</span>&nbsp;&nbsp;<a href="https://vnexpress.net/phap-se-cam-quang-cao-nhien-lieu-hoa-thach-5096008.html" style="color:#C9950C;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+            <tr>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid #C9950C;border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Pháp chuẩn bị thực thi lệnh cấm quảng cáo nhiên liệu hóa thạch, một động thái mang tính bước ngoặt nhằm đẩy mạnh quá trình chuyển đổi sang năng lượng sạch và giảm thiểu tác động môi trường. Quyết định này, dù đã trải qua 5 năm trì hoãn kể từ khi luật ban đầu được thông qua, đánh dấu một cam kết rõ ràng của quốc gia châu Âu trong cuộc chiến chống biến đổi khí hậu.
+
+Lệnh cấm sẽ áp dụng cho mọi hình thức quảng cáo liên quan đến nhiên liệu hóa thạch, đặc biệt là các sản phẩm nhập khẩu, bao gồm dầu mỏ, khí đốt tự nhiên và than đá. Mục tiêu chính là loại bỏ sự khuyến khích tiêu thụ các nguồn năng lượng gây ô nhiễm, đồng thời định hướng công chúng và doanh nghiệp tập trung vào các giải pháp bền vững hơn. Bằng cách hạn chế khả năng tiếp thị của các tập đoàn năng lượng truyền thống, Pháp hy vọng sẽ tạo ra một môi trường thuận lợi hơn cho sự phát triển và chấp nhận rộng rãi của năng lượng tái tạo như điện mặt trời, điện gió và thủy điện.
+
+Ý nghĩa thực tiễn của lệnh cấm này là rất lớn. Nó không chỉ gửi đi một thông điệp mạnh mẽ tới các ngành công nghiệp và người tiêu dùng về tầm quan trọng của việc giảm phụ thuộc vào nhiên liệu hóa thạch, mà còn có thể tạo tiền lệ cho các quốc gia khác noi theo. Đây là một phần trong chiến lược tổng thể của Pháp nhằm đạt được các mục tiêu về khí hậu đã cam kết, đồng thời thúc đẩy đổi mới trong lĩnh vực năng lượng xanh, góp phần xây dựng một tương lai bền vững hơn cho hành tinh.</p>
+                  </td>
+                </tr></table>
+              </td>
+            </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>
+          <tr>
+            <td bgcolor="#FFFFFF" style="background-color:#FFFFFF;padding:18px 24px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#C9950C" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#C9950C;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">3</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#8B6508;line-height:1.4;font-family:Arial,sans-serif;">VinaCapital không còn là cổ đông lớn của PNJ</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">VnExpress - Kinh doanh</span>&nbsp;&nbsp;<a href="https://vnexpress.net/vinacapital-khong-con-la-co-dong-lon-cua-pnj-5096078.html" style="color:#C9950C;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+            <tr>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid #C9950C;border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">VinaCapital, một trong những quỹ đầu tư hàng đầu tại Việt Nam, đã chính thức không còn là cổ đông lớn của Công ty Cổ phần Vàng bạc Đá quý Phú Nhuận (PNJ) sau động thái thoái vốn đáng chú ý. Cụ thể, năm tổ chức liên quan đến VinaCapital đã đồng loạt bán ra hơn 6,3 triệu cổ phiếu PNJ trong một phiên giao dịch đặc biệt, khi cổ phiếu này bất ngờ thoát khỏi tình trạng giảm sàn.
+
+Giao dịch này đã đẩy tổng tỷ lệ sở hữu của nhóm quỹ VinaCapital tại PNJ xuống dưới ngưỡng 5%, chính thức chấm dứt vị thế cổ đông lớn mà họ đã nắm giữ trong một thời gian. Việc thoái vốn diễn ra trong bối cảnh thị trường chứng khoán có nhiều biến động, và thời điểm PNJ &quot;thoát giá sàn&quot; có thể đã tạo ra một cơ hội thanh khoản thuận lợi cho VinaCapital thực hiện giao dịch lớn này.
+
+Ý nghĩa thực tế của sự kiện này là VinaCapital sẽ không còn phải công bố thông tin chi tiết về các giao dịch cổ phiếu PNJ của mình, đồng thời giảm bớt ảnh hưởng trực tiếp của quỹ này lên các quyết sách của doanh nghiệp. Đối với PNJ, việc một cổ đông lớn thoái vốn có thể mở ra cơ hội cho các nhà đầu tư khác tham gia, hoặc phản ánh sự thay đổi trong chiến lược đầu tư của VinaCapital, dù PNJ vẫn là một doanh nghiệp đầu ngành với nền tảng kinh doanh vững chắc. Động thái này đánh dấu một sự thay đổi đáng kể trong cơ cấu cổ đông của một trong những thương hiệu trang sức lớn nhất Việt Nam.</p>
+                  </td>
+                </tr></table>
+              </td>
+            </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>
+          <tr>
+            <td bgcolor="#FFFEF5" style="background-color:#FFFEF5;padding:18px 24px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#C9950C" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#C9950C;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">4</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#8B6508;line-height:1.4;font-family:Arial,sans-serif;">Chuyên gia: Phân bổ tài sản thiếu cân bằng là sai lầm lớn nhất trong đầu tư</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">VnExpress - Kinh doanh</span>&nbsp;&nbsp;<a href="https://vnexpress.net/chuyen-gia-phan-bo-tai-san-thieu-can-bang-la-sai-lam-lon-nhat-trong-dau-tu-5095928.html" style="color:#C9950C;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+            <tr>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid #C9950C;border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Theo nhận định của các chuyên gia tài chính, sai lầm nghiêm trọng nhất mà nhà đầu tư thường mắc phải chính là phân bổ tài sản thiếu cân bằng. Trong bối cảnh thị trường biến động không ngừng, nhiều cá nhân dễ dàng bị cuốn theo sức hấp dẫn của các kênh đầu tư &quot;nóng&quot;, hứa hẹn lợi nhuận cao trong thời gian ngắn, mà bỏ qua nguyên tắc cơ bản về sự cân bằng và đa dạng hóa danh mục.
+
+Thực trạng này không chỉ phản ánh tâm lý muốn làm giàu nhanh mà còn cho thấy sự thiếu hụt trong chiến lược quản lý rủi ro dài hạn. Việc tập trung quá mức vào một loại tài sản hoặc một ngành cụ thể khi nó đang tăng trưởng mạnh có thể mang lại lợi nhuận tức thời, nhưng đồng thời cũng tiềm ẩn rủi ro cực lớn. Khi thị trường đảo chiều hoặc kênh đầu tư đó gặp khó khăn, toàn bộ danh mục có thể chịu tổn thất nặng nề, thậm chí dẫn đến thua lỗ không thể phục hồi.
+
+Ý nghĩa thực tế của khuyến nghị này là lời nhắc nhở quan trọng về tầm quan trọng của việc xây dựng một danh mục đầu tư vững chắc, có khả năng chống chịu tốt trước các cú sốc thị trường. Phân bổ tài sản cân bằng đòi hỏi nhà đầu tư phải chia nhỏ vốn vào nhiều loại tài sản khác nhau như cổ phiếu, trái phiếu, bất động sản, vàng hay các quỹ đầu tư, tùy thuộc vào khẩu vị rủi ro và mục tiêu tài chính cá nhân. Sự đa dạng hóa này không chỉ giúp giảm thiểu rủi ro khi một kênh đầu tư gặp vấn đề mà còn tạo cơ hội để danh mục tăng trưởng ổn định hơn trong dài hạn, đảm bảo an toàn và tối ưu hóa lợi nhuận bền vững.</p>
+                  </td>
+                </tr></table>
+              </td>
+            </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>
+          <tr>
+            <td bgcolor="#FFFFFF" style="background-color:#FFFFFF;padding:18px 24px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#C9950C" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#C9950C;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">5</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#8B6508;line-height:1.4;font-family:Arial,sans-serif;">Tài sản của ông Nguyễn Đăng Quang xuống dưới 1 tỷ USD</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">VnExpress - Kinh doanh</span>&nbsp;&nbsp;<a href="https://vnexpress.net/tai-san-cua-ong-nguyen-dang-quang-xuong-duoi-1-ty-usd-5095917.html" style="color:#C9950C;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+            <tr>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid #C9950C;border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Tài sản của ông Nguyễn Đăng Quang, Chủ tịch Tập đoàn Masan, đã chính thức giảm xuống dưới ngưỡng 1 tỷ USD, đánh dấu một sự thay đổi đáng chú ý trong bảng xếp hạng những người giàu nhất Việt Nam. Theo các ước tính mới nhất, khối tài sản của ông Quang hiện ở mức 990 triệu USD, giảm hơn 100 triệu USD so với thời điểm đầu năm.
+
+Nguyên nhân chính dẫn đến sự sụt giảm này được xác định là do đà đi xuống của cổ phiếu MSN, mã chứng khoán của Masan Group, trên thị trường. Masan Group là một trong những tập đoàn tư nhân hàng đầu Việt Nam, hoạt động đa ngành từ hàng tiêu dùng, bán lẻ, khai khoáng đến nông nghiệp công nghệ cao. Việc giá cổ phiếu MSN không giữ được đà tăng trưởng đã trực tiếp ảnh hưởng đến giá trị tài sản ròng của ông Nguyễn Đăng Quang, người nắm giữ lượng lớn cổ phần tại tập đoàn này.
+
+Sự kiện tài sản của ông Quang xuống dưới 1 tỷ USD không chỉ là một con số đơn thuần mà còn mang ý nghĩa thực tế về biến động của thị trường chứng khoán và những thách thức mà các doanh nghiệp lớn đang phải đối mặt. Nó phản ánh áp lực từ môi trường kinh doanh, sự cạnh tranh và những yếu tố vĩ mô có thể tác động mạnh mẽ đến giá trị tài sản của các nhà lãnh đạo doanh nghiệp. Đối với Masan Group, đây có thể là thời điểm để tập đoàn rà soát lại chiến lược và củng cố niềm tin của nhà đầu tư, trong bối cảnh thị trường đang có nhiều biến động khó lường.</p>
+                  </td>
+                </tr></table>
+              </td>
+            </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>
+          <tr>
+            <td bgcolor="#FFFEF5" style="background-color:#FFFEF5;padding:18px 24px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#C9950C" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#C9950C;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">6</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#8B6508;line-height:1.4;font-family:Arial,sans-serif;">Giao dịch chứng khoán khối ngoại tuần từ 6-10/7: Tiếp tục bán ròng hơn 2.470 tỷ đồng</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">Tin Nhanh Chứng Khoán</span>&nbsp;&nbsp;<a href="https://www.tinnhanhchungkhoan.vn/giao-dich-chung-khoan-khoi-ngoai-tuan-tu-6-107-tiep-tuc-ban-rong-hon-2470-ty-dong-post393797.html" style="color:#C9950C;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+            <tr>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid #C9950C;border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Thị trường chứng khoán Việt Nam trong tuần từ ngày 6 đến 10 tháng 7 tiếp tục chứng kiến áp lực bán ròng đáng kể từ khối nhà đầu tư nước ngoài, với tổng giá trị hơn 2.478 tỷ đồng. Đây là diễn biến nối tiếp xu hướng rút vốn của khối ngoại trong những giai đoạn gần đây, dù đà bán ròng đã có phần chậm lại so với tuần trước đó.
+
+Bối cảnh này đặt ra nhiều thách thức cho tâm lý thị trường, khi dòng vốn ngoại thường được coi là một chỉ báo quan trọng về sức hấp dẫn của nền kinh tế và triển vọng của thị trường chứng khoán. Việc bán ròng liên tục cho thấy nhà đầu tư nước ngoài vẫn đang trong giai đoạn cơ cấu lại danh mục hoặc thận trọng trước các yếu tố vĩ mô toàn cầu và trong nước.
+
+Trong bối cảnh đó, thị trường đang trong trạng thái chờ đợi những chất xúc tác mới đủ mạnh để tạo động lực tăng trưởng. Một trong những kỳ vọng lớn nhất là mùa công bố kết quả kinh doanh quý II, được dự đoán sẽ mang lại những thông tin tích cực từ các doanh nghiệp, đặc biệt là trong bối cảnh đà tăng lãi suất đã bị chặn lại, mở ra cơ hội cho các nhóm cổ phiếu lớn, tiềm năng được mệnh danh là &quot;cổ phiếu vua&quot;, có thể phục hồi và dẫn dắt thị trường. Tuy nhiên, áp lực bán ròng từ khối ngoại vẫn là một yếu tố cần được theo dõi sát sao, có thể ảnh hưởng đến khả năng bứt phá của thị trường trong ngắn hạn.</p>
+                  </td>
+                </tr></table>
+              </td>
+            </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>
+          <tr>
+            <td bgcolor="#FFFFFF" style="background-color:#FFFFFF;padding:18px 24px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#C9950C" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#C9950C;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">7</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#8B6508;line-height:1.4;font-family:Arial,sans-serif;">Xóa dần “nỗi sợ” condotel</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">Tin Nhanh Chứng Khoán</span>&nbsp;&nbsp;<a href="https://www.tinnhanhchungkhoan.vn/xoa-dan-noi-so-condotel-post393438.html" style="color:#C9950C;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+            <tr>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid #C9950C;border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Từng là nỗi ám ảnh lớn đối với nhiều nhà đầu tư sau giai đoạn sụp đổ, phân khúc condotel đang dần lấy lại niềm tin khi chính thức &quot;có danh, có phận&quot; trên thị trường. Bối cảnh pháp lý mơ hồ, thiếu quy định rõ ràng về quyền sở hữu và phân chia lợi nhuận từng đẩy condotel vào khủng hoảng, gây thiệt hại nặng nề và tạo ra &quot;nỗi sợ&quot; kéo dài.
+
+Tuy nhiên, những diễn biến gần đây cho thấy nỗ lực tháo gỡ vướng mắc đang mang lại ý nghĩa thực tế. Việc condotel được công nhận về mặt pháp lý là bước ngoặt quan trọng, mở đường cho các quy định chi tiết hơn. Đơn cử, Đà Nẵng đã ban hành quy định mới về diện tích căn hộ thương mại và condotel, thể hiện sự chủ động của địa phương trong việc quản lý và phát triển loại hình này. Các cuộc thảo luận chuyên sâu về pháp lý và cơ chế phân chia lợi nhuận tại các dự án condotel cũng đang được đẩy mạnh, hướng tới sự minh bạch và công bằng hơn cho nhà đầu tư.
+
+Các chuyên gia cũng đưa ra nhiều khuyến nghị thiết thực nhằm giúp condotel tìm lại &quot;ánh hào quang&quot;, tập trung vào hoàn thiện khung pháp lý, tăng cường kiểm soát chất lượng dự án và xây dựng cơ chế bảo vệ quyền lợi nhà đầu tư. Những động thái này đang từng bước xóa dần &quot;nỗi sợ&quot; condotel, hứa hẹn một tương lai ổn định và bền vững hơn cho phân khúc bất động sản nghỉ dưỡng đầy tiềm năng này.</p>
+                  </td>
+                </tr></table>
+              </td>
+            </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>
+          <tr>
+            <td bgcolor="#FFFEF5" style="background-color:#FFFEF5;padding:18px 24px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#C9950C" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#C9950C;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">8</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#8B6508;line-height:1.4;font-family:Arial,sans-serif;">Thực hiện Nghị quyết 57 - nhìn từ Đà Nẵng Bài 1: Mở hướng phát triển công nghệ từ những quyết sách đặc thù</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">Đại Biểu Nhân Dân</span>&nbsp;&nbsp;<a href="https://baomoi.com/thuc-hien-nghi-quyet-57-nhin-tu-da-nang-bai-1-mo-huong-phat-trien-cong-nghe-tu-nhung-quyet-sach-dac-thu-c55591472.epi" style="color:#C9950C;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+            <tr>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid #C9950C;border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Nghị quyết số 57-NQ/TW của Bộ Chính trị được xác định là đột phá chiến lược, đưa khoa học công nghệ, đổi mới sáng tạo và chuyển đổi số trở thành động lực phát triển quốc gia trong kỷ nguyên mới. Nhìn từ Đà Nẵng, thành phố này đang tiên phong triển khai nghị quyết bằng một hướng đi đặc thù, không chỉ dừng lại ở việc đầu tư hạ tầng hay thu hút doanh nghiệp đơn thuần.
+
+Thay vào đó, Đà Nẵng đang tập trung xây dựng một &quot;hệ sinh thái thể chế&quot; vượt trội, tạo nền tảng vững chắc cho cuộc đua công nghệ cao. Đây là quyết sách mang ý nghĩa thực tiễn sâu sắc, thể hiện tầm nhìn chiến lược trong việc phát triển công nghệ từ gốc rễ. Việc kiến tạo một khung pháp lý và chính sách đặc thù, linh hoạt được kỳ vọng sẽ tạo ra môi trường thuận lợi nhất, thu hút nhân tài và nguồn lực chất lượng cao, đồng thời thúc đẩy mạnh mẽ các hoạt động nghiên cứu, phát triển trong lĩnh vực trí tuệ nhân tạo (AI) và chip bán dẫn.
+
+Cách tiếp cận này của Đà Nẵng không chỉ là một bước đi quan trọng trong việc cụ thể hóa Nghị quyết 57 mà còn mở ra một hướng phát triển công nghệ bền vững, tạo lợi thế cạnh tranh đặc biệt cho thành phố trong bối cảnh toàn cầu đang đẩy mạnh cuộc cách mạng công nghiệp 4.0. Đây là minh chứng cho thấy sự chủ động và sáng tạo của địa phương trong việc biến các chủ trương lớn thành hành động cụ thể, có chiều sâu, hướng tới mục tiêu đưa khoa học công nghệ trở thành mũi nhọn phát triển kinh tế - xã hội.</p>
+                  </td>
+                </tr></table>
+              </td>
+            </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>
+          <tr>
+            <td bgcolor="#FFFFFF" style="background-color:#FFFFFF;padding:18px 24px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#C9950C" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#C9950C;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">9</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#8B6508;line-height:1.4;font-family:Arial,sans-serif;">Toàn cảnh bến xe hiện đại bậc nhất Hà Nội sắp đưa vào khai thác</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">Báo Tin Tức TTXVN</span>&nbsp;&nbsp;<a href="https://baomoi.com/toan-canh-ben-xe-hien-dai-bac-nhat-ha-noi-sap-dua-vao-khai-thac-c55591477.epi" style="color:#C9950C;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+            <tr>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid #C9950C;border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Hà Nội sắp đón nhận một công trình giao thông trọng điểm, Bến xe Yên Sở, được kỳ vọng trở thành trung tâm trung chuyển hành khách hiện đại bậc nhất tại khu vực cửa ngõ phía Nam thủ đô. Dự án này đang trong giai đoạn hoàn thiện cuối cùng và chuẩn bị đưa vào khai thác, hứa hẹn mang lại diện mạo mới cho hệ thống vận tải công cộng của thành phố.
+
+Bến xe Yên Sở được đầu tư đồng bộ và hiện đại, không chỉ về cơ sở hạ tầng mà còn về công nghệ quản lý, nhằm tối ưu hóa trải nghiệm cho hành khách và nâng cao hiệu quả hoạt động. Với vị trí chiến lược tại cửa ngõ phía Nam, bến xe sẽ đóng vai trò quan trọng trong việc kết nối Hà Nội với các tỉnh thành phía Nam, giảm tải áp lực giao thông cho các bến xe cũ trong nội đô và góp phần quy hoạch lại mạng lưới vận tải hành khách liên tỉnh.
+
+Việc đưa Bến xe Yên Sở vào khai thác không chỉ giải quyết bài toán ùn tắc giao thông, mà còn nâng cao chất lượng dịch vụ, tiện nghi cho người dân. Công trình này thể hiện tầm nhìn phát triển đô thị hiện đại của Hà Nội, hướng tới một hệ thống giao thông thông minh, hiệu quả, đáp ứng nhu cầu đi lại ngày càng tăng của người dân và du khách, đồng thời thúc đẩy phát triển kinh tế – xã hội khu vực.</p>
+                  </td>
+                </tr></table>
+              </td>
+            </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>
+
+  <!-- GÓC ĐÀ NẴNG -->
+  
+  <tr><td bgcolor="#E0F2F1" style="background-color:#E0F2F1;padding:10px 0;text-align:center;font-size:20px;letter-spacing:5px;font-family:Arial,sans-serif;">🌊 ☀️ 🏖️ ☀️ 🌊</td></tr>
+  <tr><td bgcolor="#E0F2F1" style="background-color:#E0F2F1;padding:12px 22px 6px;"><table cellpadding="0" cellspacing="0"><tr><td bgcolor="#00897B" style="background-color:#00897B;border-radius:20px;padding:5px 16px;"><span style="color:#FFFFFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">🏖️&nbsp;Góc Đà Nẵng hôm nay</span></td></tr></table></td></tr>
+  <tr><td bgcolor="#E0F2F1" style="background-color:#E0F2F1;padding:14px 24px 20px;">
+    
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:14px;">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#00897B" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#00897B;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">1</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#00897B;line-height:1.4;font-family:Arial,sans-serif;">Khẳng định vị thế điểm đến hấp dẫn của doanh nghiệp Nhật Bản</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">Chuyên trang Công an Đà Nẵng - Báo Công an Nhân dân</span>&nbsp;&nbsp;<a href="https://baomoi.com/khang-dinh-vi-the-diem-den-hap-dan-cua-doanh-nghiep-nhat-ban-c55584577.epi" style="color:#00897B;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+                <tr><td colspan="2" style="padding:8px 0 0 42px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                    <td bgcolor="#E0F2F1" style="background-color:#E0F2F1;padding:10px 14px;border-left:3px solid #00897B;border-radius:0 4px 4px 0;">
+                      <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Chiều 9-7, hội nghị &quot;Gặp gỡ Nhật Bản tại Đà Nẵng: Đối tác chiến lược toàn diện - Hướng tới tương lai bền vững&quot; đã diễn ra, do Phó Chủ tịch UBND thành phố Nguyễn Thị Anh Thi và Ngài ITO Naoki, Đại sứ Đặc mệnh toàn quyền Nhật Bản tại Việt Nam đồng chủ trì. Sự kiện này không chỉ là một diễn đàn ngoại giao kinh tế quan trọng mà còn là minh chứng rõ nét cho mối quan hệ hữu nghị sâu sắc giữa hai quốc gia, đặc biệt trong bối cảnh Việt Nam và Nhật Bản đang hiện thực hóa quan hệ Đối tác Chiến lược toàn diện.
+
+Hội nghị đã củng cố vị thế của Việt Nam nói chung và Đà Nẵng nói riêng như một điểm đến đầu tư hấp dẫn và đáng tin cậy đối với các doanh nghiệp Nhật Bản. Với tầm nhìn chiến lược về phát triển bền vững, sự kiện này đã mở ra nhiều cơ hội hợp tác mới, thúc đẩy dòng vốn đầu tư từ Nhật Bản vào các lĩnh vực tiềm năng của Việt Nam. Các cuộc thảo luận tập trung vào việc tạo dựng môi trường kinh doanh thuận lợi, minh bạch và ổn định, nhằm thu hút thêm các dự án chất lượng cao từ Nhật Bản, đặc biệt trong các ngành công nghệ cao, công nghiệp phụ trợ, du lịch và dịch vụ. Ý nghĩa thực tiễn của hội nghị nằm ở việc cụ thể hóa các cam kết hợp tác, tạo điều kiện cho doanh nghiệp Nhật Bản tìm hiểu sâu hơn về tiềm năng thị trường, chính sách ưu đãi và nguồn nhân lực tại Việt Nam, từ đó đưa ra các quyết định đầu tư mang tính chiến lược, góp phần vào sự phát triển kinh tế-xã hội của cả hai quốc gia.</p>
+                    </td>
+                  </tr></table>
+                </td></tr>
+              </table>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:14px;">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#00897B" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#00897B;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">2</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#00897B;line-height:1.4;font-family:Arial,sans-serif;">Danang, DIFF, Bridge &amp; River</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">Chuyên trang Công an Đà Nẵng - Báo Công an Nhân dân</span>&nbsp;&nbsp;<a href="https://baomoi.com/danang-diff-bridge-river-c55482707.epi" style="color:#00897B;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+                <tr><td colspan="2" style="padding:8px 0 0 42px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                    <td bgcolor="#E0F2F1" style="background-color:#E0F2F1;padding:10px 14px;border-left:3px solid #00897B;border-radius:0 4px 4px 0;">
+                      <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Lễ hội Pháo hoa Quốc tế Đà Nẵng (DIFF) năm 2026, với chủ đề &quot;Da Nang - United Horizons&quot; (Đà Nẵng - Những chân trời kết nối), sẽ tiếp tục khẳng định vị thế của thành phố bên sông Hàn là điểm đến sự kiện hàng đầu khu vực. Nối tiếp thành công rực rỡ từ các mùa lễ hội trước, DIFF 2026 không chỉ là một màn trình diễn pháo hoa mãn nhãn mà còn là biểu tượng cho sự giao thoa văn hóa, kết nối bạn bè quốc tế.
+
+Bối cảnh diễn ra lễ hội luôn gắn liền với dòng sông Hàn thơ mộng và những cây cầu biểu tượng của Đà Nẵng như cầu Rồng, cầu Sông Hàn. Chính những công trình kiến trúc này đã tạo nên một sân khấu tự nhiên độc đáo, nơi ánh sáng pháo hoa bùng nổ trên nền trời đêm, phản chiếu lung linh xuống mặt nước, mang đến trải nghiệm thị giác khó quên cho hàng triệu du khách. Sự kết hợp giữa pháo hoa, sông và cầu không chỉ làm tăng thêm vẻ đẹp huyền ảo mà còn thể hiện tinh thần vươn lên, hội nhập của Đà Nẵng.
+
+Ý nghĩa thực tế của DIFF 2026 là vô cùng to lớn. Lễ hội không chỉ góp phần quảng bá hình ảnh một Đà Nẵng năng động, hiếu khách ra thế giới, mà còn thúc đẩy mạnh mẽ ngành du lịch, dịch vụ của thành phố. Đây là cơ hội vàng để các doanh nghiệp địa phương phát triển, tạo công ăn việc làm và mang lại nguồn thu đáng kể, góp phần vào sự phát triển kinh tế bền vững. &quot;United Horizons&quot; không chỉ là kết nối các nền văn hóa qua pháo hoa mà còn là kết nối con người, mở ra những chân trời mới cho sự hợp tác và thịnh vượng.</p>
+                    </td>
+                  </tr></table>
+                </td></tr>
+              </table>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:14px;">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#00897B" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#00897B;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">3</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#00897B;line-height:1.4;font-family:Arial,sans-serif;">Người Việt ưu tiên dùng hàng Việt</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">Báo Đà Nẵng</span>&nbsp;&nbsp;<a href="https://baomoi.com/nguoi-viet-uu-tien-dung-hang-viet-c55420274.epi" style="color:#00897B;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+                <tr><td colspan="2" style="padding:8px 0 0 42px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                    <td bgcolor="#E0F2F1" style="background-color:#E0F2F1;padding:10px 14px;border-left:3px solid #00897B;border-radius:0 4px 4px 0;">
+                      <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Chiến dịch &quot;Người Việt ưu tiên dùng hàng Việt&quot; đã vượt xa khuôn khổ một khẩu hiệu đơn thuần, trở thành lời kêu gọi mạnh mẽ về trách nhiệm và hành động thiết thực từ mỗi người dân. Bối cảnh của phong trào này xuất phát từ mong muốn xây dựng một thị trường nội địa vững mạnh, nơi hàng hóa sản xuất trong nước được người tiêu dùng đón nhận và tin tưởng. Đây không chỉ là một sáng kiến kinh tế mà còn mang ý nghĩa văn hóa sâu sắc, thể hiện tinh thần tự hào dân tộc và ủng hộ lao động Việt.
+
+Diễn biến của phong trào không chỉ dừng lại ở việc khuyến khích tiêu thụ chung chung, mà còn đi vào chi tiết, đặc biệt nhấn mạnh các sản phẩm &quot;Made in Da Nang&quot; và các sản phẩm OCOP (Chương trình Mỗi xã một sản phẩm) trên địa bàn thành phố. Điều này cho thấy sự cụ thể hóa trong việc triển khai, nhằm tạo ra tác động rõ rệt hơn ở cấp độ địa phương, giúp các doanh nghiệp nhỏ và vừa, các hợp tác xã có cơ hội phát triển. Việc ưu tiên dùng hàng Việt, đặc biệt là các sản phẩm đặc trưng của từng vùng miền, góp phần trực tiếp vào việc nâng cao năng lực cạnh tranh, cải thiện chất lượng sản phẩm và đa dạng hóa mẫu mã, đáp ứng tốt hơn nhu cầu thị trường.
+
+Ý nghĩa thực tế của phong trào là rất lớn. Nó không chỉ kích thích sản xuất trong nước, tạo thêm việc làm và tăng trưởng kinh tế, mà còn hình thành thói quen tiêu dùng văn minh, có trách nhiệm. Khi người Việt tin dùng hàng Việt, đó là động lực để các nhà sản xuất không ngừng đổi mới, nâng cao chất lượng và uy tín, từ đó xây dựng thương hiệu quốc gia vững mạnh. Đây là nền tảng quan trọng để hàng Việt không chỉ chinh phục thị trường nội địa mà còn vươn ra thế giới, khẳng định vị thế của sản phẩm Việt Nam trên trường quốc tế.</p>
+                    </td>
+                  </tr></table>
+                </td></tr>
+              </table>
+  </td></tr>
+
+  <!-- BẢN TIN TÀI CHÍNH -->
+  
+  <tr><td bgcolor="#E3F2FD" style="background-color:#E3F2FD;padding:10px 0;text-align:center;font-size:20px;letter-spacing:5px;font-family:Arial,sans-serif;">💰 📈 💵 📈 💰</td></tr>
+  <tr><td bgcolor="#E3F2FD" style="background-color:#E3F2FD;padding:12px 22px 6px;"><table cellpadding="0" cellspacing="0"><tr><td bgcolor="#1565C0" style="background-color:#1565C0;border-radius:20px;padding:5px 16px;"><span style="color:#FFFFFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">💰&nbsp;Bản tin tài chính hôm nay</span></td></tr></table></td></tr>
+  <tr><td bgcolor="#E3F2FD" style="background-color:#E3F2FD;padding:16px 24px 20px;">
+
+    <!-- Exchange rates -->
+    <p style="margin:0 0 8px;font-size:13px;font-weight:bold;color:#1565C0;font-family:Arial,sans-serif;">💱 Tỷ giá hôm nay</p>
+    <table cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr style="border-bottom:2px solid #1565C0;">
+          <th style="padding:4px 10px 4px 0;font-size:11px;color:#555;text-align:left;font-family:Arial,sans-serif;">Đồng tiền</th>
+          <th style="padding:4px 8px;font-size:11px;color:#1B5E20;text-align:right;font-family:Arial,sans-serif;">Mua vào</th>
+          <th style="padding:4px 0 4px 8px;font-size:11px;color:#B71C1C;text-align:right;font-family:Arial,sans-serif;">Bán ra</th>
+        </tr>
+      </thead>
+      <tbody><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#333;font-family:Arial,sans-serif;white-space:nowrap;">🇺🇸 USD</td><td style="padding:5px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">26,060.00</td><td style="padding:5px 0 5px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">26,470.00</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#333;font-family:Arial,sans-serif;white-space:nowrap;">🇪🇺 EUR</td><td style="padding:5px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">29,300.03</td><td style="padding:5px 0 5px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">30,844.77</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#333;font-family:Arial,sans-serif;white-space:nowrap;">🇯🇵 JPY</td><td style="padding:5px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">156.96</td><td style="padding:5px 0 5px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">167.79</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#333;font-family:Arial,sans-serif;white-space:nowrap;">🇨🇳 CNY</td><td style="padding:5px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">3,779.15</td><td style="padding:5px 0 5px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">3,939.58</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#333;font-family:Arial,sans-serif;white-space:nowrap;">🇬🇧 GBP</td><td style="padding:5px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">34,365.18</td><td style="padding:5px 0 5px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">35,824.02</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#333;font-family:Arial,sans-serif;white-space:nowrap;">🇦🇺 AUD</td><td style="padding:5px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">17,786.93</td><td style="padding:5px 0 5px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">18,542.00</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#333;font-family:Arial,sans-serif;white-space:nowrap;">🇸🇬 SGD</td><td style="padding:5px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">19,829.50</td><td style="padding:5px 0 5px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">20,712.68</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#333;font-family:Arial,sans-serif;white-space:nowrap;">🇰🇷 KRW</td><td style="padding:5px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">15.11</td><td style="padding:5px 0 5px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">18.21</td></tr></tbody>
+    </table>
+    <p style="margin:4px 0 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">Cập nhật: 7:31 AM · Nguồn: Vietcombank (tham khảo)</p>
+
+    <!-- Gold + silver prices -->
+    <p style="margin:14px 0 8px;font-size:13px;font-weight:bold;color:#1565C0;font-family:Arial,sans-serif;">🥇 Giá vàng &amp; bạc hôm nay</p>
+    <table cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr style="border-bottom:2px solid #1565C0;">
+          <th style="padding:4px 10px 4px 0;font-size:11px;color:#555;text-align:left;font-family:Arial,sans-serif;">Loại</th>
+          <th style="padding:4px 8px;font-size:11px;color:#1B5E20;text-align:right;font-family:Arial,sans-serif;">Mua vào</th>
+          <th style="padding:4px 4px;font-size:11px;color:#B71C1C;text-align:right;font-family:Arial,sans-serif;">Bán ra</th>
+          <th style="padding:4px 0;font-size:11px;color:#aaa;text-align:right;font-family:Arial,sans-serif;">Biến động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">🥇 SJC 1 lượng</td><td style="padding:5px 8px;font-size:12px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">146.90 triệu</td><td style="padding:5px 4px;font-size:12px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">149.90 triệu</td><td style="padding:5px 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;white-space:nowrap;">&nbsp;triệu đ/lượng</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">💍 SJC nhẫn tròn</td><td style="padding:5px 8px;font-size:12px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">146.40 triệu</td><td style="padding:5px 4px;font-size:12px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">149.40 triệu</td><td style="padding:5px 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;white-space:nowrap;">&nbsp;triệu đ/lượng</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">💛 DOJI nhẫn tròn</td><td style="padding:5px 8px;font-size:12px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">145.00 triệu</td><td style="padding:5px 4px;font-size:12px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">149.00 triệu</td><td style="padding:5px 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;white-space:nowrap;">&nbsp;triệu đ/lượng</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">✨ PNJ nhẫn tròn 24K</td><td style="padding:5px 8px;font-size:12px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">145.50 triệu</td><td style="padding:5px 4px;font-size:12px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">148.80 triệu</td><td style="padding:5px 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;white-space:nowrap;">&nbsp;triệu đ/lượng</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">🌍 Vàng thế giới</td><td style="padding:5px 8px;font-size:12px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">4,121.4</td><td style="padding:5px 4px;font-size:12px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">-</td><td style="padding:5px 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;white-space:nowrap;">&nbsp;USD</td></tr>
+        <tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">🥈 Bạc mỹ nghệ Phú Quý 99.9</td><td style="padding:5px 8px;font-size:12px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;">2.243</td><td style="padding:5px 4px;font-size:12px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;">2.639</td><td style="padding:5px 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">nghìn đ/chỉ</td></tr>
+      </tbody>
+    </table>
+    <p style="margin:4px 0 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">Cập nhật: 04:30 2026-07-11 · Nguồn: vang.today</p>
+    <p style="margin:2px 0 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">📌 Bạc: giavang.org · Đơn vị vàng: triệu đ/lượng</p>
+
+    <!-- Crypto -->
+    
+    <p style="margin:14px 0 8px;font-size:13px;font-weight:bold;color:#1565C0;font-family:Arial,sans-serif;">₿ Crypto hôm nay</p>
+    <table cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
+      <tr style="border-bottom:1px solid #BBDEFB;">
+        <td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">₿ Bitcoin (BTC)</td>
+        <td style="padding:5px 0;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;">64,081 USD</td>
+        <td style="padding:5px 0 5px 8px;font-size:11px;color:#888;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">≈ 1.683 tỷ</td>
+      </tr>
+      <tr style="border-bottom:1px solid #BBDEFB;">
+        <td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">Ξ Ethereum (ETH)</td>
+        <td style="padding:5px 0;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;">1,792 USD</td>
+        <td style="padding:5px 0 5px 8px;font-size:11px;color:#888;font-family:Arial,sans-serif;text-align:right;"></td>
+      </tr>
+      <tr>
+        <td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">💵 USDT/VNĐ</td>
+        <td style="padding:5px 0;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;">26,252 đ</td>
+        <td style="padding:5px 0 5px 8px;font-size:11px;color:#888;font-family:Arial,sans-serif;text-align:right;">tỷ giá phi chính thức</td>
+      </tr>
+    </table>
+    <p style="margin:4px 0 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">Nguồn: CoinGecko</p>
+
+  </td></tr>
+
+  <!-- CHÍNH SÁCH & PHÁP LUẬT -->
+  
+  <tr><td bgcolor="#E8EAF6" style="background-color:#E8EAF6;padding:10px 0;text-align:center;font-size:20px;letter-spacing:5px;font-family:Arial,sans-serif;">⚖️ 📋 🏛️ 📋 ⚖️</td></tr>
+  <tr><td bgcolor="#E8EAF6" style="background-color:#E8EAF6;padding:12px 22px 6px;"><table cellpadding="0" cellspacing="0"><tr><td bgcolor="#283593" style="background-color:#283593;border-radius:20px;padding:5px 16px;"><span style="color:#FFFFFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">⚖️&nbsp;Chính sách & Pháp luật tài chính</span></td></tr></table></td></tr>
+  <tr><td bgcolor="#E8EAF6" style="background-color:#E8EAF6;padding:14px 24px 20px;">
+    <p style="margin:0 0 10px;font-size:12px;color:#555;font-style:italic;font-family:Arial,sans-serif;">
+      Quy định mới ban hành &amp; sắp có hiệu lực — tổng hợp từ nguồn tài chính chính thống
+    </p>
+    <p style="margin:0;font-size:13px;color:#333;line-height:1.8;"><strong style="font-size:14px;">📋 Condotel chính thức &quot;có danh, có phận&quot;</strong><br>📍 <em>Nguồn: <a href="https://www.tinnhanhchungkhoan.vn/xoa-dan-noi-so-condotel-post393438.html" style="color:#C9950C;text-decoration:underline;" target="_blank">Tin Nhanh Chứng Khoán</a></em><br>💡 <strong>Tác động:</strong> Giúp các nhà đầu tư condotel giảm bớt rủi ro pháp lý, tạo điều kiện cho doanh nghiệp phát triển các dự án condotel rõ ràng hơn, có thể thu hút lại dòng vốn đầu tư vào phân khúc này.</p>
+  </td></tr>
+
+  <!-- VIRAL MXH -->
+  
+  <tr><td bgcolor="#FFF9C4" style="background-color:#FFF9C4;padding:10px 0;text-align:center;font-size:20px;letter-spacing:5px;font-family:Arial,sans-serif;">🔥 💬 📱 💬 🔥</td></tr>
+  <tr><td bgcolor="#FFF9C4" style="background-color:#FFF9C4;padding:12px 22px 6px;"><table cellpadding="0" cellspacing="0"><tr><td bgcolor="#C9950C" style="background-color:#C9950C;border-radius:20px;padding:5px 16px;"><span style="color:#FFFFFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">🔥&nbsp;Mạng xã hội hôm nay</span></td></tr></table></td></tr>
+  <tr><td bgcolor="#FFF9C4" style="background-color:#FFF9C4;padding:14px 24px 20px;">
+    <p style="margin:0;font-size:13px;color:#333;line-height:1.8;">Tuyệt vời! Dưới đây là 3 tin đang &quot;làm mưa làm gió&quot; cõi mạng, được chọn lọc kỹ càng từ danh sách bạn cung cấp:</p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;"><strong style="font-size:14px;">🔥 Sân khấu kịch Thiên Đăng của dàn sao &quot;đỉnh chóp&quot; bất ngờ &quot;bay màu&quot; sau 3 năm</strong><br>📍 <em>Nguồn: <a href="https://vnexpress.net/san-khau-kich-thien-dang-dong-cua-5096036.html" style="color:#C9950C;text-decoration:underline;" target="_blank">VnExpress Giải trí</a></em><br>Tin nóng hổi từ làng kịch khiến dân tình ngỡ ngàng: Sân khấu Thiên Đăng với dàn &quot;cây đa cây đề&quot; như NSƯT Thành Lộc, Hữu Châu, Kim Xuân đã chính thức đóng cửa sau vỏn vẹn gần ba năm hoạt động. Cộng đồng mạng đang xôn xao, tiếc nuối và không ngừng đặt câu hỏi về lý do đằng sau quyết định đột ngột này.</p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;"><strong style="font-size:14px;">🔥 Vợ Messi sánh đôi gia đình Beckham: &quot;Hội chị em&quot; tỷ đô hội tụ!</strong><br>📍 <em>Nguồn: <a href="https://vnexpress.net/vo-messi-du-tiec-cung-gia-dinh-beckham-5095833.html" style="color:#C9950C;text-decoration:underline;" target="_blank">VnExpress Giải trí</a></em><br>Anto Roccuzzo, bà xã nhà Messi, vừa khiến dân tình &quot;mắt tròn mắt dẹt&quot; khi xuất hiện cực kỳ sang chảnh bên gia đình Beckham tại sự kiện khai trương cửa hàng pop-up của Victoria. Khoảnh khắc &quot;hội chị em&quot; quyền lực này đọ sắc và khí chất đã nhanh chóng viral, khiến fan hâm mộ không khỏi trầm trồ về đẳng cấp của giới thượng lưu toàn cầu.</p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;"><strong style="font-size:14px;">🔥 Cặp đôi Haaland - Isabel: Tình yêu &quot;từ thuở còn thơ&quot; của làng bóng đá</strong><br>📍 <em>Nguồn: <a href="https://vnexpress.net/chuyen-tinh-haaland-va-ban-gai-quen-tu-thuo-nho-5094951.html" style="color:#C9950C;text-decoration:underline;" target="_blank">VnExpress Giải trí</a></em><br>Tiền đạo &quot;quái vật&quot; Erling Haaland cùng bạn gái Isabel, người mẫu xinh đẹp, đang khiến MXH &quot;tan chảy&quot; với chuyện tình thanh mai trúc mã. Cả hai không chỉ chung đam mê trái bóng tròn mà còn từng là đồng đội từ thuở thiếu thời, một minh chứng cho tình yêu vượt thời gian khiến bao người ngưỡng mộ và ghen tị.</p>
+  </td></tr>
+
+  <!-- MUSIC + FASHION -->
+  
+  <tr><td bgcolor="#EDE7F6" style="background-color:#EDE7F6;padding:10px 0;text-align:center;font-size:20px;letter-spacing:5px;font-family:Arial,sans-serif;">🎵 👗 ✨ 👗 🎵</td></tr>
+  <tr><td bgcolor="#EDE7F6" style="background-color:#EDE7F6;padding:12px 22px 6px;"><table cellpadding="0" cellspacing="0"><tr><td bgcolor="#7B1FA2" style="background-color:#7B1FA2;border-radius:20px;padding:5px 16px;"><span style="color:#FFFFFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">🎵&nbsp;Âm nhạc & Thời trang hôm nay</span></td></tr></table></td></tr>
+  <tr><td bgcolor="#EDE7F6" style="background-color:#EDE7F6;padding:14px 24px 20px;">
+    <p style="margin:0;font-size:13px;color:#333;line-height:1.8;"><strong>ÂM NHẠC 🎵</strong><br><strong style="font-size:14px;">🎵 Bùng nổ World Cup 2026: Shakira, BTS và Justin Bieber &quot;đốt cháy&quot; chung kết!</strong><br>📍 <em>Nguồn: <a href="https://tuoitre.vn/shakira-tu-hao-vi-bieu-dien-voi-bts-justin-bieber-o-chung-ket-world-cup-100260710135916138.htm" style="color:#C9950C;text-decoration:underline;" target="_blank">Tuổi Trẻ Âm nhạc</a></em><br>Màn trình diễn được mong đợi nhất hành tinh sắp sửa diễn ra! Shakira, BTS và Justin Bieber sẽ cùng Madonna tạo nên một đêm chung kết World Cup 2026 lịch sử, hứa hẹn khuấy động sân vận động New York New Jersey vào ngày 19-7. Đây chắc chắn sẽ là dấu mốc đặc biệt của giải đấu, nơi âm nhạc và bóng đá hòa quyện trong một bữa tiệc cảm xúc bùng nổ!</p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;"><strong>THỜI TRANG 👗</strong><br><strong style="font-size:14px;">👗 Zendaya – Nữ hoàng thảm đỏ &quot;nhả tơ&quot; phong cách Spider-Man cực đỉnh!</strong><br>📍 <em>Nguồn: <a href="https://tuoitre.vn/nang-tho-cua-nguoi-nhen-mac-ca-vu-tru-spider-man-len-tham-do-100260710215740058.htm" style="color:#C9950C;text-decoration:underline;" target="_blank">Tuổi Trẻ Thời trang</a></em><br>Không ai có thể biến hóa tài tình như Zendaya! Nàng thơ của Người Nhện đã khéo léo khoác lên mình &quot;cả vũ trụ Spider-Man&quot; từ đầu đến chân, với bảng màu đỏ - xanh đặc trưng trong suốt chiến dịch quảng bá bom tấn Spider-Man: Brand New Day. Các nữ công sở có thể học hỏi cách cô nàng kết hợp màu sắc và phụ kiện tinh tế để tạo điểm nhấn độc đáo cho trang phục hàng ngày của mình đấy!</p>
+  </td></tr>
+
+  <!-- FOOD OF THE DAY -->
+  
+  <tr><td bgcolor="#FBE9E7" style="background-color:#FBE9E7;padding:10px 0;text-align:center;font-size:20px;letter-spacing:5px;font-family:Arial,sans-serif;">🍜 😋 🍽️ 😋 🍜</td></tr>
+  <tr><td bgcolor="#FBE9E7" style="background-color:#FBE9E7;padding:12px 22px 6px;"><table cellpadding="0" cellspacing="0"><tr><td bgcolor="#E64A19" style="background-color:#E64A19;border-radius:20px;padding:5px 16px;"><span style="color:#FFFFFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">🍽️&nbsp;Món ngon hôm nay</span></td></tr></table></td></tr>
+  <tr><td bgcolor="#FFF3E0" style="background-color:#FFF3E0;padding:14px 24px 20px;">
+    <p style="margin:0;font-size:13px;color:#333;line-height:1.8;">Ôi chao cả nhà ơi, hôm nay là 11/07/2026 rồi, trời nắng nóng thế này mà không có món ăn vặt nào giải nhiệt, lại còn cay xè tê tái đầu lưỡi thì đúng là có lỗi với bao tử quá đi mất! Bữa nay, tui phải giới thiệu ngay một &quot;chân ái&quot; của giới mê ăn vặt Đà Nẵng – món này mà lỡ đụng phải là &quot;dính&quot; từ miếng đầu tiên tới miếng cuối cùng luôn!</p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;">🍽️ <strong>Ốc Hút</strong> — Đặc sản đường phố Đà Nẵng</p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;">Trời ơi, cái vị cay nồng đặc trưng của ớt xiêm xanh, sả thơm lừng quyện vào từng con ốc nhỏ xíu, đã được xào thấm đẫm gia vị mặn ngọt. Cứ thế mà đưa lên miệng, hít một hơi thật mạnh, con ốc theo dòng nước sốt cay nồng lướt vào khoang miệng, sần sật giòn giòn mà đậm đà khó cưỡng! Ăn xong là mồ hôi túa ra, nhưng miệng thì cứ xuýt xoa, tay thì cứ gắp lia lịa, không thể dừng lại được đâu nha! Nhất định phải thử chấm thêm miếng bánh mì hoặc bánh tráng nướng giòn rụm vào nước sốt cay xè đó, đảm bảo &quot;phê pha&quot; tới bến!</p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;">💡 <strong>Ăn ở đâu ngon?</strong><br>&nbsp;&nbsp;&#8226;&nbsp;<strong>Quán Ốc Hút Đĩa Bay</strong> (Đường Phan Tứ, Ngũ Hành Sơn, Đà Nẵng) – Quán này đông khách cực kỳ, nổi tiếng với ốc hút cay xé lưỡi.<br>&nbsp;&nbsp;&#8226;&nbsp;Hoặc ghé các hàng ốc trên <strong>đường Lê Duẩn</strong> buổi tối cũng có rất nhiều lựa chọn ngon bá cháy nha!</p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;">💰 <strong>Giá tham khảo:</strong> 20.000 – 35.000 VNĐ/đĩa (tùy size và loại ốc)</p>
+  </td></tr>
+
+  <!-- TIPS -->
+  <tr><td bgcolor="#FFFFF0" style="background-color:#FFFFF0;padding:10px 0;text-align:center;font-size:20px;letter-spacing:5px;font-family:Arial,sans-serif;">💄 💪 🩺 💪 💄</td></tr><tr><td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:12px 22px 6px;"><table cellpadding="0" cellspacing="0"><tr><td bgcolor="#8B6508" style="background-color:#8B6508;border-radius:20px;padding:5px 16px;"><span style="color:#FFFFFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">💡&nbsp;Tips dành cho chị em hôm nay</span></td></tr></table></td></tr>
+  <tr><td bgcolor="#FCE4EC" style="background-color:#FCE4EC;padding:16px 24px;border-top:2px solid #FFE082;">
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td width="52" valign="top" style="padding-right:14px;">
+        <table cellpadding="0" cellspacing="0"><tr>
+          <td bgcolor="#AD1457" width="44" height="44" align="center" valign="middle"
+              style="background-color:#AD1457;width:44px;height:44px;border-radius:22px;text-align:center;vertical-align:middle;font-size:22px;font-family:Arial,sans-serif;">
+            💄
+          </td>
+        </tr></table>
+      </td>
+      <td valign="top">
+        <p style="margin:0 0 8px;font-size:12px;font-weight:bold;color:#AD1457;letter-spacing:1px;text-transform:uppercase;font-family:Arial,sans-serif;">Tip làm đẹp &amp; chăm da</p>
+        <p style="margin:0;font-size:13px;color:#333;line-height:1.8;">Chào hội chị em văn phòng xinh đẹp của tui! Hôm nay là 2026-07-11 rồi, thời gian cứ vù vù như deadline cuối tháng vậy đó ha! 🤪 Có phải sáng nào tụi mình cũng vội vàng như chạy marathon không? Đừng lo, hôm nay tui có bí kíp &#x27;phù phép&#x27; cho mình xinh tươi rạng rỡ chỉ trong 5 phút thôi nè!</p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;">⏰ <strong>Make Up 5 Phút Thần Tốc Cho Nàng Văn Phòng!</strong></p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;">Nàng ơi, bỏ qua kem nền cầu kỳ đi nha! 🙅‍♀️ Thay vào đó, hãy dùng một em BB/CC Cream có tích hợp chống nắng nhẹ. Em này vừa giúp đều màu da tức thì, vừa bảo vệ da khỏi ánh sáng xanh từ màn hình máy tính và đèn văn phòng nữa đó. ✨</p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;">Tiếp theo, một chút son dưỡng có màu hoặc son kem lì tông MLBB (My Lips But Better) là &#x27;chân ái&#x27; luôn! Tán nhẹ một lớp lòng môi, sau đó dùng ngón tay chấm nhẹ lên má để tạo hiệu ứng ửng hồng tự nhiên, vừa tiết kiệm thời gian, vừa tươi tắn. 💄 Cuối cùng, đừng quên một đường mascara thật mỏng và chuốt nhẹ chân mày để gương mặt có điểm nhấn nha. Thế là xong! Đảm bảo nàng sẽ tự tin tỏa sáng cả ngày mà không tốn quá 5 phút vàng ngọc buổi sáng đâu! 💖 Yêu thương!</p>
+      </td>
+    </tr></table>
+  </td></tr>
+  <tr><td bgcolor="#E8F5E9" style="background-color:#E8F5E9;padding:16px 24px;border-top:2px solid #C8E6C9;">
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td width="52" valign="top" style="padding-right:14px;">
+        <table cellpadding="0" cellspacing="0"><tr>
+          <td bgcolor="#2E7D32" width="44" height="44" align="center" valign="middle"
+              style="background-color:#2E7D32;width:44px;height:44px;border-radius:22px;text-align:center;vertical-align:middle;font-size:22px;font-family:Arial,sans-serif;">
+            🏃
+          </td>
+        </tr></table>
+      </td>
+      <td valign="top">
+        <p style="margin:0 0 8px;font-size:12px;font-weight:bold;color:#2E7D32;letter-spacing:1px;text-transform:uppercase;font-family:Arial,sans-serif;">Tip tập thể dục &amp; giữ dáng</p>
+        <p style="margin:0;font-size:13px;color:#333;line-height:1.8;">Chào các cô gái văn phòng xinh đẹp! ✨ Hôm nay 2026-07-11, huấn luyện viên của bạn có một tip siêu hiệu quả đây!</p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;">🚶‍♀️ <strong>&quot;Micro-Vận Động&quot;: Đánh Bại Lười Biếng Cả Ngày!</strong></p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;">Ngồi làm việc 8 tiếng mỗi ngày là kẻ thù số 1 của vòng eo và năng lượng. Đừng lo, bạn không cần phải đến gym! Hãy biến văn phòng thành sàn tập của riêng bạn với chiến lược &quot;Micro-Vận Động&quot;. Cứ mỗi 60-90 phút, hãy đứng dậy và thực hiện một động tác nhỏ trong 1-2 phút:</p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;">&nbsp;&nbsp;&#8226;&nbsp;<strong>Đi bộ nhanh:</strong> Thay vì email, hãy đi bộ đến bàn đồng nghiệp để trao đổi. Thêm 5-10 phút đi bộ nhẹ nhàng mỗi ngày!<br>&nbsp;&nbsp;&#8226;&nbsp;<strong>Leo cầu thang:</strong> Bỏ thang máy và leo cầu thang ít nhất 2 tầng.<br>&nbsp;&nbsp;&#8226;&nbsp;<strong>Vươn vai + kiễng chân:</strong> Đứng dậy, vươn vai thật cao, sau đó kiễng gót chân lên xuống 15-20 lần.<br>&nbsp;&nbsp;&#8226;&nbsp;<strong>Squat tại chỗ:</strong> Thực hiện 10-15 cái squat nhẹ nhàng cạnh bàn làm việc (nếu không gian cho phép).</p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;">Những &quot;micro-vận động&quot; này không chỉ giúp đốt thêm khoảng 50-100 calo mỗi ngày mà còn cải thiện tuần hoàn máu, giảm đau lưng và tăng cường sự tập trung. Bắt đầu ngay hôm nay nhé! 💖</p>
+      </td>
+    </tr></table>
+  </td></tr>
+  <tr><td bgcolor="#E3F2FD" style="background-color:#E3F2FD;padding:16px 24px;border-top:2px solid #BBDEFB;">
+    <table width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td width="52" valign="top" style="padding-right:14px;">
+        <table cellpadding="0" cellspacing="0"><tr>
+          <td bgcolor="#1565C0" width="44" height="44" align="center" valign="middle"
+              style="background-color:#1565C0;width:44px;height:44px;border-radius:22px;text-align:center;vertical-align:middle;font-size:22px;font-family:Arial,sans-serif;">
+            🩺
+          </td>
+        </tr></table>
+      </td>
+      <td valign="top">
+        <p style="margin:0 0 8px;font-size:12px;font-weight:bold;color:#1565C0;letter-spacing:1px;text-transform:uppercase;font-family:Arial,sans-serif;">Tip sức khỏe: huyết áp, cột sống, vai gáy</p>
+        <p style="margin:0;font-size:13px;color:#333;line-height:1.8;">🩺 <strong>Thư Giãn Vai Gáy Ngay Tại Bàn Làm Việc!</strong></p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;">Các nàng công sở ơi, có phải bạn đang cảm thấy vai gáy căng cứng sau nhiều giờ nhìn màn hình? Đừng xem thường nhé! Ngồi làm việc sai tư thế hoặc quá lâu một chỗ là &quot;thủ phạm&quot; chính gây đau vai gáy. Theo thống kê, có tới <strong>80% nhân viên văn phòng</strong> gặp phải tình trạng này. 😟</p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;">Hãy dành 2-3 phút mỗi 60-90 phút để thực hiện các động tác sau, ngay tại ghế của bạn:<br>1.  <strong>Nghiêng đầu:</strong> Từ từ nghiêng đầu sang một bên cho tai chạm vai (không nhún vai), giữ 15 giây. Đổi bên.<br>2.  <strong>Cuộn vai:</strong> Nhấc vai lên cao, cuộn ra sau và hạ xuống. Lặp lại 5-10 lần theo cả hai chiều.<br>3.  <strong>Mở ngực:</strong> Đan hai tay ra sau lưng (nếu có thể) hoặc chỉ cần mở rộng vai, ưỡn ngực nhẹ nhàng, giữ 15-20 giây.</p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;">Những động tác đơn giản này giúp giảm căng cơ, tăng lưu thông máu, và phòng ngừa thoái hóa cột sống cổ hiệu quả. Áp dụng ngay để cảm nhận sự khác biệt nhé! ✨</p>
+      </td>
+    </tr></table>
+  </td></tr>
+
+  <!-- QUOTE -->
+  
+  <tr><td bgcolor="#EDE7F6" style="background-color:#EDE7F6;padding:10px 0;text-align:center;font-size:20px;letter-spacing:5px;font-family:Arial,sans-serif;">💬 ✨ 💭 ✨ 💬</td></tr>
+  <tr><td bgcolor="#EDE7F6" style="background-color:#EDE7F6;padding:12px 22px 6px;"><table cellpadding="0" cellspacing="0"><tr><td bgcolor="#7B1FA2" style="background-color:#7B1FA2;border-radius:20px;padding:5px 16px;"><span style="color:#FFFFFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">💬&nbsp;Câu châm ngôn hôm nay</span></td></tr></table></td></tr>
+  <tr><td bgcolor="#EDE7F6" style="background-color:#EDE7F6;padding:14px 24px 20px;">
+    <p style="margin:0;font-size:13px;color:#333;line-height:1.8;">💬 <strong>&quot;Success is not final, failure is not fatal: it is the courage to continue that counts.&quot;</strong><br><em>[Thành công không phải là cuối cùng, thất bại không phải là chết người: chính lòng dũng cảm để tiếp tục mới là điều đáng giá.]</em><br>— Winston Churchill</p><p style="margin:8px 0;font-size:13px;color:#333;line-height:1.8;"><strong>Giải nghĩa:</strong> Câu nói này nhắc nhở chúng ta rằng cả thành công lẫn thất bại đều là những chặng đường tạm thời trong cuộc sống và sự nghiệp. Điều quan trọng nhất là tinh thần kiên cường, không bỏ cuộc trước khó khăn và luôn có dũng khí để tiếp tục tiến lên, bởi chính sự bền bỉ đó mới thực sự định hình nên giá trị và sức mạnh của mỗi người phụ nữ trên con đường sự nghiệp của mình.</p>
+  </td></tr>
+
+  <!-- TRAI ĐẸP -->
+  
+  <tr><td bgcolor="#FFFFF0" style="background-color:#FFFFF0;padding:10px 0;text-align:center;font-size:20px;letter-spacing:5px;font-family:Arial,sans-serif;">💛 😍 💛 😍 💛</td></tr>
+  <tr><td bgcolor="#FFF9E6" style="background-color:#FFF9E6;padding:12px 22px 6px;"><table cellpadding="0" cellspacing="0"><tr><td bgcolor="#F9A825" style="background-color:#F9A825;border-radius:20px;padding:5px 16px;"><span style="color:#FFFFFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">🌟&nbsp;Crush Hôm Nay</span></td></tr></table></td></tr>
+  <tr><td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:16px 24px 22px;border-top:3px solid #F9A825;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td width="158" valign="top" style="padding-right:16px;text-align:center;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9e/Liu_Yuning_%E5%88%98%E5%AE%87%E5%AE%81_COSMO_%E5%BA%86%E5%85%B8%E6%B4%BB%E5%8A%A8_1.jpg/400px-Liu_Yuning_%E5%88%98%E5%AE%87%E5%AE%81_COSMO_%E5%BA%86%E5%85%B8%E6%B4%BB%E5%8A%A8_1.jpg" alt="Lưu Vũ Ninh (Liu Yuning)" referrerpolicy="no-referrer" width="140" height="190" style="width:140px;max-width:140px;height:auto;border-radius:12px;display:block;margin:0 auto 10px;box-shadow:0 4px 14px rgba(139,101,8,.20);border:3px solid #FFE082;outline:none;" />
+        <p style="margin:6px 0 0;text-align:center;"><span style="background:#C9950C;color:#fff;font-size:10px;padding:3px 10px;border-radius:12px;margin-right:4px;margin-bottom:4px;display:inline-block;font-family:Arial,sans-serif;">C-pop</span> <span style="background:#C9950C;color:#fff;font-size:10px;padding:3px 10px;border-radius:12px;margin-right:4px;margin-bottom:4px;display:inline-block;font-family:Arial,sans-serif;">OST</span> <span style="background:#C9950C;color:#fff;font-size:10px;padding:3px 10px;border-radius:12px;margin-right:4px;margin-bottom:4px;display:inline-block;font-family:Arial,sans-serif;">giọng hát</span></p>
+      </td>
+      <td valign="top">
+        <p style="margin:0 0 2px;font-size:20px;font-weight:bold;color:#8B6508;font-family:Arial,sans-serif;">💗 Lưu Vũ Ninh (Liu Yuning)</p>
+        <p style="margin:0 0 6px;font-size:12px;color:#aaa;font-family:Arial,sans-serif;">Trung Quốc 🇨🇳 &nbsp;|&nbsp; Ca sĩ (OST specialist)</p>
+        <table cellpadding="0" cellspacing="0" style="margin:8px 0;"><tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>Ngày sinh</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">17/04/1996</td></tr><tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>Chiều cao</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">1m80</td></tr><tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>Cân nặng</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">68 kg</td></tr><tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>Nhóm máu</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">A</td></tr><tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>Cung HĐ</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">Bạch Dương ♈</td></tr><tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>Màu yêu thích</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">Xanh dương &amp; Trắng</td></tr><tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>Con số may</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">4</td></tr><tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>Tình trạng</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">Độc thân 💫</td></tr><tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>Sở thích</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">Guitar, viết nhạc, đọc sách, nấu ăn</td></tr></table>
+        <p style="margin:8px 0;font-size:13px;color:#333;line-height:1.75;font-family:Arial,sans-serif;">Lưu Vũ Ninh sinh ngày 17/04/1996 — giọng hát trầm ấm đặc trưng chuyên hát OST cho các drama lớn. Nghe mà không biết tên là thiệt thòi lớn! Khuôn mặt thư sinh điềm tĩnh, kiểu đẹp nghệ sĩ nội tâm. OST &#x27;Till the End of the Moon&#x27; viral khắp châu Á.</p>
+        <p style="margin:6px 0 2px;font-size:11px;color:#C9950C;font-weight:bold;font-family:Arial,sans-serif;">🏆 Tác phẩm nổi bật:</p><p style="margin:0 0 4px;font-size:12px;color:#555;font-family:Arial,sans-serif;">OST &#x27;Till the End of the Moon&#x27;, &#x27;Love Between Fairy and Devil&#x27;, nhiều OST hit</p>
+        <p style="margin:6px 0 2px;font-size:11px;color:#F9A825;font-weight:bold;font-family:Arial,sans-serif;">🏅 Giải thưởng:</p><p style="margin:0 0 8px;font-size:12px;color:#555;font-family:Arial,sans-serif;">Weibo Popular Singer Awards, Golden Eagle Music Awards</p>
+      </td>
+    </tr></table>
+  </td></tr>
+
+  <!-- FOOTER -->
+  <tr>
+    <td bgcolor="#8B6508" style="background-color:#8B6508;padding:16px 30px 12px;text-align:center;">
+      <p style="margin:0 0 6px;font-size:20px;letter-spacing:5px;font-family:Arial,sans-serif;">✨ 💛 ✨ 💛 ✨</p>
+      <p style="margin:0 0 4px;font-size:13px;color:#FFE082;font-family:Arial,sans-serif;">
+        Chúc chị em một ngày vui vẻ và năng suất! ✨
+      </p>
+      <p style="margin:0 0 10px;font-size:11px;color:#FFD54F;font-family:Arial,sans-serif;">
+        TTXHXD — Tổng hợp bởi Groq AI &amp; nguồn tin VN 💌
+      </p>
+      <p style="margin:0;font-size:18px;letter-spacing:5px;font-family:Arial,sans-serif;border-radius:0 0 14px 14px;">🌼 ✨ 🌼 ✨ 🌼</p>
+    </td>
+  </tr>
+
+</table>
+
+</td></tr>
+</table>
+</body>
+</html>
