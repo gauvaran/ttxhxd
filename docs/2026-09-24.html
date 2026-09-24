@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:v="urn:schemas-microsoft-com:vml">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<style>
+@media screen and (max-width:620px) {
+  table[width="600"] { width:100% !important; }
+  td { word-break:break-word; overflow-wrap:break-word; }
+  td[style*="padding:28px 30px"], td[style*="padding:20px 30px"], td[style*="padding:16px 30px"], td[style*="padding:12px 30px"] { padding-left:14px !important; padding-right:14px !important; }
+  /* stack guy image above text on mobile */
+  td[width="150"] { display:block !important; width:100% !important; padding-right:0 !important; text-align:center !important; margin-bottom:10px; }
+  td[width="150"] img { margin:0 auto !important; }
+  td[width="32"] { display:none; }
+  img { max-width:100% !important; height:auto !important; }
+}
+@media print { #web-nav { display:none !important; } body { background:#fff !important; } }
+</style>
+</head>
+<body style="margin:0;padding:0;background-color:#FFFDE7;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;">
+<div id="web-nav" style="background:#8B6508;padding:8px 16px;font-family:Arial,sans-serif;font-size:13px;position:sticky;top:0;z-index:999;border-bottom:2px solid #C9950C;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;">
+  <a id="nav-prev" href="#" style="color:#FFE082;text-decoration:none;visibility:hidden;">&#8592; --/--</a>
+  <a href="all.html" style="color:#FFD700;text-decoration:none;font-weight:bold;">&#128240; T&#7845;t c&#7843; b&#7843;n tin</a>
+  <span style="color:#FFFFFF;font-weight:bold;">24/09/2026</span>
+  <a id="nav-next" href="#" style="color:#FFE082;text-decoration:none;visibility:hidden;">--/-- &#8594;</a>
+  <a href="2026-09-24.pdf" download="2026-09-24.pdf" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:5px 12px;border-radius:4px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;text-decoration:none;display:inline-block;">&#128196; T&#7843;i PDF</a>
+  <button onclick="sharePage()" style="background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.3);padding:5px 12px;border-radius:4px;font-size:12px;cursor:pointer;font-family:Arial,sans-serif;text-decoration:none;display:inline-block;">&#128279; Chia s&#7867;</button>
+</div>
+<script>
+function sharePage(){
+  var title='TTXHXD – 24/09/2026';
+  if(navigator.share){navigator.share({title:title,url:location.href});}
+  else{navigator.clipboard.writeText(location.href).then(function(){alert('Đã sao chép link!');}); }
+}
+(function(){
+  var m=location.pathname.match(/(\d{4}-\d{2}-\d{2})\.html/);
+  if(!m)return;
+  var slug=m[1];
+  function fmt(s){var p=s.split('-');return p[2]+'/'+p[1];}
+  fetch('dates.json?_='+Date.now())
+    .then(function(r){return r.json();})
+    .then(function(dates){
+      var idx=dates.indexOf(slug);
+      var prevEl=document.getElementById('nav-prev');
+      var nextEl=document.getElementById('nav-next');
+      if(idx>0){
+        var pd=dates[idx-1];
+        prevEl.href=pd+'.html';
+        prevEl.innerHTML='&#8592; '+fmt(pd);
+        prevEl.style.visibility='visible';
+      }
+      if(idx>=0&&idx<dates.length-1){
+        var nd=dates[idx+1];
+        nextEl.href=nd+'.html';
+        nextEl.innerHTML=fmt(nd)+' &#8594;';
+        nextEl.style.visibility='visible';
+      }
+    }).catch(function(){});
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowLeft'){var p=document.getElementById('nav-prev');if(p&&p.style.visibility==='visible')location.href=p.href;}
+    if(e.key==='ArrowRight'){var n=document.getElementById('nav-next');if(n&&n.style.visibility==='visible')location.href=n.href;}
+  });
+})();
+</script>
+
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" bgcolor="#FFFDE7" style="background-color:#FFFDE7;">
+<tr><td align="center" style="padding:20px 12px 28px;">
+
+<table role="presentation" width="600" cellpadding="0" cellspacing="0"
+       style="max-width:600px;width:100%;background-color:#FFFFFF;border-radius:14px;
+              box-shadow:0 4px 24px rgba(139,101,8,.12);" bgcolor="#FFFFFF">
+
+  <!-- HEADER TOP STICKER STRIPE -->
+  <tr>
+    <td bgcolor="#FFD54F" style="background-color:#FFD54F;padding:8px 20px;text-align:center;border-radius:14px 14px 0 0;">
+      <p style="margin:0;font-size:20px;letter-spacing:6px;font-family:Arial,sans-serif;">💅 ✨ 🌸 💕 🌸 ✨ 💅</p>
+    </td>
+  </tr>
+
+  <!-- HEADER MAIN -->
+  <tr>
+    <td bgcolor="#8B6508" style="background-color:#8B6508;padding:20px 30px 24px;text-align:center;">
+      <p style="margin:0 0 10px;font-size:26px;font-weight:bold;color:#FFFFFF;font-family:Arial,sans-serif;line-height:1.2;">
+        💌 Thông Tấn Xã Heo Xinh Đẹp
+      </p>
+      <p style="margin:0 0 14px;font-size:13px;color:#FFE082;font-family:Arial,sans-serif;">
+        Bản tin hàng ngày dành cho chị em văn phòng 💕
+      </p>
+      <table cellpadding="0" cellspacing="0" style="margin:0 auto;">
+        <tr>
+          <td bgcolor="#7B5000" style="background-color:#7B5000;border-radius:20px;padding:6px 20px;">
+            <span style="color:#FFFFFF;font-size:13px;font-weight:bold;font-family:Arial,sans-serif;">📅 24/09/2026</span>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- HEADER BOTTOM FLOWER STRIPE -->
+  <tr>
+    <td bgcolor="#FFD54F" style="background-color:#FFD54F;padding:7px 20px;text-align:center;">
+      <p style="margin:0;font-size:18px;letter-spacing:5px;font-family:Arial,sans-serif;">✨ 🌼 💛 🌼 ✨</p>
+    </td>
+  </tr>
+
+  <!-- SECTION BADGE: TIN TỨC -->
+  <tr><td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:12px 22px 6px;"><table cellpadding="0" cellspacing="0"><tr><td bgcolor="#8B6508" style="background-color:#8B6508;border-radius:20px;padding:5px 16px;"><span style="color:#FFFFFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">🌏&nbsp;Tin tức hôm nay</span></td></tr></table></td></tr>
+
+  <!-- ARTICLES -->
+  
+          <tr>
+            <td bgcolor="#FFFFFF" style="background-color:#FFFFFF;padding:18px 24px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#C9950C" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#C9950C;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">1</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#8B6508;line-height:1.4;font-family:Arial,sans-serif;">Phụ kiện làm đẹp Trung Quốc đắt khách tại Mỹ</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">VnExpress - Kinh doanh</span>&nbsp;&nbsp;<a href="https://vnexpress.net/phu-kien-lam-dep-trung-quoc-dat-khach-tai-my-5123988.html" style="color:#C9950C;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+            <tr>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid #C9950C;border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Bất chấp căng thẳng thương mại, các loại tóc nối, móng tay giả của Trung Quốc vẫn được nhập khẩu quy mô lớn vào thị trường Mỹ.</p>
+                  </td>
+                </tr></table>
+              </td>
+            </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>
+          <tr>
+            <td bgcolor="#FFFEF5" style="background-color:#FFFEF5;padding:18px 24px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#C9950C" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#C9950C;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">2</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#8B6508;line-height:1.4;font-family:Arial,sans-serif;">Ông chủ Highlands Coffee chi 2.300 tỷ đồng mua lại vốn từ Jollibee</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">VnExpress - Kinh doanh</span>&nbsp;&nbsp;<a href="https://vnexpress.net/ong-chu-highlands-coffee-chi-2-300-ty-dong-mua-lai-von-tu-jollibee-5124003.html" style="color:#C9950C;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+            <tr>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid #C9950C;border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Ông David Thái, CEO Highlands Coffee, chi 2.300 tỷ đồng mua lại 11% cổ phần từ Jollibee, qua đó nâng sở hữu lên 51% và giành lại quyền chi phối chuỗi cà phê này.</p>
+                  </td>
+                </tr></table>
+              </td>
+            </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>
+          <tr>
+            <td bgcolor="#FFFFFF" style="background-color:#FFFFFF;padding:18px 24px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#C9950C" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#C9950C;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">3</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#8B6508;line-height:1.4;font-family:Arial,sans-serif;">Việt Nam đề nghị JPMorgan hỗ trợ tiếp cận vốn quốc tế</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">VnExpress - Kinh doanh</span>&nbsp;&nbsp;<a href="https://vnexpress.net/viet-nam-de-nghi-jpmorgan-ho-tro-tiep-can-von-quoc-te-5124002.html" style="color:#C9950C;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+            <tr>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid #C9950C;border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Tổng Bí thư, Chủ tịch nước Tô Lâm đề nghị JPMorgan Chase hỗ trợ Chính phủ, ngân hàng và doanh nghiệp Việt tiếp cận các nguồn vốn quốc tế, gồm phát hành trái phiếu.</p>
+                  </td>
+                </tr></table>
+              </td>
+            </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>
+          <tr>
+            <td bgcolor="#FFFEF5" style="background-color:#FFFEF5;padding:18px 24px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#C9950C" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#C9950C;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">4</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#8B6508;line-height:1.4;font-family:Arial,sans-serif;">Lương thực toàn cầu trước áp lực tăng giá vì El Nino</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">VnExpress - Kinh doanh</span>&nbsp;&nbsp;<a href="https://vnexpress.net/luong-thuc-toan-cau-truoc-ap-luc-tang-gia-vi-el-nino-5123872.html" style="color:#C9950C;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+            <tr>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid #C9950C;border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">El Nino năm nay có nguy cơ gây hạn hán tại châu Á và thời tiết cực đoan trên khắp thế giới khiến giá lương thực tăng, theo chuyên gia.</p>
+                  </td>
+                </tr></table>
+              </td>
+            </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>
+          <tr>
+            <td bgcolor="#FFFFFF" style="background-color:#FFFFFF;padding:18px 24px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#C9950C" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#C9950C;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">5</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#8B6508;line-height:1.4;font-family:Arial,sans-serif;">Túi tái sử dụng cũng có thể gây hại môi trường thế nào?</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">VnExpress - Kinh doanh</span>&nbsp;&nbsp;<a href="https://vnexpress.net/tui-tai-su-dung-cung-co-the-gay-hai-moi-truong-the-nao-5123504.html" style="color:#C9950C;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+            <tr>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid #C9950C;border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Sản xuất túi tái sử dụng tốn tài nguyên hơn túi nilon nên nếu tích trữ nhiều mà số lần dùng ít thì chúng lại là &quot;khoản nợ môi trường&quot;.</p>
+                  </td>
+                </tr></table>
+              </td>
+            </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>
+          <tr>
+            <td bgcolor="#FFFEF5" style="background-color:#FFFEF5;padding:18px 24px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#C9950C" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#C9950C;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">6</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#8B6508;line-height:1.4;font-family:Arial,sans-serif;">Tổng công ty Tín Nghĩa (TID) muốn bán 51% vốn chủ đầu tư dự án Cù Lao Tân Vạn</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">Tin Nhanh Chứng Khoán</span>&nbsp;&nbsp;<a href="https://www.tinnhanhchungkhoan.vn/tong-cong-ty-tin-nghia-tid-muon-ban-51-von-chu-dau-tu-du-an-cu-lao-tan-van-post398174.html" style="color:#C9950C;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+            <tr>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid #C9950C;border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">(ĐTCK) Nhận lại 27,54 triệu cổ phiếu chủ đầu tư dự án Cù Lao Tân Vạn từ CTCP May Tiến Phát, CTCP Tổng công ty Tín Nghĩa (mã TID - UPCoM) nhanh chóng rao bán lại toàn bộ số lượng cổ phiếu này với giá khởi điểm 36.350 đồng/cổ phiếu. Tín Nghĩa (TID) phát sinh thêm 1.268 tỷ đồng vốn hợp tác với Cảng Phư</p>
+                  </td>
+                </tr></table>
+              </td>
+            </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>
+          <tr>
+            <td bgcolor="#FFFFFF" style="background-color:#FFFFFF;padding:18px 24px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#C9950C" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#C9950C;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">7</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#8B6508;line-height:1.4;font-family:Arial,sans-serif;">Chứng khoán Smartmind bị phạt 157,5 triệu đồng</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">Tin Nhanh Chứng Khoán</span>&nbsp;&nbsp;<a href="https://www.tinnhanhchungkhoan.vn/chung-khoan-smartmind-bi-phat-1575-trieu-dong-post398172.html" style="color:#C9950C;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+            <tr>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid #C9950C;border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">(ĐTCK) Ngày 23/9/2026, Thanh tra Chứng khoán Nhà nước ban hành Quyết định số 548/QĐ-XPHC về việc xử phạt vi phạm hành chính trong lĩnh vực chứng khoán và thị trường chứng khoán đối với Công ty cổ phần Chứng khoán Smartmind. Capella Quảng Nam bị xử phạt vì vi phạm nghĩa vụ công bố thông tin tài chính</p>
+                  </td>
+                </tr></table>
+              </td>
+            </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>
+          <tr>
+            <td bgcolor="#FFFEF5" style="background-color:#FFFEF5;padding:18px 24px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#C9950C" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#C9950C;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">8</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#8B6508;line-height:1.4;font-family:Arial,sans-serif;">Đến lượt Toyota làm xe điện EREV</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">Tạp chí Tri thức</span>&nbsp;&nbsp;<a href="https://baomoi.com/den-luot-toyota-lam-xe-dien-erev-c56117882.epi" style="color:#C9950C;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+            <tr>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid #C9950C;border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Toyota đặt mục tiêu xuất xưởng 400.000 xe EREV vào năm 2028. Tuy nhiên, số xe điện này không dành cho tất cả thị trường toàn cầu.</p>
+                  </td>
+                </tr></table>
+              </td>
+            </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>
+          <tr>
+            <td bgcolor="#FFFFFF" style="background-color:#FFFFFF;padding:18px 24px 16px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#C9950C" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#C9950C;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">9</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#8B6508;line-height:1.4;font-family:Arial,sans-serif;">Đi xem mắt, người đàn ông vội đứng dậy rời đi vì bí mật của cô gái</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">Tạp chí SaoStar</span>&nbsp;&nbsp;<a href="https://baomoi.com/di-xem-mat-nguoi-dan-ong-voi-dung-day-roi-di-vi-bi-mat-cua-co-gai-c56117844.epi" style="color:#C9950C;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+            <tr>
+              <td colspan="2" style="padding:10px 0 0 42px;">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                  <td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:10px 14px;border-left:3px solid #C9950C;border-radius:0 4px 4px 0;">
+                    <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Người đàn ông có buổi gặp mặt với một cô gái thông qua mai mối.</p>
+                  </td>
+                </tr></table>
+              </td>
+            </tr>
+              </table>
+            </td>
+          </tr>
+          <tr><td style="padding:0;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+            <td height="1" bgcolor="#FFE082" style="background-color:#FFE082;font-size:0;line-height:0;">&nbsp;</td>
+          </tr></table></td></tr>
+
+  <!-- GÓC ĐÀ NẴNG -->
+  
+  <tr><td bgcolor="#E0F2F1" style="background-color:#E0F2F1;padding:10px 0;text-align:center;font-size:20px;letter-spacing:5px;font-family:Arial,sans-serif;">🌊 ☀️ 🏖️ ☀️ 🌊</td></tr>
+  <tr><td bgcolor="#E0F2F1" style="background-color:#E0F2F1;padding:12px 22px 6px;"><table cellpadding="0" cellspacing="0"><tr><td bgcolor="#00897B" style="background-color:#00897B;border-radius:20px;padding:5px 16px;"><span style="color:#FFFFFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">🏖️&nbsp;Góc Đà Nẵng hôm nay</span></td></tr></table></td></tr>
+  <tr><td bgcolor="#E0F2F1" style="background-color:#E0F2F1;padding:14px 24px 20px;">
+    
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:14px;">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#00897B" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#00897B;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">1</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#00897B;line-height:1.4;font-family:Arial,sans-serif;">Mở rộng hệ sinh thái đổi mới sáng tạo Đà Nẵng từ &#x27;thủ phủ&#x27; công nghệ Silicon Valley</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">Chuyên trang Công an Đà Nẵng - Báo Công an Nhân dân</span>&nbsp;&nbsp;<a href="https://baomoi.com/mo-rong-he-sinh-thai-doi-moi-sang-tao-da-nang-tu-thu-phu-cong-nghe-silicon-valley-c56117947.epi" style="color:#00897B;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+                <tr><td colspan="2" style="padding:8px 0 0 42px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                    <td bgcolor="#E0F2F1" style="background-color:#E0F2F1;padding:10px 14px;border-left:3px solid #00897B;border-radius:0 4px 4px 0;">
+                      <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Tối 21-9, trong khuôn khổ chuyến công tác tại Hoa Kỳ, Đoàn công tác thành phố Đà Nẵng do Phó Bí thư Thành ủy, Chủ tịch UBND thành phố Nguyễn Mạnh Hùng làm Trưởng đoàn đã tham dự Tọa đàm “Kết nối Mạng lưới đổi mới sáng tạo và Chuyên gia tại Silicon Valley nhằm phát triển các ngành công nghệ chiến lượ</p>
+                    </td>
+                  </tr></table>
+                </td></tr>
+              </table>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:14px;">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#00897B" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#00897B;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">2</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#00897B;line-height:1.4;font-family:Arial,sans-serif;">Đà Nẵng kết nối với Silicon Valley trong phát triển các ngành công nghệ chiến lược</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">Tạp chí VnEconomy</span>&nbsp;&nbsp;<a href="https://baomoi.com/da-nang-ket-noi-voi-silicon-valley-trong-phat-trien-cac-nganh-cong-nghe-chien-luoc-c56114340.epi" style="color:#00897B;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+                <tr><td colspan="2" style="padding:8px 0 0 42px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                    <td bgcolor="#E0F2F1" style="background-color:#E0F2F1;padding:10px 14px;border-left:3px solid #00897B;border-radius:0 4px 4px 0;">
+                      <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Trong bối cảnh công nghệ số đang ngày càng định hình lợi thế cạnh tranh của các quốc gia và đô thị, Đà Nẵng đã có những bước đi mạnh mẽ nhằm kết nối nguồn lực con người, công nghệ và vốn với Silicon Valley...</p>
+                    </td>
+                  </tr></table>
+                </td></tr>
+              </table>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:14px;">
+                <tr>
+                  <td width="34" valign="top" style="padding-right:12px;padding-top:1px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0"><tr>
+                      <td bgcolor="#00897B" width="28" height="28" align="center" valign="middle"
+                          style="background-color:#00897B;width:28px;height:28px;border-radius:14px;text-align:center;vertical-align:middle;">
+                        <span style="color:#FFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">3</span>
+                      </td>
+                    </tr></table>
+                  </td>
+                  <td valign="top">
+                    <p style="margin:0 0 5px;font-size:15px;font-weight:bold;color:#00897B;line-height:1.4;font-family:Arial,sans-serif;">Trung tâm Đổi mới sáng tạo Đà Nẵng hợp tác với nhiều đối tác ở Silicon Valley</p>
+                    <p style="margin:0;font-family:Arial,sans-serif;"><span style="color:#aaa;font-size:11px;">VietTimes</span>&nbsp;&nbsp;<a href="https://baomoi.com/trung-tam-doi-moi-sang-tao-da-nang-hop-tac-voi-nhieu-doi-tac-o-silicon-valley-c56110078.epi" style="color:#00897B;text-decoration:none;font-size:11px;font-weight:bold;">&#128279; Đọc thêm &#8594;</a></p>
+                  </td>
+                </tr>
+                
+                <tr><td colspan="2" style="padding:8px 0 0 42px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+                    <td bgcolor="#E0F2F1" style="background-color:#E0F2F1;padding:10px 14px;border-left:3px solid #00897B;border-radius:0 4px 4px 0;">
+                      <p style="margin:0;font-size:13px;color:#333;line-height:1.7;">Các thỏa thuận hướng tới thúc đẩy mạng lưới kết nối giữa Đà Nẵng với Silicon Valley, tăng cường tiếp cận nguồn lực đầu tư, chuyên gia, công nghệ và thị trường quốc tế cho hệ sinh thái khởi nghiệp đổi mới sáng tạo của TP.</p>
+                    </td>
+                  </tr></table>
+                </td></tr>
+              </table>
+  </td></tr>
+
+  <!-- BẢN TIN TÀI CHÍNH -->
+  
+  <tr><td bgcolor="#E3F2FD" style="background-color:#E3F2FD;padding:10px 0;text-align:center;font-size:20px;letter-spacing:5px;font-family:Arial,sans-serif;">💰 📈 💵 📈 💰</td></tr>
+  <tr><td bgcolor="#E3F2FD" style="background-color:#E3F2FD;padding:12px 22px 6px;"><table cellpadding="0" cellspacing="0"><tr><td bgcolor="#1565C0" style="background-color:#1565C0;border-radius:20px;padding:5px 16px;"><span style="color:#FFFFFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">💰&nbsp;Bản tin tài chính hôm nay</span></td></tr></table></td></tr>
+  <tr><td bgcolor="#E3F2FD" style="background-color:#E3F2FD;padding:16px 24px 20px;">
+
+    <!-- Exchange rates -->
+    <p style="margin:0 0 8px;font-size:13px;font-weight:bold;color:#1565C0;font-family:Arial,sans-serif;">💱 Tỷ giá hôm nay</p>
+    <table cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr style="border-bottom:2px solid #1565C0;">
+          <th style="padding:4px 10px 4px 0;font-size:11px;color:#555;text-align:left;font-family:Arial,sans-serif;">Đồng tiền</th>
+          <th style="padding:4px 8px;font-size:11px;color:#1B5E20;text-align:right;font-family:Arial,sans-serif;">Mua vào</th>
+          <th style="padding:4px 0 4px 8px;font-size:11px;color:#B71C1C;text-align:right;font-family:Arial,sans-serif;">Bán ra</th>
+        </tr>
+      </thead>
+      <tbody><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#333;font-family:Arial,sans-serif;white-space:nowrap;">🇺🇸 USD</td><td style="padding:5px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">25,780.00</td><td style="padding:5px 0 5px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">26,190.00</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#333;font-family:Arial,sans-serif;white-space:nowrap;">🇪🇺 EUR</td><td style="padding:5px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">28,904.01</td><td style="padding:5px 0 5px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">30,428.37</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#333;font-family:Arial,sans-serif;white-space:nowrap;">🇯🇵 JPY</td><td style="padding:5px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">158.97</td><td style="padding:5px 0 5px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">169.94</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#333;font-family:Arial,sans-serif;white-space:nowrap;">🇨🇳 CNY</td><td style="padding:5px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">3,779.06</td><td style="padding:5px 0 5px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">3,939.55</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#333;font-family:Arial,sans-serif;white-space:nowrap;">🇬🇧 GBP</td><td style="padding:5px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">33,651.68</td><td style="padding:5px 0 5px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">35,080.80</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#333;font-family:Arial,sans-serif;white-space:nowrap;">🇦🇺 AUD</td><td style="padding:5px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">17,941.82</td><td style="padding:5px 0 5px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">18,703.77</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#333;font-family:Arial,sans-serif;white-space:nowrap;">🇸🇬 SGD</td><td style="padding:5px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">19,813.07</td><td style="padding:5px 0 5px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">20,695.85</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#333;font-family:Arial,sans-serif;white-space:nowrap;">🇰🇷 KRW</td><td style="padding:5px 8px;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">16.49</td><td style="padding:5px 0 5px 8px;font-size:13px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">19.88</td></tr></tbody>
+    </table>
+    <p style="margin:4px 0 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">Cập nhật: 7:26 AM · Nguồn: Vietcombank (tham khảo)</p>
+
+    <!-- Gold + silver prices -->
+    <p style="margin:14px 0 8px;font-size:13px;font-weight:bold;color:#1565C0;font-family:Arial,sans-serif;">🥇 Giá vàng &amp; bạc hôm nay</p>
+    <table cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
+      <thead>
+        <tr style="border-bottom:2px solid #1565C0;">
+          <th style="padding:4px 10px 4px 0;font-size:11px;color:#555;text-align:left;font-family:Arial,sans-serif;">Loại</th>
+          <th style="padding:4px 8px;font-size:11px;color:#1B5E20;text-align:right;font-family:Arial,sans-serif;">Mua vào</th>
+          <th style="padding:4px 4px;font-size:11px;color:#B71C1C;text-align:right;font-family:Arial,sans-serif;">Bán ra</th>
+          <th style="padding:4px 0;font-size:11px;color:#aaa;text-align:right;font-family:Arial,sans-serif;">Biến động</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">🥇 SJC 1 lượng</td><td style="padding:5px 8px;font-size:12px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">142.50 triệu</td><td style="padding:5px 4px;font-size:12px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">145.50 triệu</td><td style="padding:5px 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;white-space:nowrap;">&nbsp;triệu đ/lượng</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">💍 SJC nhẫn tròn</td><td style="padding:5px 8px;font-size:12px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">142.00 triệu</td><td style="padding:5px 4px;font-size:12px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">145.00 triệu</td><td style="padding:5px 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;white-space:nowrap;">&nbsp;triệu đ/lượng</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">💛 DOJI nhẫn tròn</td><td style="padding:5px 8px;font-size:12px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">142.00 triệu</td><td style="padding:5px 4px;font-size:12px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">146.00 triệu</td><td style="padding:5px 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;white-space:nowrap;">&nbsp;triệu đ/lượng</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">✨ PNJ nhẫn tròn 24K</td><td style="padding:5px 8px;font-size:12px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">142.20 triệu</td><td style="padding:5px 4px;font-size:12px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">145.20 triệu</td><td style="padding:5px 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;white-space:nowrap;">&nbsp;triệu đ/lượng</td></tr><tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">🌍 Vàng thế giới</td><td style="padding:5px 8px;font-size:12px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">4,287.6</td><td style="padding:5px 4px;font-size:12px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">-</td><td style="padding:5px 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;white-space:nowrap;">&nbsp;USD</td></tr>
+        <tr style="border-bottom:1px solid #BBDEFB;"><td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">🥈 Bạc mỹ nghệ Phú Quý 99.9</td><td style="padding:5px 8px;font-size:12px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;">2.207</td><td style="padding:5px 4px;font-size:12px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;">2.596</td><td style="padding:5px 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">nghìn đ/chỉ</td></tr>
+      </tbody>
+    </table>
+    <p style="margin:4px 0 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">Cập nhật: 07:30 2026-09-24 · Nguồn: vang.today</p>
+    <p style="margin:2px 0 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">📌 Bạc: giavang.org · Đơn vị vàng: triệu đ/lượng</p>
+
+    <!-- Crypto -->
+    
+    <p style="margin:14px 0 8px;font-size:13px;font-weight:bold;color:#1565C0;font-family:Arial,sans-serif;">₿ Crypto hôm nay</p>
+    <table cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
+      <tr style="border-bottom:1px solid #BBDEFB;">
+        <td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">₿ Bitcoin (BTC)</td>
+        <td style="padding:5px 0;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;">84,331 USD</td>
+        <td style="padding:5px 0 5px 8px;font-size:11px;color:#888;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">≈ 2.194 tỷ</td>
+      </tr>
+      <tr style="border-bottom:1px solid #BBDEFB;">
+        <td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">Ξ Ethereum (ETH)</td>
+        <td style="padding:5px 0;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;">2,688 USD</td>
+        <td style="padding:5px 0 5px 8px;font-size:11px;color:#888;font-family:Arial,sans-serif;text-align:right;"></td>
+      </tr>
+      <tr>
+        <td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">💵 USDT/VNĐ</td>
+        <td style="padding:5px 0;font-size:13px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;">26,007 đ</td>
+        <td style="padding:5px 0 5px 8px;font-size:11px;color:#888;font-family:Arial,sans-serif;text-align:right;">tỷ giá phi chính thức</td>
+      </tr>
+    </table>
+    <p style="margin:4px 0 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;">Nguồn: CoinGecko</p>
+
+  </td></tr>
+
+  <!-- CHÍNH SÁCH & PHÁP LUẬT -->
+  
+
+  <!-- VIRAL MXH -->
+  
+
+  <!-- MUSIC + FASHION -->
+  
+
+  <!-- FOOD OF THE DAY -->
+  
+
+  <!-- TIPS -->
+  
+
+  <!-- QUOTE -->
+  
+
+  <!-- TRAI ĐẸP -->
+  
+  <tr><td bgcolor="#FFFFF0" style="background-color:#FFFFF0;padding:10px 0;text-align:center;font-size:20px;letter-spacing:5px;font-family:Arial,sans-serif;">💛 😍 💛 😍 💛</td></tr>
+  <tr><td bgcolor="#FFF9E6" style="background-color:#FFF9E6;padding:12px 22px 6px;"><table cellpadding="0" cellspacing="0"><tr><td bgcolor="#F9A825" style="background-color:#F9A825;border-radius:20px;padding:5px 16px;"><span style="color:#FFFFFF;font-size:12px;font-weight:bold;font-family:Arial,sans-serif;">🌟&nbsp;Crush Hôm Nay</span></td></tr></table></td></tr>
+  <tr><td bgcolor="#FFFDE7" style="background-color:#FFFDE7;padding:16px 24px 22px;border-top:3px solid #F9A825;">
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
+      <td width="158" valign="top" style="padding-right:16px;text-align:center;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/1/1f/Jasper_Liu_20200901.jpg" alt="Lưu Dĩ Hào (Jasper Liu)" referrerpolicy="no-referrer" width="140" height="190" style="width:140px;max-width:140px;height:auto;border-radius:12px;display:block;margin:0 auto 10px;box-shadow:0 4px 14px rgba(139,101,8,.20);border:3px solid #FFE082;outline:none;" />
+        <p style="margin:6px 0 0;text-align:center;"><span style="background:#C9950C;color:#fff;font-size:10px;padding:3px 10px;border-radius:12px;margin-right:4px;margin-bottom:4px;display:inline-block;font-family:Arial,sans-serif;">Đài Loan</span> <span style="background:#C9950C;color:#fff;font-size:10px;padding:3px 10px;border-radius:12px;margin-right:4px;margin-bottom:4px;display:inline-block;font-family:Arial,sans-serif;">diễn viên</span> <span style="background:#C9950C;color:#fff;font-size:10px;padding:3px 10px;border-radius:12px;margin-right:4px;margin-bottom:4px;display:inline-block;font-family:Arial,sans-serif;">người mẫu</span></p>
+      </td>
+      <td valign="top">
+        <p style="margin:0 0 2px;font-size:20px;font-weight:bold;color:#8B6508;font-family:Arial,sans-serif;">💗 Lưu Dĩ Hào (Jasper Liu)</p>
+        <p style="margin:0 0 6px;font-size:12px;color:#aaa;font-family:Arial,sans-serif;">Đài Loan 🇹🇼 &nbsp;|&nbsp; Diễn viên, người mẫu</p>
+        <table cellpadding="0" cellspacing="0" style="margin:8px 0;"><tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>Ngày sinh</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">01/04/1988</td></tr><tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>Chiều cao</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">1m86</td></tr><tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>Cân nặng</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">75 kg</td></tr><tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>Nhóm máu</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">B</td></tr><tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>Cung HĐ</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">Bạch Dương ♈</td></tr><tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>Màu yêu thích</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">Trắng &amp; Xám</td></tr><tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>Con số may</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">1</td></tr><tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>Tình trạng</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">Độc thân 💫</td></tr><tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;font-family:Arial,sans-serif;white-space:nowrap;"><strong>Sở thích</strong></td><td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">Thể thao ngoài trời, mô tô, gym, thời trang</td></tr></table>
+        <p style="margin:8px 0;font-size:13px;color:#333;line-height:1.75;font-family:Arial,sans-serif;">Lưu Dĩ Hào sinh ngày 01/04/1988, cao 1m86 — diễn viên và người mẫu Đài Loan với chiều cao lý tưởng. Khuôn mặt điền trai đàn ông trưởng thành, phong thái tự tin phóng khoáng. &#x27;Before We Get Married&#x27; có lượng fan VN rất lớn. An toàn để thích!</p>
+        <p style="margin:6px 0 2px;font-size:11px;color:#C9950C;font-weight:bold;font-family:Arial,sans-serif;">🏆 Tác phẩm nổi bật:</p><p style="margin:0 0 4px;font-size:12px;color:#555;font-family:Arial,sans-serif;">&#x27;Before We Get Married&#x27; (2019 — fan VN mê điên đảo), &#x27;Dear Lemon Chicken&#x27;</p>
+        <p style="margin:6px 0 2px;font-size:11px;color:#F9A825;font-weight:bold;font-family:Arial,sans-serif;">🏅 Giải thưởng:</p><p style="margin:0 0 8px;font-size:12px;color:#555;font-family:Arial,sans-serif;">Golden Bell Awards đề cử, Asian Television Awards đề cử</p>
+      </td>
+    </tr></table>
+  </td></tr>
+
+  <!-- FOOTER -->
+  <tr>
+    <td bgcolor="#8B6508" style="background-color:#8B6508;padding:16px 30px 12px;text-align:center;">
+      <p style="margin:0 0 6px;font-size:20px;letter-spacing:5px;font-family:Arial,sans-serif;">✨ 💛 ✨ 💛 ✨</p>
+      <p style="margin:0 0 4px;font-size:13px;color:#FFE082;font-family:Arial,sans-serif;">
+        Chúc chị em một ngày vui vẻ và năng suất! ✨
+      </p>
+      <p style="margin:0 0 10px;font-size:11px;color:#FFD54F;font-family:Arial,sans-serif;">
+        TTXHXD — Tổng hợp bởi Groq AI &amp; nguồn tin VN 💌
+      </p>
+      <p style="margin:0;font-size:18px;letter-spacing:5px;font-family:Arial,sans-serif;border-radius:0 0 14px 14px;">🌼 ✨ 🌼 ✨ 🌼</p>
+    </td>
+  </tr>
+
+</table>
+
+</td></tr>
+</table>
+</body>
+</html>
