@@ -397,9 +397,7 @@ def _groq_music_fashion_trend(date_str, music_articles, fashion_articles, chart=
         "- Chỉ dùng thông tin từ các bài có sẵn — KHÔNG bịa thêm chi tiết, số liệu, view\n"
         "- Dùng MREF[N] cho âm nhạc, FREF[N] cho thời trang\n"
         "- Tiếng Việt sinh động, có thể thêm emoji\n"
-        "- Chỉ 2 item, không thêm gì khác\n"
-        + ("- Sau 2 item, thêm 1 dòng: '🎧 **Top 3 Apple Music VN:** ' + 3 bài đầu bảng xếp hạng (tên — ca sĩ), "
-           "chép đúng như dữ liệu" if chart else "")
+        "- Chỉ 2 item, không thêm gì khác"
     )
     raw = _llm_call(prompt, max_tokens=700, temperature=0.8)
 
@@ -411,6 +409,9 @@ def _groq_music_fashion_trend(date_str, music_articles, fashion_articles, chart=
 
     raw = _re.sub(r"MREF\[(\d+)\]", _replace_mref, raw)
     raw = _re.sub(r"FREF\[(\d+)\]", _replace_fref, raw)
+    if raw and chart:  # rendered from data, not by the LLM, so it is always exact
+        raw += ("\n\n🎧 **Top 3 Apple Music Việt Nam hôm nay:** " +
+                " · ".join(f"#{c['rank']} [{c['title']} — {c['artist']}]({c['url']})" for c in chart[:3]))
     return raw
 
 
