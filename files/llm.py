@@ -3,7 +3,7 @@ llm.py - LLM provider chain with model auto-discovery and per-run health stats.
 
 Order is controlled by LLM_ORDER (default "groq,gemini,fallback"):
   groq     — GROQ_API_KEY; model from GROQ_MODEL or auto-picked from /models
-  gemini   — GEMINI_API_KEY; GEMINI_MODEL (default gemini-2.5-flash)
+  gemini   — GEMINI_API_KEY; GEMINI_MODEL (default gemini-flash-latest)
   fallback — any OpenAI-compatible endpoint (e.g. OpenRouter, a paid tier):
              FALLBACK_LLM_URL (…/chat/completions), FALLBACK_LLM_KEY, FALLBACK_LLM_MODEL
 
@@ -153,7 +153,7 @@ def _gemini(prompt, max_tokens, temperature):
     key = os.environ.get("GEMINI_API_KEY", "")
     if not key:
         return ""
-    model = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+    model = os.environ.get("GEMINI_MODEL") or "gemini-flash-latest"
     payload = {"contents": [{"parts": [{"text": prompt}]}],
                "generationConfig": {"maxOutputTokens": max_tokens + 512, "temperature": temperature,
                                     "thinkingConfig": {"thinkingBudget": 512}}}
