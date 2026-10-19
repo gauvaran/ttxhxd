@@ -10,6 +10,7 @@ import re
 import time
 import logging
 import datetime
+from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.header import Header
@@ -92,24 +93,28 @@ def md_to_html(text):
     return text
 
 
+GUY_CID = "crush-today"
+
+
 def _guy_img_src(image_url, embed=True):
-    """Return img src: base64 data URI (embed=True, for email/PDF) or raw URL (web)."""
+    """img src for the guy photo.
+    embed=True  → base64 data URI (PDF rendering only — Gmail strips data: URIs)
+    embed="cid" → cid: reference; send_email attaches the file as an inline part
+    embed=False → relative path served by GitHub/Cloudflare Pages (web)"""
     import base64 as _b64
-    if not image_url:
+    if not image_url or not image_url.startswith("assets/"):
+        return ""  # never hotlink remote images (Wikimedia rate-limits / 404s)
+    local = os.path.join(DOCS_DIR, image_url)
+    if not os.path.exists(local):
+        logging.warning(f"Guy image missing: {image_url}")
         return ""
-    if image_url.startswith("assets/"):
-        local = os.path.join(DOCS_DIR, image_url)
-        if not os.path.exists(local):
-            return ""
-        if embed:
-            if os.path.getsize(local) > 900_000:
-                return ""  # skip very large images in email
-            ext = image_url.rsplit(".", 1)[-1].lower()
-            mime = "image/jpeg" if ext in ("jpg", "jpeg") else f"image/{ext}"
-            data = _b64.b64encode(open(local, "rb").read()).decode()
-            return f"data:{mime};base64,{data}"
-        return image_url  # web: relative URL served by Cloudflare
-    return image_url  # remote URL fallback
+    if embed == "cid":
+        return f"cid:{GUY_CID}"
+    if embed:
+        ext = image_url.rsplit(".", 1)[-1].lower()
+        mime = "image/jpeg" if ext in ("jpg", "jpeg") else f"image/{ext}"
+        return f"data:{mime};base64,{_b64.b64encode(open(local, 'rb').read()).decode()}"
+    return image_url
 
 
 def build_html(data, embed_images=True):  # noqa: C901
@@ -225,10 +230,20 @@ def build_html(data, embed_images=True):  # noqa: C901
                 {summary_block}
               </table>"""
 
+        w = data.get("weather") or {}
+        weather_html = (
+            f'<p style="margin:0 0 12px;padding:10px 14px;background:#FFFFFF;border-radius:10px;'
+            f'font-size:13px;color:#00695C;font-family:Arial,sans-serif;line-height:1.6;">'
+            f'{w["emoji"]} <strong>Thời tiết Đà Nẵng:</strong> {h(w["label"])}, {w["tmin"]}–{w["tmax"]}°C'
+            + (f', khả năng mưa {w["rain"]}%' if w.get("rain") is not None else "")
+            + f'<br><span style="color:#555;">{h(w["tip"])}</span>'
+            f'<span style="color:#aaa;font-size:10px;"> · Nguồn: {h(w["source"])}</span></p>'
+        ) if w else ""
         danang_html = f"""
   {_sticker("🌊 ☀️ 🏖️ ☀️ 🌊", C_TEAL_BG)}
   {_badge("🏖️", "Góc Đà Nẵng hôm nay", C_TEAL, C_TEAL_BG)}
   <tr><td bgcolor="{C_TEAL_BG}" style="background-color:{C_TEAL_BG};padding:14px 24px 20px;">
+    {weather_html}
     {danang_items}
   </td></tr>"""
 
@@ -471,31 +486,35 @@ def build_html(data, embed_images=True):  # noqa: C901
                 return ""
             return (f'<tr><td style="font-size:11px;color:#aaa;padding:2px 8px 2px 0;'
                     f'font-family:Arial,sans-serif;white-space:nowrap;"><strong>{label}</strong></td>'
-                    f'<td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">{h(val)}</td></tr>')
+                    f'<td style="font-size:12px;color:#444;padding:2px 0;font-family:Arial,sans-serif;">{h(str(val))}</td></tr>')
 
+        bday = guy.get("birthday", "")
+        if bday and guy.get("age"):
+            bday = f'{bday} ({guy["age"]} tuổi)'
         info_table = (
             '<table cellpadding="0" cellspacing="0" style="margin:8px 0;">'
-            + _info_row("Ngày sinh", guy.get("birthday") or (guy.get("born") and f"Năm {guy['born']}") or "")
+            + _info_row("Ngày sinh", bday)
             + _info_row("Chiều cao", guy.get("height"))
-            + _info_row("Cân nặng", guy.get("weight"))
-            + _info_row("Nhóm máu", guy.get("blood_type"))
             + _info_row("Cung HĐ", guy.get("zodiac"))
-            + _info_row("Màu yêu thích", guy.get("fav_color"))
-            + _info_row("Con số may", guy.get("fav_number"))
-            + _info_row("Tình trạng", guy.get("status"))
-            + _info_row("Sở thích", guy.get("hobbies"))
             + "</table>"
         )
-        works_html = ""
-        if guy.get("top_works"):
-            works_html = (f'<p style="margin:6px 0 2px;font-size:11px;color:{C_ACCENT};font-weight:bold;'
-                          f'font-family:Arial,sans-serif;">🏆 Tác phẩm nổi bật:</p>'
-                          f'<p style="margin:0 0 4px;font-size:12px;color:#555;font-family:Arial,sans-serif;">{h(guy["top_works"])}</p>')
-        awards_html = ""
-        if guy.get("awards"):
-            awards_html = (f'<p style="margin:6px 0 2px;font-size:11px;color:{C_GOLD};font-weight:bold;'
-                           f'font-family:Arial,sans-serif;">🏅 Giải thưởng:</p>'
-                           f'<p style="margin:0 0 8px;font-size:12px;color:#555;font-family:Arial,sans-serif;">{h(guy["awards"])}</p>')
+        bday_banner = (f'<p style="margin:0 0 8px;padding:6px 12px;background:#FFE0EC;border-radius:16px;'
+                       f'font-size:13px;color:#C2185B;font-weight:bold;font-family:Arial,sans-serif;">'
+                       f'🎂 Hôm nay là sinh nhật anh ấy — chúc mừng sinh nhật {h(guy["name"].split("(")[0].strip())}! 🎉</p>'
+                       ) if guy.get("birthday_today") else ""
+        hot = guy.get("hot_news")
+        works_html = (f'<p style="margin:6px 0 2px;font-size:11px;color:{C_ACCENT};font-weight:bold;'
+                      f'font-family:Arial,sans-serif;">🔥 Đang hot vì:</p>'
+                      f'<p style="margin:0 0 4px;font-size:12px;color:#555;font-family:Arial,sans-serif;">'
+                      f'<a href="{h(hot["link"], quote=True)}" style="color:{C_PRIMARY};">{h(hot["title"])}</a>'
+                      f' <span style="color:#aaa;">({h(hot["publisher"])})</span></p>') if hot else ""
+        src_bits = []
+        if guy.get("wiki_url"):
+            src_bits.append(f'<a href="{h(guy["wiki_url"], quote=True)}" style="color:#aaa;">Wikipedia</a>')
+        if guy.get("image_credit"):
+            src_bits.append(f'Ảnh: {h(guy["image_credit"])} / Wikimedia Commons')
+        awards_html = (f'<p style="margin:8px 0 0;font-size:10px;color:#aaa;font-family:Arial,sans-serif;">'
+                       f'Nguồn: {" · ".join(src_bits)}</p>') if src_bits else ""
 
         guy_html = f"""
   {_sticker("💛 😍 💛 😍 💛", "#FFFFF0")}
@@ -509,6 +528,7 @@ def build_html(data, embed_images=True):  # noqa: C901
       <td valign="top">
         <p style="margin:0 0 2px;font-size:20px;font-weight:bold;color:{C_PRIMARY};font-family:Arial,sans-serif;">💗 {h(guy["name"])}</p>
         <p style="margin:0 0 6px;font-size:12px;color:#aaa;font-family:Arial,sans-serif;">{h(guy.get("origin",""))} &nbsp;|&nbsp; {h(guy.get("job",""))}</p>
+        {bday_banner}
         {info_table}
         <p style="margin:8px 0;font-size:13px;color:#333;line-height:1.75;font-family:Arial,sans-serif;">{h(guy.get("intro",""))}</p>
         {works_html}
@@ -715,7 +735,9 @@ def build_plain_text(data):
     return "\n".join(lines)
 
 
-def send_email(subject, html, plain_text):
+def send_email(subject, html, plain_text, inline_images=None, recipients=None):
+    """inline_images: {cid: local_path} attached as multipart/related parts.
+    recipients: override the BCC list (used for admin alerts)."""
     if not EMAIL_PASSWORD:
         logging.error("EMAIL_PASSWORD not set")
         return False
@@ -729,17 +751,28 @@ def send_email(subject, html, plain_text):
         from_header = EMAIL_FROM
 
     bcc_raw  = f"{EMAIL_TO},{EMAIL_BCC}" if EMAIL_TO else EMAIL_BCC
-    bcc_list = [b.strip() for b in bcc_raw.split(",") if b.strip()]
+    bcc_list = recipients or [b.strip() for b in bcc_raw.split(",") if b.strip()]
 
-    msg = MIMEMultipart("alternative")
+    alt = MIMEMultipart("alternative")
+    alt.attach(MIMEText(plain_text, "plain", "utf-8"))
+    alt.attach(MIMEText(html, "html", "utf-8"))
+    if inline_images:
+        msg = MIMEMultipart("related")
+        msg.attach(alt)
+        for cid, path in inline_images.items():
+            with open(path, "rb") as f:
+                ext = path.rsplit(".", 1)[-1].lower()
+                part = MIMEImage(f.read(), _subtype={"jpg": "jpeg"}.get(ext, ext))
+            part.add_header("Content-ID", f"<{cid}>")
+            part.add_header("Content-Disposition", "inline", filename=os.path.basename(path))
+            msg.attach(part)
+    else:
+        msg = alt
     msg["Subject"] = Header(subject, "utf-8")
     msg["From"]    = from_header
     msg["To"]      = "undisclosed-recipients:;"
     # Do NOT add Bcc header — recipients would see the full list.
     # BCC is handled by the SMTP envelope (RCPT TO) in sendmail() below.
-
-    msg.attach(MIMEText(plain_text, "plain", "utf-8"))
-    msg.attach(MIMEText(html, "html", "utf-8"))
 
     for attempt in range(1, MAX_RETRIES + 1):
         logging.info(f"Send attempt {attempt}/{MAX_RETRIES}...")
@@ -943,6 +976,67 @@ def save_web_pages(data):
     logging.info(f"Web pages saved: docs/{today}.html")
 
 
+REQUIRED_AI_SECTIONS = ["viral", "music_fashion", "food_of_day",
+                        "tip_beauty", "tip_exercise", "tip_health"]
+
+
+def health_check(data):
+    """Return a list of problems; an empty list means the issue is fit to send."""
+    problems = []
+    stats = data.get("llm_stats", {})
+    if stats.get("disabled"):
+        for prov, why in stats["disabled"].items():
+            problems.append(f"LLM provider '{prov}' disabled: {why}")
+    empty = [k for k in REQUIRED_AI_SECTIONS if not (data.get(k) or "").strip()]
+    if empty:
+        problems.append(f"Empty AI sections: {', '.join(empty)}")
+    arts = data.get("articles", [])
+    ai_ok = sum(1 for a in arts if a.get("ai_summary"))
+    if len(arts) < 5:
+        problems.append(f"Only {len(arts)} main articles (need >= 5)")
+    if arts and ai_ok < len(arts) * 0.6:
+        problems.append(f"Only {ai_ok}/{len(arts)} articles got an AI summary")
+    if not data.get("danang_articles"):
+        problems.append("No fresh Đà Nẵng article")
+    guy = data.get("guy") or {}
+    if not guy:
+        problems.append("No guy of the day")
+    elif not _guy_img_src(guy.get("image_url", ""), embed=False):
+        problems.append(f"Guy image missing for {guy.get('name')}: {guy.get('image_url')}")
+    # Problems that should block sending; data-source hiccups (Đà Nẵng) only warn.
+    blocking = [p for p in problems if not p.startswith("No fresh Đà Nẵng")
+                and not p.startswith("LLM provider")]
+    return problems, blocking
+
+
+def _step_summary(data, problems):
+    path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not path:
+        return
+    stats = data.get("llm_stats", {})
+    rows = [f"| {k} | {len(data.get(k) or '')} chars |" for k in REQUIRED_AI_SECTIONS + ["policy"]]
+    with open(path, "a", encoding="utf-8") as f:
+        f.write(f"## TTXHXD {data.get('date')}\n\n"
+                f"- Articles: {len(data.get('articles', []))} "
+                f"(AI summaries: {sum(1 for a in data.get('articles', []) if a.get('ai_summary'))})\n"
+                f"- Đà Nẵng: {len(data.get('danang_articles', []))}\n"
+                f"- Guy: {(data.get('guy') or {}).get('name')}\n"
+                f"- LLM: ok={stats.get('ok')} fail={stats.get('fail')} "
+                f"groq_model={stats.get('groq_model')} by={stats.get('by_provider')}\n\n"
+                "| Section | Size |\n|---|---|\n" + "\n".join(rows) + "\n\n"
+                + ("### Problems\n" + "\n".join(f"- {p}" for p in problems) if problems else "✅ Healthy")
+                + "\n")
+
+
+def _alert_admin(subject, problems):
+    match = re.match(r'^.*?<(.+?)>$', EMAIL_FROM)
+    admin = os.environ.get("ADMIN_EMAIL") or (match.group(1) if match else EMAIL_FROM)
+    if not (admin and EMAIL_PASSWORD) or os.environ.get("NO_EMAIL"):
+        return
+    body = "Bản tin KHÔNG được gửi cho độc giả vì:\n\n" + "\n".join(f"- {p}" for p in problems)
+    send_email(f"⚠️ [TTXHXD] {subject}", f"<pre>{h(body)}</pre>", body, recipients=[admin])
+
+
 def main():
     logging.info("=== TTXHXD Bot started ===")
 
@@ -950,24 +1044,39 @@ def main():
     data = fetch_content()
     if not data or not data.get("articles"):
         logging.error("Failed to fetch content. Aborting.")
+        _alert_admin("Không lấy được tin", ["fetch_content returned no articles"])
         sys.exit(1)
-    logging.info(f"Fetched {len(data['articles'])} articles")
+    logging.info(f"Fetched {len(data['articles'])} articles; LLM stats: {data.get('llm_stats')}")
 
-    html       = build_html(data)
-    plain_text = build_plain_text(data)
+    problems, blocking = health_check(data)
+    _step_summary(data, problems)
+    for p in problems:
+        logging.warning(f"HEALTH: {p}")
+    if blocking and not os.environ.get("FORCE_SEND"):
+        logging.error("Health gate failed — not sending, not publishing. Set FORCE_SEND=1 to override.")
+        _alert_admin(f"Bản tin {data['date']} bị chặn", problems)
+        sys.exit(2)
+
     subject    = f"TTXHXD 🌸 Bản tin ngày {data['date']}"
+    plain_text = build_plain_text(data)
+    email_html = build_html(data, embed_images="cid")
+    inline = {}
+    guy_img = (data.get("guy") or {}).get("image_url", "")
+    if "cid:" in email_html and guy_img:
+        inline[GUY_CID] = os.path.join(DOCS_DIR, guy_img)
 
     if os.environ.get("NO_EMAIL"):
         logging.info("NO_EMAIL set — skipping email send")
     elif not EMAIL_PASSWORD:
         logging.info("No EMAIL_PASSWORD — skipping email send")
-    elif send_email(subject, html, plain_text):
+    elif send_email(subject, email_html, plain_text, inline_images=inline):
         logging.info("Email sent successfully")
     else:
         logging.error(f"Email failed after {MAX_RETRIES} attempts.")
         sys.exit(1)
 
     save_web_pages(data)
+    data["_dedup"].save()
     logging.info("=== Bot finished successfully ===")
 
 

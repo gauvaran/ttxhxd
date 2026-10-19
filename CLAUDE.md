@@ -268,7 +268,7 @@ GEMINI_API_KEY=AIza...   # optional
 - **Ainews**: project gốc tại `gauvaran/ainews` đang chạy ổn định — đọc code trên GitHub để hiểu kiến trúc
 - **Groq API key**: đã có, lấy từ `.env` của ainews hoặc GitHub Secrets của ainews
 - **Gmail App Password**: đã có, dùng chung `bismtaiteam@gmail.com` hoặc tạo sender mới
-- **Gemini key**: `AIzaSyCYHHSPjPqQk4xiZYH0wTEjigTfChXI4u4` (free 20 req/day — chỉ dùng production, không backfill)
+- **Gemini key**: chỉ lưu trong GitHub Secrets / `.env` local — KHÔNG commit key vào repo (key cũ đã bị lộ và bị Google khoá 09/2026)
 - **Thư mục làm việc**: `/Users/tuantt/projects/ttxhxd/`
 
 ### Việc cần làm ngay khi bắt đầu session mới:
