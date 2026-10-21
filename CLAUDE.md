@@ -102,8 +102,8 @@ docs/                             ← GitHub Pages (HTML + PDF)
 
 **Stack:**
 - Python 3.11 (no external deps ngoài feedparser + weasyprint)
-- Groq API: `llama-3.3-70b-versatile` cho tất cả content (free tier)
-- Gemini 2.5 Flash (optional, nếu cần dịch): free 20 req/day
+- LLM: Gemini (`GEMINI_MODEL`, mặc định gemini-flash-latest) là chính, Groq (model tự dò) là fallback — xem `files/llm.py`
+- Food / tips / MXH đều viết từ bài báo thật (có nguồn), không viết từ trí nhớ LLM
 - Gmail SMTP (App Password)
 - GitHub Actions + GitHub Pages
 

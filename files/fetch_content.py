@@ -24,17 +24,25 @@ import sources as _src      # noqa: E402
 MAX_AGE_H        = 36   # main/policy/viral news must be newer than this
 DANANG_MAX_AGE_H = 72   # local news is sparser
 
-# One story per feed per round (round-robin) → topic diversity is guaranteed.
+# One story per topic per round (round-robin) → topic diversity is guaranteed.
+# Each topic is a list of feeds tried in order: a story is only taken when its body
+# can be fetched (grounded summary); VnExpress answers 406 to GitHub runners at times,
+# so every VnExpress topic has a backup outlet.
 RSS_FEEDS = [
-    ("https://vnexpress.net/rss/thoi-su.rss",                 "VnExpress - Thời sự"),
-    ("https://vnexpress.net/rss/kinh-doanh.rss",              "VnExpress - Kinh doanh"),
-    ("https://cafef.vn/tai-chinh-ngan-hang.rss",              "CafeF - Tài chính ngân hàng"),
-    ("https://tuoitre.vn/rss/the-gioi.rss",                   "Tuổi Trẻ - Thế giới"),
-    ("https://tuoitre.vn/rss/phap-luat.rss",                  "Tuổi Trẻ - Pháp luật"),
-    ("https://tuoitre.vn/rss/giai-tri.rss",                   "Tuổi Trẻ - Giải trí"),
-    ("https://vnexpress.net/rss/suc-khoe.rss",                "VnExpress - Sức khỏe"),
-    ("https://vnexpress.net/rss/khoa-hoc-cong-nghe.rss",      "VnExpress - Công nghệ"),
+    [("https://vnexpress.net/rss/thoi-su.rss",            "VnExpress - Thời sự"),
+     ("https://tuoitre.vn/rss/thoi-su.rss",               "Tuổi Trẻ - Thời sự")],
+    [("https://vnexpress.net/rss/kinh-doanh.rss",         "VnExpress - Kinh doanh"),
+     ("https://tuoitre.vn/rss/kinh-doanh.rss",            "Tuổi Trẻ - Kinh doanh")],
+    [("https://cafef.vn/tai-chinh-ngan-hang.rss",         "CafeF - Tài chính ngân hàng")],
+    [("https://tuoitre.vn/rss/the-gioi.rss",              "Tuổi Trẻ - Thế giới")],
+    [("https://tuoitre.vn/rss/phap-luat.rss",             "Tuổi Trẻ - Pháp luật")],
+    [("https://tuoitre.vn/rss/giai-tri.rss",              "Tuổi Trẻ - Giải trí")],
+    [("https://vnexpress.net/rss/suc-khoe.rss",           "VnExpress - Sức khỏe"),
+     ("https://thanhnien.vn/rss/suc-khoe.rss",            "Thanh Niên - Sức khỏe")],
+    [("https://vnexpress.net/rss/khoa-hoc-cong-nghe.rss", "VnExpress - Công nghệ"),
+     ("https://tuoitre.vn/rss/nhip-song-so.rss",          "Tuổi Trẻ - Nhịp sống số")],
 ]
+MIN_BODY = 400  # chars of article text needed for a grounded summary
 
 # Đà Nẵng sources, in priority order (baodanang.vn sitemap returns 403 since 2026-09)
 DANANG_RSS_FEEDS  = [
@@ -57,6 +65,7 @@ FASHION_FEEDS = [("https://tuoitre.vn/rss/thoi-trang.rss", "Tuổi Trẻ Thời 
 
 # Policy/legal RSS feeds — financial & regulatory focus
 POLICY_FEEDS = [
+    ("https://baochinhphu.vn/chinh-sach-moi.rss",  "Báo Chính phủ - Chính sách mới"),
     ("https://tinnhanhchungkhoan.vn/rss/home.rss", "Tin Nhanh Chứng Khoán"),
     ("https://vnexpress.net/rss/kinh-doanh.rss",   "VnExpress Kinh doanh"),
     ("https://cafebiz.vn/rss/home.rss",            "CafeBiz"),
@@ -100,23 +109,26 @@ def _llm_call(prompt, max_tokens=600, temperature=0.7):
     return _llm.call(prompt, max_tokens, temperature)
 
 
-def _groq_summarize_vi(title, raw_text, link=""):
+def _groq_summarize_vi(title, raw_text, link="", body=None):
     """3–5 sentence Vietnamese summary grounded in the article body.
     With too little source text we do NOT ask the LLM to invent — return ''."""
-    body = _src.article_text(link) if link else ""
+    if body is None:
+        body = _src.article_text(link) if link else ""
     clean = body if len(body) > len(raw_text or "") else (raw_text or "").strip()
     if len(clean) < 150:
         return ""
     prompt = (
-        "Bạn là biên tập viên tin tức. Tóm tắt bài báo dưới đây trong 3–5 câu tiếng Việt, "
-        "đủ để hiểu sự việc mà không cần đọc bài gốc: ai, làm gì, ở đâu, khi nào, con số chính, "
-        "ảnh hưởng thực tế.\n"
+        "Bạn là biên tập viên tin tức. Tóm tắt bài báo dưới đây trong 3–5 câu ngắn tiếng Việt "
+        "(TỐI ĐA 90 từ), đủ để hiểu sự việc mà không cần đọc bài gốc: ai, làm gì, ở đâu, khi nào, "
+        "con số chính.\n"
         "RÀNG BUỘC: chỉ dùng thông tin có trong nội dung; không thêm số liệu, tên, ngày tháng ngoài bài. "
-        "Bỏ qua phần quảng cáo, tin liên quan, chú thích ảnh. Viết liền mạch, không gạch đầu dòng, "
-        "không xưng hô với độc giả, không câu chào.\n\n"
+        "KHÔNG viết câu kết luận, đánh giá, ý nghĩa hay dự đoán mà bài không nói "
+        "(kiểu 'nhằm…', 'góp phần…', 'gây chấn động…'). Mỗi câu tối đa ~25 từ, không nối nhiều ý "
+        "bằng dấu chấm phẩy. Bỏ qua quảng cáo, tin liên quan, chú thích ảnh. Viết liền mạch, "
+        "không gạch đầu dòng, không xưng hô với độc giả.\n\n"
         f"Tiêu đề: {title}\n\nNội dung: {clean[:3500]}"
     )
-    return _llm_call(prompt, max_tokens=400, temperature=0.3)
+    return _llm_call(prompt, max_tokens=350, temperature=0.3)
 
 
 def _fetch_baomoi(slug, n=10):
@@ -251,6 +263,8 @@ def _fetch_policy_articles(dd, n=5):
                 if any(kw in text for kw in _POLICY_KW) and not dd.is_dup(title, link):
                     raw.append({"title": title, "desc": desc[:300],
                                 "link": link, "publisher": publisher})
+                    if sum(1 for r in raw if r["publisher"] == publisher) >= 3:  # keep outlets mixed
+                        break
         except Exception as e:
             print(f"Policy feed error ({publisher}): {e}", file=sys.stderr)
     return raw[:n]
@@ -277,7 +291,8 @@ def _groq_policy_summary(date_str, articles):
     prompt = (
         f"Hôm nay là {date_str}. Dưới đây là {len(articles)} tin tức về chính sách, pháp luật tài chính vừa đăng:\n\n"
         f"{context}\n\n"
-        "Từ danh sách trên, chọn TỐI ĐA 3 tin quan trọng nhất ảnh hưởng đến người dân/doanh nghiệp và viết theo format:\n\n"
+        f"Từ danh sách trên, chọn {min(3, len(articles))} tin (ít nhất {min(2, len(articles))}) quan trọng nhất "
+        "ảnh hưởng đến người dân/doanh nghiệp và viết theo format:\n\n"
         "### 📋 [Tiêu đề ngắn gọn]\n"
         "📍 *Nguồn: PREF[N]*\n"
         "💡 **Tác động:** [1-2 câu: ảnh hưởng thực tế đến người dân, nhân viên ngân hàng, doanh nghiệp]\n\n"
@@ -286,7 +301,7 @@ def _groq_policy_summary(date_str, articles):
         "- Dùng đúng PREF[N] (N là số thứ tự bài trong danh sách)\n"
         "- Tiếng Việt rõ ràng, ngắn gọn, dễ hiểu với người không chuyên pháp luật\n"
         "- Ưu tiên tin có từ khóa: Nghị định, Thông tư, lãi suất, thuế, có hiệu lực\n"
-        "- Nếu không có tin chính sách thực sự, chỉ viết 1-2 item\n"
+
         "- Chỉ output đúng format, không thêm lời mở đầu hay kết luận"
     )
     raw = _llm_call(prompt, max_tokens=600, temperature=0.3)
@@ -295,43 +310,79 @@ def _groq_policy_summary(date_str, articles):
     return re.sub(r"PREF\[(\d+)\]", _replace_pref, raw)
 
 
+_TREND_SKIP = ("xổ số", "xo so", "xsmb", "xsmn", "xsmt", "kqxs", "vietlott")
+
+
+def _trend_items(trends, n=8):
+    """Google Trends entries usable as citable items (lottery results dropped),
+    each grounded with the opening of its linked article when reachable."""
+    out = []
+    for t in trends:
+        if len(out) >= n:
+            break
+        if not t.get("news_url") or any(k in t["keyword"].lower() for k in _TREND_SKIP):
+            continue
+        out.append({"title": t["news_title"] or t["keyword"], "publisher": t["news_source"] or "Google Trends",
+                    "link": t["news_url"], "keyword": t["keyword"], "traffic": t["traffic"],
+                    "body": _src.article_text(t["news_url"], max_chars=700)})
+    return out
+
+
 def _groq_viral_content(date_str, articles, trends=None):
-    if not articles:
+    """3 MXH items; at least 2 must come from Google Trends (real search interest).
+    Keyword/traffic/source lines are rendered by code from the data, not by the LLM."""
+    trend_items = _trend_items(trends or [])
+    if not articles and not trend_items:
         return ""
-    trend_ctx = ""
-    if trends:
-        trend_ctx = ("\nTỪ KHÓA ĐANG ĐƯỢC TÌM NHIỀU NHẤT VN HÔM NAY (Google Trends — tín hiệu thật):\n" +
-                     "\n".join(f"- {t['keyword']} ({t['traffic']} lượt) — {t['news_title']}" for t in trends) +
-                     "\nƯu tiên tin trùng với các từ khóa này.\n")
+    need_trends = min(2, len(trend_items))
+    trend_ctx = "\n".join(
+        f"[T{i+1}] Từ khóa: {t['keyword']} ({t['traffic']} lượt tìm) — Tin: {t['title']} ({t['publisher']})"
+        + (f"\n    Trích bài: {t['body']}" if t["body"] else "")
+        for i, t in enumerate(trend_items))
 
     def _src_label(a):
         s = a.get("_sources", 1)
         return f"🔴 {s} nguồn đưa tin" if s >= 3 else (f"🟠 {s} nguồn" if s == 2 else "")
 
-    context = "\n".join(
+    art_ctx = "\n".join(
         f"[{i+1}] {_src_label(a)} [{a['publisher']}] {a['title']}\n    Mô tả: {a['desc']}"
-        for i, a in enumerate(articles)
-    )
+        for i, a in enumerate(articles))
     prompt = (
-        f"Hôm nay là {date_str}. Dưới đây là {len(articles)} tin giải trí/showbiz VN được {len(VIRAL_FEEDS)} nguồn thu thập:\n\n"
-        f"{context}\n{trend_ctx}\n"
-        "🔴 = nhiều nguồn cùng đưa tin → khả năng cao đang hot trên MXH\n\n"
-        "Từ danh sách trên, chọn ĐÚNG 3 tin gây xôn xao MXH nhất và viết theo format:\n\n"
-        "### 🔥 [Tiêu đề hấp dẫn, ngắn gọn]\n"
-        "📍 *Nguồn: REF[N]*\n"
-        "[2-3 câu: viết lại sinh động, dí dỏm, nêu bật điều gây tò mò/tranh cãi/sốc, góc nhìn cộng đồng]\n\n"
-        "Ưu tiên chọn: scandal, tin sốc, bắt giữ, drama, viral clip, kết hôn/chia tay bất ngờ — "
-        "đặc biệt ưu tiên bài có nhiều nguồn đưa tin (🔴/🟠)\n"
-        "Yêu cầu:\n"
-        "- Chỉ dùng thông tin từ các bài có sẵn — KHÔNG bịa thêm chi tiết, số liệu, tên người\n"
-        "- Dùng đúng REF[N] (N là số thứ tự bài trong danh sách)\n"
-        "- Tiếng Việt sinh động, chêm tiếng lóng tự nhiên, có thể thêm emoji\n"
-        "- 3 item liền nhau, không thêm gì khác"
+        f"Hôm nay là {date_str}. Bạn viết mục 'Mạng xã hội hôm nay' cho chị em văn phòng.\n\n"
+        f"A) TỪ KHÓA ĐANG ĐƯỢC TÌM NHIỀU NHẤT VIỆT NAM (Google Trends — tín hiệu thật):\n{trend_ctx or '(không có)'}\n\n"
+        f"B) TIN GIẢI TRÍ/SHOWBIZ (🔴 = nhiều báo cùng đưa):\n{art_ctx or '(không có)'}\n\n"
+        f"Chọn ĐÚNG 3 chủ đề. BẮT BUỘC ít nhất {need_trends} chủ đề lấy từ danh sách A "
+        "(ưu tiên chủ đề chị em quan tâm: showbiz, đời sống, mua sắm, sự kiện xã hội), phần còn lại từ A hoặc B.\n"
+        "Format mỗi chủ đề:\n\n"
+        "### 🔥 [Tiêu đề ngắn gọn, đúng sự việc]\n"
+        "📍 SRC[T1]   ← dùng SRC[Tn] cho mục A hoặc SRC[n] cho mục B; giữ nguyên dạng này\n"
+        "[2-3 câu: chuyện gì đang xảy ra, vì sao được quan tâm — vui, dí dỏm nhưng đúng sự thật]\n\n"
+        "RÀNG BUỘC:\n"
+        "- Chỉ dùng thông tin có trong dữ liệu trên; KHÔNG bịa chi tiết, số liệu, thành tích, lời nói của ai\n"
+        "- KHÔNG đặt chữ trong ngoặc kép như thể trích dẫn nếu dữ liệu không có nguyên văn\n"
+        "- Không có thông tin phản ứng cộng đồng thì đừng tả phản ứng cộng đồng\n"
+        "- Câu phải rõ nghĩa, tự nhiên; tiếng lóng vừa phải\n"
+        "- Chỉ output 3 chủ đề, không lời mở đầu/kết luận"
     )
-    raw = _llm_call(prompt, max_tokens=700, temperature=0.8)
-    def _replace_ref(m):
-        return _cite(articles, m.group(1)) or ""
-    return re.sub(r"REF\[(\d+)\]", _replace_ref, raw)
+    raw = _llm_call(prompt, max_tokens=700, temperature=0.6)
+
+    def _replace(m):
+        ref = m.group(1)
+        if ref.upper().startswith("T"):
+            i = int(ref[1:]) - 1
+            if 0 <= i < len(trend_items):
+                t = trend_items[i]
+                USED_SOURCES.append(t)
+                traffic = f" · {t['traffic']} lượt tìm" if t["traffic"] else ""
+                return f"*🔎 Google Trends: **{t['keyword']}**{traffic} · Nguồn: [{t['publisher']}]({t['link']})*"
+            return ""
+        cited = _cite(articles, ref)
+        return f"*Nguồn: {cited}*" if cited else ""
+    out = re.sub(r"SRC\[(T?\d+)\]", _replace, raw, flags=re.I)
+    n_trend = out.count("🔎 Google Trends")
+    if n_trend < need_trends:
+        print(f"  WARN viral: only {n_trend}/{need_trends} items grounded in Google Trends", file=sys.stderr)
+    return out
 
 
 def _fetch_music_fashion_articles():
@@ -470,71 +521,139 @@ def _rotate(options, day_num, salt=0):
     return options[(day_num + salt) % len(options)]
 
 
-def _groq_food_of_day(date_str, day_num=0):
+# ── Grounded food / tips: written from a real recent article, never from memory ──
+FOOD_FEEDS = [("https://tuoitre.vn/rss/am-thuc.rss", "Tuổi Trẻ - Ẩm thực"),
+              ("https://dantri.com.vn/rss/du-lich.rss", "Dân Trí - Du lịch")]
+BEAUTY_FEEDS = [("https://thanhnien.vn/rss/suc-khoe/lam-dep.rss", "Thanh Niên - Làm đẹp"),
+                ("https://suckhoedoisong.vn/lam-dep.rss", "Sức khỏe & Đời sống - Làm đẹp")]
+HEALTH_FEEDS = [("https://thanhnien.vn/rss/suc-khoe.rss", "Thanh Niên - Sức khỏe"),
+                ("https://dantri.com.vn/rss/suc-khoe.rss", "Dân Trí - Sức khỏe"),
+                ("https://tuoitre.vn/rss/suc-khoe.rss", "Tuổi Trẻ - Sức khỏe"),
+                ("https://suckhoedoisong.vn/dinh-duong.rss", "Sức khỏe & Đời sống - Dinh dưỡng")]
+TIP_MAX_AGE_H = 24 * 7
+FOOD_MAX_AGE_H = 24 * 14
+
+_FOOD_KW = ("món", "ăn", "bún", "bánh", "phở", "mì", "cơm", "chè", "gỏi", "lẩu", "nem", "cháo", "xôi",
+            "đặc sản", "ẩm thực", "hải sản", "ốc", "nướng", "quán", "nấu")
+_CENTRAL_KW = ("đà nẵng", "quảng nam", "hội an", "huế", "quảng ngãi", "miền trung", "xứ quảng")
+_EXERCISE_KW = ("tập", "vận động", "đi bộ", "chạy bộ", "giảm cân", "squat", "yoga", "plank", "giữ dáng",
+                "thể dục", "vóc dáng", "eo", "cơ bụng", "giãn cơ", "đạp xe", "bơi")
+_HEALTH_KW = ("nên", "cách", "mẹo", "thói quen", "dấu hiệu", "phòng ngừa", "ăn gì", "uống", "ngủ",
+              "văn phòng", "ngồi", "mắt", "đau", "huyết áp", "stress", "căng thẳng", "dạ dày", "bữa sáng",
+              "cà phê", "tốt cho", "lợi ích", "thực phẩm")
+
+
+def _has_kw(text, kws):
+    t = text.lower()
+    return any(re.search(rf"(?<!\w){re.escape(k)}(?!\w)", t) for k in kws)
+
+
+def _pick_grounded(dd, feeds, kws=None, prefer=(), max_age_h=TIP_MAX_AGE_H, min_body=500, max_fetch=6):
+    """Newest non-duplicate article matching kws whose body can be fetched; None if none."""
+    cands = []
+    for url, pub in feeds:
+        cands += [it for it in _fresh_entries(url, pub, max_age_h, limit=30)
+                  if (not kws or _has_kw(it["title"], kws)) and not dd.is_dup(it["title"], it["link"])]
+    if prefer:
+        cands.sort(key=lambda it: not _has_kw(it["title"] + " " + it["desc"], prefer))
+    for it in cands[:max_fetch]:
+        body = _src.article_text(it["link"])
+        if len(body) >= min_body:
+            dd.add(it["title"], it["link"])
+            return dict(it, body=body)
+    return None
+
+
+def _source_line(art):
+    return f"\n\n📍 *Nguồn: [{art['publisher']}]({art['link']})*"
+
+
+_TIP_RULES = (
+    "RÀNG BUỘC:\n"
+    "- KHÔNG nêu tên thương hiệu, tên sản phẩm thương mại hay giá tiền\n"
+    "- KHÔNG kể chuyện ngôi thứ nhất ('mình đã thử', 'đêm qua mình…')\n"
+    "- KHÔNG gán lời khuyên cho WHO, Bộ Y tế, nghiên cứu hay chuyên gia nào trừ khi nguồn nêu rõ\n"
+    "- KHÔNG đưa con số (calo, %, số lần, số giờ) trừ khi nguồn có con số đó\n"
+    "- Không lời chào, không kết bằng kêu gọi chia sẻ\n"
+)
+
+
+def _tip_from_article(kind, emoji, art):
     prompt = (
-        f"Hôm nay là {date_str}. Bạn là food blogger Việt Nam, mê ăn vặt và đặc sản vùng miền.\n\n"
-        f"Giới thiệu MÓN ĂN NGON HÔM NAY: **{_rotate(DISHES, day_num)}**.\n\n"
-        "Format:\n"
-        "🍽️ **[Tên món]** — [Vùng miền / xuất xứ]\n\n"
-        "[3-4 câu sinh động: mô tả hương vị, cách ăn, ăn kèm gì, tại sao ngon đến 'không thể dừng được']\n\n"
-        "💡 **Ăn ở đâu?** [khu chợ / phố ẩm thực nổi tiếng nơi món này phổ biến — KHÔNG nêu tên quán cụ thể]\n\n"
-        "💰 **Giá tham khảo:** [khoảng giá thực tế]\n\n"
-        "Yêu cầu: không bịa tên quán, giá là khoảng phổ biến. Tone vui vẻ, thèm ăn."
+        f"Bạn viết mục '{kind}' cho bản tin của chị em nữ văn phòng: vui, gần gũi như bạn thân, có emoji.\n"
+        "Dựa CHỈ vào bài báo dưới đây, viết 1 tip ~100–140 từ tiếng Việt, áp dụng được ngay.\n"
+        f"Bắt đầu bằng {emoji} + **tên tip ngắn gọn in đậm** đúng với nội dung bài.\n"
+        + _TIP_RULES +
+        "- Mọi lời khuyên, con số, tên thực phẩm/hoạt chất phải có trong bài; không thêm kiến thức ngoài bài\n"
+        "- Nếu bài có lưu ý nên đi khám, giữ lại 1 câu lưu ý đó\n\n"
+        f"Tiêu đề bài: {art['title']}\n\nNội dung bài: {art['body'][:3000]}"
     )
-    return _llm_call(prompt, max_tokens=350, temperature=0.85)
+    out = _llm_call(prompt, max_tokens=450, temperature=0.6)
+    return out + _source_line(art) if out else ""
 
 
-def _groq_tip_beauty(date_str, day_num=0):
+def _tip(dd, kind, emoji, feeds, kws, fallback_topic, fallback_role):
+    art = _pick_grounded(dd, feeds, kws)
+    if art:
+        print(f"  {kind}: grounded in {art['publisher']} — {art['title'][:60]}", file=sys.stderr)
+        return _tip_from_article(kind, emoji, art)
+    print(f"  {kind}: no recent article — topic fallback '{fallback_topic}'", file=sys.stderr)
     prompt = (
-        f"Hôm nay là {date_str}. Bạn là beauty blogger và chuyên gia skincare Việt Nam.\n\n"
-        f"Viết 1 tip làm đẹp cho phụ nữ văn phòng. Chủ đề hôm nay: **{_rotate(TOPICS_BEAUTY, day_num)}**.\n\n"
-        "Yêu cầu:\n"
-        "- ~130-150 từ, tiếng Việt sinh động có emoji 💄\n"
-        "- Sản phẩm/nguyên liệu dễ tìm, giá hợp lý\n"
-        "- Tone vui tươi như người bạn thân share bí kíp\n"
-        "- Bắt đầu bằng emoji + tên tip ngắn gọn in đậm"
+        f"Bạn là {fallback_role}. Viết 1 tip '{kind}' cho phụ nữ văn phòng về chủ đề: **{fallback_topic}**.\n"
+        f"~100–140 từ tiếng Việt, vui tươi, có emoji. Bắt đầu bằng {emoji} + **tên tip ngắn gọn in đậm**.\n"
+        "Chỉ nêu lời khuyên phổ thông, an toàn, được công nhận rộng rãi.\n" + _TIP_RULES
     )
-    return _llm_call(prompt, max_tokens=350, temperature=0.8)
+    return _llm_call(prompt, max_tokens=400, temperature=0.6)
 
 
-def _groq_tip_exercise(date_str, day_num=0):
-    prompt = (
-        f"Hôm nay là {date_str}. Bạn là huấn luyện viên thể dục và chuyên gia dinh dưỡng.\n\n"
-        f"Viết 1 tip vận động/giữ dáng cho phụ nữ văn phòng. Chủ đề hôm nay: **{_rotate(TOPICS_EXERCISE, day_num, 5)}**.\n\n"
-        "Yêu cầu:\n"
-        "- ~130-150 từ, tiếng Việt sinh động có emoji 🏃‍♀️\n"
-        "- Thực tế, làm được ngay không cần gym hay dụng cụ đắt tiền\n"
-        "- Có con số cụ thể (số lần, phút, calo) để dễ thực hiện\n"
-        "- Bắt đầu bằng emoji + tên tip ngắn gọn in đậm"
-    )
-    return _llm_call(prompt, max_tokens=350, temperature=0.8)
+def _groq_tip_beauty(dd, day_num=0):
+    return _tip(dd, "Tip làm đẹp", "💄", BEAUTY_FEEDS, None,
+                _rotate(TOPICS_BEAUTY, day_num), "chuyên gia chăm sóc da")
 
 
-def _groq_tip_health(date_str, day_num=0):
-    prompt = (
-        f"Hôm nay là {date_str}. Bạn là bác sĩ nội khoa và chuyên gia sức khỏe phụ nữ.\n\n"
-        f"Viết 1 tip sức khỏe thực tế cho phụ nữ văn phòng. Chủ đề hôm nay: **{_rotate(TOPICS_HEALTH, day_num, 10)}**.\n\n"
-        "Yêu cầu:\n"
-        "- ~130-150 từ, tiếng Việt sinh động có emoji 🩺\n"
-        "- Chỉ nêu khuyến nghị y khoa phổ biến, đã được công nhận (WHO, Bộ Y tế); không bịa nghiên cứu/con số\n"
-        "- Thực tế, áp dụng ngay tại chỗ ngồi văn phòng\n"
-        "- Bắt đầu bằng emoji + tên tip ngắn gọn in đậm"
-    )
-    return _llm_call(prompt, max_tokens=350, temperature=0.75)
+def _groq_tip_exercise(dd, day_num=0):
+    return _tip(dd, "Tip vận động & giữ dáng", "🏃‍♀️", HEALTH_FEEDS + BEAUTY_FEEDS, _EXERCISE_KW,
+                _rotate(TOPICS_EXERCISE, day_num, 5), "huấn luyện viên thể dục")
 
 
-def _groq_food_tip(date_str):
-    prompt = (
-        f"Hôm nay là {date_str}. Bạn là đầu bếp và food blogger Việt Nam.\n\n"
-        "Viết 1 tip ẩm thực hữu ích: công thức nhanh, mẹo nấu ăn, "
-        "hoặc mẹo chọn nguyên liệu tươi ngon.\n\n"
-        "Yêu cầu:\n"
-        "- ~120-150 từ, tiếng Việt sinh động có emoji\n"
-        "- Thực tế, áp dụng được ngay, không cầu kỳ\n"
-        "- Tone vui vẻ như người bạn chia sẻ bí kíp nấu ăn\n"
-        "- Bắt đầu bằng emoji và tên tip ngắn gọn"
-    )
-    return _llm_call(prompt, max_tokens=350, temperature=0.8)
+def _groq_tip_health(dd, day_num=0):
+    return _tip(dd, "Tip sức khỏe", "🩺", HEALTH_FEEDS, _HEALTH_KW,
+                _rotate(TOPICS_HEALTH, day_num, 10), "bác sĩ")
+
+
+_FOOD_FORMAT = (
+    "Format:\n"
+    "🍽️ **[Tên món]** — [vùng miền / địa phương, theo nguồn]\n\n"
+    "[3–4 câu sinh động: hương vị, cách ăn, ăn kèm — CHỈ những gì nguồn mô tả]\n\n"
+    "💡 **Ăn ở đâu?** [địa điểm/khu vực nguồn nhắc tới — BỎ dòng này nếu nguồn không nói]\n\n"
+    "💰 **Giá tham khảo:** [CHỈ khi nguồn có nêu giá — nếu không thì BỎ dòng này]\n\n"
+    "RÀNG BUỘC: không thêm nguyên liệu, nhân, cách chế biến, giá, địa điểm ngoài nguồn. "
+    "Tone vui, thèm ăn, không lời chào."
+)
+
+
+def _groq_food_of_day(dd, day_num=0):
+    art = _pick_grounded(dd, FOOD_FEEDS, _FOOD_KW, prefer=_CENTRAL_KW, max_age_h=FOOD_MAX_AGE_H)
+    if art:
+        print(f"  Food: grounded in {art['publisher']} — {art['title'][:60]}", file=sys.stderr)
+        prompt = ("Bạn là food blogger Việt Nam. Dựa CHỈ vào bài báo dưới đây, giới thiệu 1 món ăn "
+                  "nổi bật nhất trong bài.\n\n" + _FOOD_FORMAT +
+                  f"\n\nTiêu đề bài: {art['title']}\n\nNội dung bài: {art['body'][:3000]}")
+        out = _llm_call(prompt, max_tokens=450, temperature=0.7)
+        return out + _source_line(art) if out else ""
+    # Fallback: a rotating dish that has its OWN Vietnamese Wikipedia article.
+    for k in range(len(DISHES)):
+        dish = _rotate(DISHES, day_num, k)
+        w = _src.wiki_extract(dish)
+        if w and w["title"].lower() == dish.lower() and len(w["text"]) >= 300:
+            print(f"  Food: no article — Wikipedia '{dish}'", file=sys.stderr)
+            prompt = (f"Bạn là food blogger Việt Nam. Dựa CHỈ vào đoạn Wikipedia dưới đây, giới thiệu món "
+                      f"**{dish}**.\n\n" + _FOOD_FORMAT + f"\n\nNguồn Wikipedia: {w['text']}")
+            out = _llm_call(prompt, max_tokens=450, temperature=0.7)
+            return out + _source_line({"publisher": "Wikipedia", "link": w["url"]}) if out else ""
+        if k >= 8:
+            break
+    return ""
 
 
 def _fetch_vangtodaygold():
@@ -719,37 +838,77 @@ def _fetch_finance_data():
     }
 
 
-def _fetch_rss_articles(dd, target=8, feeds=None, max_age_h=MAX_AGE_H):
-    """Round-robin across feeds (one fresh, non-duplicate story per feed per round),
-    so every topic is represented before any feed contributes a second story."""
-    socket.setdefaulttimeout(12)
+def _fresh_entries(feed_url, publisher, max_age_h, limit=25):
     headers = {"User-Agent": "Mozilla/5.0 (compatible; TTXHXDBot/1.0)"}
-    per_feed = []
-    for feed_url, publisher in (feeds or RSS_FEEDS):
-        items = []
-        try:
-            feed = feedparser.parse(feed_url, request_headers=headers)
-            for entry in feed.entries[:25]:
-                title = _strip_html(entry.get("title", "")).strip()
-                link = entry.get("link", "")
-                age = _dedup.age_hours(entry)
-                if not title or not link or (age is not None and age > max_age_h):
-                    continue
-                items.append({"title": title, "publisher": publisher, "link": link,
-                              "desc": _strip_html(entry.get("summary", entry.get("description", "")))})
-            print(f"OK: {publisher} ({len(feed.entries)} entries, {len(items)} fresh)", file=sys.stderr)
-        except Exception as e:
-            print(f"Feed error ({publisher}): {e}", file=sys.stderr)
-        per_feed.append(items)
+    items = []
+    try:
+        feed = feedparser.parse(feed_url, request_headers=headers)
+        for entry in feed.entries[:limit]:
+            title = _strip_html(entry.get("title", "")).strip()
+            link = entry.get("link", "")
+            age = _dedup.age_hours(entry)
+            if not title or not link or (age is not None and age > max_age_h):
+                continue
+            items.append({"title": title, "publisher": publisher, "link": link,
+                          "desc": _strip_html(entry.get("summary", entry.get("description", "")))})
+        print(f"OK: {publisher} ({len(feed.entries)} entries, {len(items)} fresh)", file=sys.stderr)
+    except Exception as e:
+        print(f"Feed error ({publisher}): {e}", file=sys.stderr)
+    return items
 
+
+class _Topic:
+    """Candidate stream for one topic: primary feed first, backup feeds when the
+    primary's article pages cannot be fetched (MAX_BODY_MISSES in a row)."""
+    MAX_BODY_MISSES = 2
+
+    def __init__(self, feeds, max_age_h):
+        self.feeds = [feeds] if isinstance(feeds, tuple) else list(feeds)
+        self.max_age_h = max_age_h
+        self.items, self.misses = [], 0
+        self._next_feed()
+
+    def _next_feed(self):
+        self.items, self.misses = [], 0
+        while self.feeds and not self.items:
+            url, pub = self.feeds.pop(0)
+            self.items = _fresh_entries(url, pub, self.max_age_h)
+
+    def __bool__(self):
+        return bool(self.items or self.feeds)
+
+    def next_grounded(self, dd):
+        """Next fresh, non-duplicate story whose body could be fetched; None when exhausted."""
+        while self.items:
+            it = self.items.pop(0)
+            if dd.is_dup(it["title"], it["link"]):
+                continue
+            it["body"] = _src.article_text(it["link"])
+            if len(it["body"]) >= MIN_BODY:
+                self.misses = 0
+                dd.add(it["title"], it["link"])
+                return it
+            self.misses += 1
+            if self.misses >= self.MAX_BODY_MISSES and self.feeds:
+                print(f"  body fetch failing for {it['publisher']} — switching to backup feed",
+                      file=sys.stderr)
+                self._next_feed()
+            if not self.items and self.feeds:
+                self._next_feed()
+        return None
+
+
+def _fetch_rss_articles(dd, target=8, feeds=None, max_age_h=MAX_AGE_H):
+    """Round-robin across topics (one fresh, non-duplicate, body-grounded story per topic
+    per round), so every topic is represented before any topic contributes a second story."""
+    socket.setdefaulttimeout(12)
+    topics = [_Topic(f, max_age_h) for f in (feeds or RSS_FEEDS)]
     result = []
-    while len(result) < target and any(per_feed):
-        for items in per_feed:
-            while items:
-                it = items.pop(0)
-                if dd.take(it["title"], it["link"]):
-                    result.append(it)
-                    break
+    while len(result) < target and any(topics):
+        for t in topics:
+            it = t.next_grounded(dd)
+            if it:
+                result.append(it)
             if len(result) >= target:
                 break
     return result
@@ -759,7 +918,8 @@ def _summarize_all(raw, label):
     out = []
     for i, art in enumerate(raw):
         print(f"  {label} {i+1}/{len(raw)}: {art['title'][:60]}", file=sys.stderr)
-        summary = _groq_summarize_vi(art["title"], art["desc"], art["link"]) if _llm.available() else ""
+        summary = (_groq_summarize_vi(art["title"], art["desc"], art["link"], art.get("body"))
+                   if _llm.available() else "")
         out.append({"title": art["title"], "publisher": art["publisher"], "link": art["link"],
                     "summary": summary or art["desc"][:300],
                     "ai_summary": bool(summary)})
@@ -805,10 +965,10 @@ def fetch_content():
     # ── Phase 4c–6: food, 3 tips, quote (topic rotation by day) ──────────────
     print("Generating food / tips / quote...", file=sys.stderr)
     ai = _llm.available
-    food_of_day  = _groq_food_of_day(date_iso, day_num) if ai() else ""
-    tip_beauty   = _groq_tip_beauty(date_iso, day_num) if ai() else ""
-    tip_exercise = _groq_tip_exercise(date_iso, day_num) if ai() else ""
-    tip_health   = _groq_tip_health(date_iso, day_num) if ai() else ""
+    food_of_day  = _groq_food_of_day(dd, day_num) if ai() else ""
+    tip_beauty   = _groq_tip_beauty(dd, day_num) if ai() else ""
+    tip_exercise = _groq_tip_exercise(dd, day_num) if ai() else ""
+    tip_health   = _groq_tip_health(dd, day_num) if ai() else ""
     quote        = _groq_motivational_quote(date_iso) if ai() else ""
 
     # ── Phase 7: Crush hôm nay (verified data + live news) ───────────────────
@@ -825,7 +985,7 @@ def fetch_content():
 
     # ── Phase 9: Policy & Legal digest ───────────────────────────────────────
     print("Fetching policy/legal articles...", file=sys.stderr)
-    policy_articles = _fetch_policy_articles(dd, n=5)
+    policy_articles = _fetch_policy_articles(dd, n=8)
     policy = _groq_policy_summary(date_iso, policy_articles) if ai() else ""
 
     for a in USED_SOURCES:

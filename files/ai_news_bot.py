@@ -127,6 +127,8 @@ def build_html(data, embed_images=True):  # noqa: C901
     tip_beauty   = data.get("tip_beauty", "")
     tip_exercise = data.get("tip_exercise", "")
     tip_health   = data.get("tip_health", "")
+    _by = (data.get("llm_stats") or {}).get("by_provider") or {}
+    ai_credit = {"gemini": "Gemini AI", "groq": "Groq AI"}.get(max(_by, key=_by.get) if _by else "", "AI")
     quote            = data.get("quote", "")
     guy              = data.get("guy")
     finance          = data.get("finance", {})
@@ -262,6 +264,9 @@ def build_html(data, embed_images=True):  # noqa: C901
                 f'</tr>'
             )
 
+        def _gold_unit(item):
+            return "" if item.get("unit") == "triệu đ/lượng" else item.get("unit", "")
+
         def _gold_row(item):
             chg_html = (f'<span style="font-size:10px;color:{"#1B5E20" if "↑" in item["change"] else "#B71C1C"};">'
                         f'{h(item["change"])}</span>') if item.get("change") else ""
@@ -270,7 +275,7 @@ def build_html(data, embed_images=True):  # noqa: C901
                 f'<td style="padding:5px 10px 5px 0;font-size:13px;color:#555;font-family:Arial,sans-serif;">{h(item["label"])}</td>'
                 f'<td style="padding:5px 8px;font-size:12px;color:#1B5E20;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">{h(item["buy"])}</td>'
                 f'<td style="padding:5px 4px;font-size:12px;color:#B71C1C;font-weight:bold;font-family:Arial,sans-serif;text-align:right;white-space:nowrap;">{h(item["sell"])}</td>'
-                f'<td style="padding:5px 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;white-space:nowrap;">{chg_html}&nbsp;{h(item.get("unit",""))}</td>'
+                f'<td style="padding:5px 0;font-size:11px;color:#aaa;font-family:Arial,sans-serif;white-space:nowrap;">{chg_html or "—"}&nbsp;{h(_gold_unit(item))}</td>'
                 f'</tr>'
             )
 
@@ -446,7 +451,7 @@ def build_html(data, embed_images=True):  # noqa: C901
             + _tip_card("🏃", "#2E7D32", "#2E7D32", "#E8F5E9", "#C8E6C9",
                         "Tip tập thể dục &amp; giữ dáng", tip_exercise)
             + _tip_card("🩺", "#1565C0", "#1565C0", "#E3F2FD", "#BBDEFB",
-                        "Tip sức khỏe: huyết áp, cột sống, vai gáy", tip_health)
+                        "Tip sức khỏe", tip_health)
         )
 
     # ── Motivational Quote ────────────────────────────────────────────────────
@@ -478,7 +483,7 @@ def build_html(data, embed_images=True):  # noqa: C901
             f'<span style="background:{C_ACCENT};color:#fff;font-size:10px;padding:3px 10px;'
             f'border-radius:12px;margin-right:4px;margin-bottom:4px;display:inline-block;'
             f'font-family:Arial,sans-serif;">{h(t)}</span>'
-            for t in guy.get("tags", [])
+            for t in (_TAG_VI.get(t, t) for t in guy.get("tags", []))
         )
 
         def _info_row(label, val):
@@ -627,7 +632,7 @@ def build_html(data, embed_images=True):  # noqa: C901
         Chúc chị em một ngày vui vẻ và năng suất! ✨
       </p>
       <p style="margin:0 0 10px;font-size:11px;color:#FFD54F;font-family:Arial,sans-serif;">
-        TTXHXD — Tổng hợp bởi Groq AI &amp; nguồn tin VN 💌
+        TTXHXD — Tổng hợp bởi {ai_credit} &amp; nguồn tin VN 💌
       </p>
       <p style="margin:0;font-size:18px;letter-spacing:5px;font-family:Arial,sans-serif;border-radius:0 0 14px 14px;">🌼 ✨ 🌼 ✨ 🌼</p>
     </td>
@@ -718,7 +723,7 @@ def build_plain_text(data):
             lines.append("\n🏃‍♀️ TIP TẬP THỂ DỤC & GIỮ DÁNG")
             lines.append(data["tip_exercise"])
         if data.get("tip_health"):
-            lines.append("\n🩺 TIP SỨC KHỎE: HUYẾT ÁP, CỘT SỐNG, VAI GÁY")
+            lines.append("\n🩺 TIP SỨC KHỎE")
             lines.append(data["tip_health"])
     if data.get("quote"):
         lines.append("\n" + "─" * 50)
@@ -976,6 +981,9 @@ def save_web_pages(data):
     logging.info(f"Web pages saved: docs/{today}.html")
 
 
+_TAG_VI = {"K-drama": "Phim Hàn", "C-drama": "Phim Hoa ngữ", "Thai drama": "Phim Thái",
+           "J-drama": "Phim Nhật", "rap": "Rapper"}
+
 REQUIRED_AI_SECTIONS = ["viral", "music_fashion", "food_of_day",
                         "tip_beauty", "tip_exercise", "tip_health"]
 
@@ -1022,7 +1030,8 @@ def _step_summary(data, problems):
                 f"- Đà Nẵng: {len(data.get('danang_articles', []))}\n"
                 f"- Guy: {(data.get('guy') or {}).get('name')}\n"
                 f"- LLM: ok={stats.get('ok')} fail={stats.get('fail')} "
-                f"groq_model={stats.get('groq_model')} by={stats.get('by_provider')}\n\n"
+                f"gemini_model={stats.get('gemini_model')} groq_model={stats.get('groq_model')} "
+                f"by={stats.get('by_provider')}\n\n"
                 "| Section | Size |\n|---|---|\n" + "\n".join(rows) + "\n\n"
                 + ("### Problems\n" + "\n".join(f"- {p}" for p in problems) if problems else "✅ Healthy")
                 + "\n")

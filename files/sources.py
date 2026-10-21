@@ -6,6 +6,7 @@ sources.py - Grounding data sources (no API keys needed).
   apple_music_top_vn()  Apple Music most-played songs in Vietnam
   google_news(query)    Google News RSS search (Vietnamese edition)
   article_text(url)     Plain paragraph text of an article page (for summaries)
+  wiki_extract(title)   Plain-text extract of a Vietnamese Wikipedia page (exact title)
 """
 
 import json
@@ -19,6 +20,10 @@ import feedparser
 UA = "Mozilla/5.0 (compatible; TTXHXDBot/1.0)"
 BROWSER_UA = ("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
               "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36")
+# Some outlets (VnExpress) answer 406 to requests without browser-like Accept headers.
+BROWSER_HEADERS = {"User-Agent": BROWSER_UA,
+                   "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+                   "Accept-Language": "vi-VN,vi;q=0.9,en;q=0.8"}
 
 
 def _log(msg):
@@ -143,7 +148,7 @@ def article_text(url, max_chars=3500):
     if not url or "news.google.com" in url:
         return ""
     try:
-        req = urllib.request.Request(url, headers={"User-Agent": BROWSER_UA})
+        req = urllib.request.Request(url, headers=BROWSER_HEADERS)
         with urllib.request.urlopen(req, timeout=12) as r:
             html = r.read(1_500_000).decode("utf-8", errors="ignore")
         p = _Paragraphs()
@@ -152,3 +157,21 @@ def article_text(url, max_chars=3500):
     except Exception as e:
         _log(f"article_text error ({url[:60]}): {e}")
         return ""
+
+
+def wiki_extract(title, lang="vi", max_chars=2500):
+    """Extract of the page with exactly this title (redirects followed); None if missing.
+    No fuzzy search: a search for 'Ốc hút' returns the 'Đà Nẵng' article."""
+    q = urllib.parse.urlencode({"action": "query", "format": "json", "titles": title, "redirects": 1,
+                                "prop": "extracts", "explaintext": 1, "exchars": max_chars})
+    try:
+        pages = _get_json(f"https://{lang}.wikipedia.org/w/api.php?{q}")["query"]["pages"]
+    except Exception as e:
+        _log(f"wiki error ({title}): {e}")
+        return None
+    page = next(iter(pages.values()))
+    text = (page.get("extract") or "").strip()
+    if "missing" in page or not text:
+        return None
+    return {"title": page["title"], "text": text,
+            "url": f"https://{lang}.wikipedia.org/wiki/" + urllib.parse.quote(page["title"].replace(" ", "_"))}

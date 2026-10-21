@@ -1,9 +1,9 @@
 """
 llm.py - LLM provider chain with model auto-discovery and per-run health stats.
 
-Order is controlled by LLM_ORDER (default "groq,gemini,fallback"):
-  groq     — GROQ_API_KEY; model from GROQ_MODEL or auto-picked from /models
+Order is controlled by LLM_ORDER (default "gemini,groq,fallback"):
   gemini   — GEMINI_API_KEY; GEMINI_MODEL (default gemini-flash-latest)
+  groq     — GROQ_API_KEY; model from GROQ_MODEL or auto-picked from /models
   fallback — any OpenAI-compatible endpoint (e.g. OpenRouter, a paid tier):
              FALLBACK_LLM_URL (…/chat/completions), FALLBACK_LLM_KEY, FALLBACK_LLM_MODEL
 
@@ -38,7 +38,7 @@ _NON_CHAT = ("whisper", "guard", "tts", "playai", "orpheus", "compound", "distil
 
 GEMINI_BASE = "https://generativelanguage.googleapis.com/v1beta/models"
 
-STATS = {"ok": 0, "fail": 0, "by_provider": {}, "disabled": {}, "groq_model": ""}
+STATS = {"ok": 0, "fail": 0, "by_provider": {}, "disabled": {}, "groq_model": "", "gemini_model": ""}
 _disabled = set()
 _groq_candidates = None
 
@@ -157,20 +157,31 @@ def _gemini(prompt, max_tokens, temperature):
     payload = {"contents": [{"parts": [{"text": prompt}]}],
                "generationConfig": {"maxOutputTokens": max_tokens + 512, "temperature": temperature,
                                     "thinkingConfig": {"thinkingBudget": 512}}}
-    for attempt in range(3):
+    for attempt in range(2):
         try:
-            data = _http_json(f"{GEMINI_BASE}/{model}:generateContent?key={key}", payload)
-            return _clean(data["candidates"][0]["content"]["parts"][0]["text"])
+            # Key in a header, never in the URL (URLs end up in logs and tracebacks).
+            data = _http_json(f"{GEMINI_BASE}/{model}:generateContent", payload,
+                              headers={"x-goog-api-key": key})
+            parts = data["candidates"][0]["content"]["parts"]
+            STATS["gemini_model"] = model
+            return _clean("".join(p.get("text", "") for p in parts if not p.get("thought")))
         except urllib.error.HTTPError as e:
             msg = e.read().decode(errors="ignore")[:300]
             if e.code == 429:
                 if "per day" in msg.lower() or "daily" in msg.lower():
                     _disable("gemini", "daily quota exhausted")
                     return ""
-                time.sleep(15 * (attempt + 1))
+                # Per-minute limit: one short wait, then let the next provider take this call.
+                _log(f"[llm] gemini 429 — wait {10 * (attempt + 1)}s")
+                time.sleep(10 * (attempt + 1))
                 continue
             if e.code in (400, 401, 403, 404):
                 _disable("gemini", f"HTTP {e.code}: {msg}")
+            else:
+                _log(f"[llm] gemini HTTP {e.code}: {msg[:120]}")
+            return ""
+        except (KeyError, IndexError) as e:  # safety block / empty candidate
+            _log(f"[llm] gemini empty reply ({e})")
             return ""
         except Exception as e:
             _log(f"[llm] gemini error: {e}")
@@ -201,7 +212,7 @@ def available():
 
 
 def _order():
-    return [p.strip() for p in os.environ.get("LLM_ORDER", "groq,gemini,fallback").split(",")
+    return [p.strip() for p in (os.environ.get("LLM_ORDER") or "gemini,groq,fallback").split(",")
             if p.strip() in _PROVIDERS]
 
 

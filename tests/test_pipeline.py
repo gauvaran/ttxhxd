@@ -69,11 +69,60 @@ class RoundRobinTest(unittest.TestCase):
                                        "link": f"https://x/{n}/{i}", "summary": "",
                                        "published_parsed": recent} for i in range(5)])
         with tempfile.NamedTemporaryFile(suffix=".json") as tmp, \
-                mock.patch.object(fc.feedparser, "parse", side_effect=fake_parse):
+                mock.patch.object(fc.feedparser, "parse", side_effect=fake_parse), \
+                mock.patch.object(fc._src, "article_text", return_value="x" * 500):
             dd = dedup.Dedup("2026-10-19", history_path=tmp.name)
             feeds = [(f"https://feed/{c}", f"P{c}") for c in "abc"]
             got = fc._fetch_rss_articles(dd, target=4, feeds=feeds)
         self.assertEqual([g["publisher"] for g in got], ["Pa", "Pb", "Pc", "Pa"])
+
+    def test_blocked_outlet_switches_to_backup_feed(self):
+        import fetch_content as fc
+        recent = time.gmtime(time.time() - 3600)
+        words = ["vang", "dau", "gao", "thep", "dien"]
+
+        def fake_parse(url, **_):
+            n = url[-1]
+            return mock.Mock(entries=[{"title": f"{words[i]} {words[(i + 2) % 5]} {n}{n} so{i}", "link": f"https://{n}.vn/{i}",
+                                       "summary": "", "published_parsed": recent} for i in range(5)])
+
+        def fake_body(url, **_):  # outlet "a" blocks the runner, outlet "b" is fine
+            return "" if url.startswith("https://a.vn") else "y" * 500
+        with tempfile.NamedTemporaryFile(suffix=".json") as tmp, \
+                mock.patch.object(fc.feedparser, "parse", side_effect=fake_parse), \
+                mock.patch.object(fc._src, "article_text", side_effect=fake_body):
+            dd = dedup.Dedup("2026-10-19", history_path=tmp.name)
+            got = fc._fetch_rss_articles(dd, target=2, feeds=[[("https://feed/a", "Pa"), ("https://feed/b", "Pb")]])
+        self.assertEqual([g["publisher"] for g in got], ["Pb", "Pb"])
+        self.assertTrue(all(len(g["body"]) >= fc.MIN_BODY for g in got))
+
+
+class GroundingTest(unittest.TestCase):
+    def test_keyword_match_is_whole_word(self):
+        import fetch_content as fc
+        self.assertTrue(fc._has_kw("5 món ăn sáng tốt cho dạ dày", fc._FOOD_KW))
+        self.assertFalse(fc._has_kw("Khăn quàng đỏ", ("ăn",)))
+        self.assertFalse(fc._has_kw("Đi theo con đường", ("eo",)))
+
+    def test_viral_trend_refs_rendered_from_data(self):
+        import fetch_content as fc
+        trends = [{"keyword": "Lisa", "traffic": "200K+", "news_title": "Lisa ra MV", "news_source": "Kenh14",
+                   "news_url": "https://k14.vn/lisa"},
+                  {"keyword": "xổ số miền bắc", "traffic": "1M+", "news_title": "KQXS", "news_source": "X",
+                   "news_url": "https://x.vn/xs"},
+                  {"keyword": "iPhone 18", "traffic": "50K+", "news_title": "iPhone 18 về VN", "news_source": "VnE",
+                   "news_url": "https://vne.vn/ip"}]
+        arts = [{"title": "Showbiz A", "desc": "d", "link": "https://a.vn/1", "publisher": "PA"}]
+        reply = "### 🔥 A\n📍 SRC[T1]\nx\n\n### 🔥 B\n📍 SRC[T2]\ny\n\n### 🔥 C\n📍 SRC[1]\nz"
+        fc.USED_SOURCES.clear()
+        with mock.patch.object(fc._src, "article_text", return_value=""), \
+                mock.patch.object(fc, "_llm_call", return_value=reply):
+            out = fc._groq_viral_content("2026-10-21", arts, trends)
+        self.assertIn("**Lisa** · 200K+ lượt tìm", out)
+        self.assertIn("**iPhone 18**", out)          # T2 = iPhone (lottery trend skipped)
+        self.assertNotIn("xổ số", out)
+        self.assertIn("[PA](https://a.vn/1)", out)
+        self.assertNotIn("SRC[", out)
 
     def test_stale_entries_dropped(self):
         import fetch_content as fc
